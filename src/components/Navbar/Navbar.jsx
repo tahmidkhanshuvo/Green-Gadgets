@@ -5,7 +5,7 @@ import logo_dark from '../../assets/logo-white.png';
 import toggle_light from '../../assets/night.png';
 import toggle_dark from '../../assets/day.png';
 
-const Navbar = ({ theme, setTheme }) => {
+const Navbar = ({ theme, setTheme, setCurrentPage }) => {
   const toggle_mode = () => {
     theme === 'light' ? setTheme('dark') : setTheme('light');
   };
@@ -14,12 +14,19 @@ const Navbar = ({ theme, setTheme }) => {
     <div className='navbar'>
       <img src={theme === 'light' ? logo_light : logo_dark} alt='logo' className='logo' />
       <ul>
-        <li className='ads'>All Ads</li>
-        <li className='chat'>Chat</li>
-        <li className='account'>Account</li>
-        <li><button>+</button></li>
+        <li className='ads' onClick={() => setCurrentPage('home')}>All Ads</li>
+        <li className='chat' onClick={() => alert('Chat functionality coming soon!')}>Chat</li>
+        <li className='account' onClick={() => setCurrentPage('account')}>Account</li>
+        <li>
+          <button onClick={() => setCurrentPage('postAd')}>+</button>
+        </li>
       </ul>
-      <img onClick={toggle_mode} src={theme === 'light' ? toggle_light : toggle_dark} alt='toggle icon' className='toggle-icon' />
+      <img
+        onClick={toggle_mode}
+        src={theme === 'light' ? toggle_light : toggle_dark}
+        alt='toggle icon'
+        className='toggle-icon'
+      />
     </div>
   );
 };
