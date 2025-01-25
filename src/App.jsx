@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './Components/Navbar/Navbar';
-import Footer from './Components/Footer/Footer';
+import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
+import HomePage from './components/Home/Home';
 
 const App = () => {
-  const current_theme = localStorage.getItem('current_theme');
-  const [theme, setTheme] = useState(current_theme ? current_theme : 'light');
+  const current_theme = localStorage.getItem('current_theme') || 'light';
+  const [theme, setTheme] = useState(current_theme);
 
   useEffect(() => {
     localStorage.setItem('current_theme', theme);
@@ -21,7 +22,9 @@ const App = () => {
       }}
     >
       <Navbar theme={theme} setTheme={setTheme} />
-      <div style={{ flex: 1 }}></div> {/* Spacer to push footer to bottom */}
+      <div style={{ flex: 1 }}>
+        <HomePage />
+      </div>
       <Footer />
     </div>
   );

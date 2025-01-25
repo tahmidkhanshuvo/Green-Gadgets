@@ -1,0 +1,107 @@
+/* Home.css */
+.home-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.home-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: all 1s ease-in-out;
+}
+
+.home-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 128, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.home-search-box {
+  width: 60%;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #2e7d32;
+  color: white;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  min-width: 220px;
+}
+
+.home-button svg {
+  font-size: 2rem;
+}
+
+.home-button:hover {
+  background-color: #1b5e20;
+}
+
+.home-info {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: white;
+  color: #2e7d32;
+}
+
+.home-info h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.home-info p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Dark mode styles */
+.dark .home-overlay {
+  background-color: rgba(0, 128, 0, 0.7);
+}
+
+.dark .home-info {
+  background-color: #1b1b1b;
+  color: #a5d6a7;
+}
+
+.dark .home-button {
+  background-color: #388e3c;
+}
+
+.dark .home-button:hover {
+  background-color: #1b5e20;
+}
