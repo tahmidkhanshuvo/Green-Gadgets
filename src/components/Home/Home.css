@@ -1,0 +1,426 @@
+/* General styles for the home page */
+.home-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #2e7d32;
+  background: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode styles */
+.dark .home-container {
+  background: #121212;
+  color: #ffffff;
+}
+
+.home-background {
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 1s ease-in-out;
+}
+
+/* Overlay content */
+.home-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 100, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dark .home-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.home-title {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.dark .home-title {
+  color:#76c7c0;
+}
+
+.home-search-box {
+  width: 60%;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  background: white;
+  color: #2e7d32;
+}
+
+/* Dark Mode for search box */
+.dark .home-search-box {
+  background: #333;
+  color: white;
+}
+
+/* Button styling */
+.home-buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #3b9a40;
+  color: white;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  min-width: 220px;
+}
+
+.home-button svg {
+  font-size: 2rem;
+}
+
+.home-button:hover {
+  background-color: #388e3c;
+}
+
+/* Dark Mode buttons */
+.dark .home-button {
+  background-color: #2d652e;
+}
+
+.dark .home-button:hover {
+  background-color: #388e3c;
+}
+
+/* Additional content sections */
+.home-testimonials,
+.home-statistics {
+  padding: 60px 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: 50px auto;
+  max-width: 1200px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode for sections */
+.dark .home-testimonials,
+.dark .home-statistics {
+  background: #333;
+  color: white;
+}
+
+.home-testimonials h2,
+.home-statistics h2 {
+  font-size: 2rem;
+  color: #1b5e20;
+  margin-bottom: 20px;
+}
+
+.dark .home-testimonials h2,
+.dark .home-statistics h2 {
+  color: white;
+}
+
+
+
+/* >>>>>>> Home Features <<<<<<<<< */
+
+.home-features {
+  text-align: center;
+  padding: 50px 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-features h2 {
+  font-size: 2rem;
+  color: #1b5e20;
+  margin-bottom: 20px;
+}
+
+.home-features ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.home-features li {
+  font-size: 1.2rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-features li span {
+  font-size: 1.2rem;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  color: #2e7d32;
+}
+
+.home-features li:hover {
+  color: #388e3c;
+}
+
+.dark .home-features {
+  background: #333;
+  color: white;
+}
+
+.dark .home-features li {
+  color: #ccc;
+}
+
+.dark .feature-icon {
+  color: #76c7c0;
+}
+
+
+/* >>>>>>> Home Info <<<<<<<<< */
+
+
+.home-info {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-info h2 {
+  font-size: 2.5rem;
+  color: #1b5e20;
+  margin-bottom: 30px;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info-item:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s;
+}
+
+.info-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.info-text h3 {
+  font-size: 1.8rem;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.info-text p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.dark .home-info {
+  background: #333;
+  color: white;
+}
+
+.dark .info-item {
+  background: #444;
+}
+
+.dark .info-text h3 {
+  color: #76c7c0;
+}
+
+.dark .info-text p {
+  color: #ccc;
+}
+
+
+
+
+
+/* >>>>>>> Home Testimonials <<<<<<<<< */
+
+.home-testimonials {
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+}
+
+.home-testimonials .testimonial {
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.dark .home-testimonials .testimonial {
+  color: #ccc;
+}
+
+/* Statistics section */
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 20px;
+  background: #e8f5e9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 220px;
+}
+
+.dark .stat-item {
+  background: #424242;
+  color: white;
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.dark .stat-item h3 {
+  color: #76c7c0;
+}
+
+.stat-item p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Dark Mode statistics */
+.dark .stat-item p {
+  color: #ccc;
+}
+
+/* Home info section styling */
+.home-info-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  text-align: left;
+}
+
+.info-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.home-info-text {
+  max-width: 600px;
+}
+
+.home-info-text p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* Dark Mode for home info section */
+.dark .home-info-text p {
+  color: #ccc;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .home-search-box {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .home-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .home-info,
+  .home-features,
+  .home-testimonials,
+  .home-statistics {
+    padding: 40px 15px;
+  }
+
+  .stats-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-info-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-image {
+    width: 200px;
+    height: 200px;
+  }
+}

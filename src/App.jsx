@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
+import HomePage from './components/Home/Home';
+import ProductSearch from './components/Product-Search/Product-Search';
 import UserAccount from './components/Account/UserAccount';
 import PostAd from './components/Post_Ad/PostAd';
 
 const App = () => {
-  const current_theme = localStorage.getItem('current_theme');
-  const [theme, setTheme] = useState(current_theme ? current_theme : 'light');
-  const [currentPage, setCurrentPage] = useState('home'); // Manage navigation
+  const current_theme = localStorage.getItem('current_theme') || 'light';
+  const [theme, setTheme] = useState(current_theme);
 
   useEffect(() => {
     localStorage.setItem('current_theme', theme);
@@ -30,21 +32,28 @@ const App = () => {
   };
 
   return (
-    <div
-      className={`container ${theme}`}
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
-      <Navbar theme={theme} setTheme={setTheme} setCurrentPage={setCurrentPage} />
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {renderPage()}
+    <Router>
+      <div
+        className={`container ${theme}`}
+        style={{
+          minHeight: '100vh', // Ensure the background covers the entire viewport
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Navbar theme={theme} setTheme={setTheme} />
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<ProductSearch />} />
+            <Route path="/account" element={<UserAccount />} />
+            <Route path="/postAd" element={<PostAd />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </Router>
   );
 };
 
