@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: linear-gradient(#dcf6da,#b6dbb3);
   
   transition: 0.5s;
   height:55px;
@@ -47,7 +47,7 @@ button {
 /* Dark mode styles */
 .dark .navbar {
   background: linear-gradient(#579040, #487C3E);
-  color: #fff;
+  color: #ffffff;
 }
 
 /* Add specific margins to move each item individually */
