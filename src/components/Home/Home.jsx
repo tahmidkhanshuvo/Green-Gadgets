@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { FaRecycle, FaTools, FaTrashAlt } from 'react-icons/fa';
+import { FaRecycle, FaTrashAlt } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';  // Importing the correct icon
 import './Home.css';
 
-const images = [
-  '/assets/Home/image1.jpg',
-  '/assets/Home/image2.jpg',
-  '/assets/Home/image3.jpg'
-];
+// Import images from the src folder
+import image1 from '../../assets/Home/image1.jpg';
+import image2 from '../../assets/Home/image2.jpg';
+import image3 from '../../assets/Home/image3.jpg';
+
+const images = [image1, image2, image3];
 
 export default function HomePage() {
   const [currentImage, setCurrentImage] = useState(0);
@@ -36,7 +39,7 @@ export default function HomePage() {
             <FaRecycle /> Recycled
           </button>
           <button className="home-button">
-            <FaTools /> Refurbished
+            <FontAwesomeIcon icon={faScrewdriverWrench} /> Refurbished
           </button>
           <button className="home-button">
             <FaTrashAlt /> E-waste
