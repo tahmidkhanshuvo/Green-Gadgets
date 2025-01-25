@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './Components/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
 
 const App = () => {
