@@ -234,7 +234,18 @@ const UserAccount = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 5, textAlign: 'center', color: 'green' }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{
+          mb: 5,
+          textAlign: 'center',
+          background: 'linear-gradient(#579040, #487C3E)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
+        }}
+      >
         My Account
       </Typography>
       
