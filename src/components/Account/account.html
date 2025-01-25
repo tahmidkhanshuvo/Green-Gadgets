@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Account - Green Gadget BD</title>
+  <link rel="stylesheet" href="account.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="logo">Green Gadget BD</div>
+    <div class="header-buttons">
+      <button onclick="openChat()">Chat</button>
+      <button onclick="goToAccount()">Account</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+      <h2>Account</h2>
+      <ul>
+        <li onclick="showSection('my-ads')">My Ads</li>
+        <li onclick="showSection('favourites')">Favourites</li>
+        <li onclick="showSection('settings')">Settings</li>
+      </ul>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+      <!-- My Ads Section -->
+      <div id="my-ads" class="menu-section active">
+        <h3>My Ads</h3>
+        <div class="ad">
+          <img src="placeholder1.jpg" alt="Laptop Image" class="product-image">
+          <h4>Old Laptop for Sale</h4>
+          <p>Price: 15,000 BDT</p>
+          <p>Description: A well-maintained laptop with 8GB RAM and 256GB SSD. Perfect for everyday use.</p>
+        </div>
+        <div class="ad">
+          <img src="placeholder2.jpg" alt="Tablet Image" class="product-image">
+          <h4>Used Tablet for Sale</h4>
+          <p>Price: 5,500 BDT</p>
+          <p>Description: A slightly used tablet with 10-inch screen and 32GB storage. Works perfectly!</p>
+        </div>
+      </div>
+
+      <!-- Favourites Section -->
+      <div id="favourites" class="menu-section">
+        <h3>Favourites</h3>
+        <div class="ad">
+          <img src="placeholder3.jpg" alt="Gaming Laptop Image" class="product-image">
+          <h4>Gaming Laptop</h4>
+          <p>Price: 85,000 BDT</p>
+          <p>Description: High-performance gaming laptop with NVIDIA graphics and 16GB RAM.</p>
+        </div>
+        <div class="ad">
+          <img src="placeholder4.jpg" alt="Monitor Image" class="product-image">
+          <h4>27-inch Monitor</h4>
+          <p> Price: 12,000 BDT</p>
+          <p> Description: Crystal clear display with 144Hz refresh rate. Ideal for gaming and work.</p>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div id="settings" class="menu-section">
+        <h3>Settings</h3>
+        <form>
+          <div class="form-group">
+           
+            <p>Change details</p>
+            <label>Email:</label>
+            <input type="email" value="zx45cv90@gmail.com" disabled>
+          </div>
+          <div class="form-group">
+            <label>Name:</label>
+            <input type="text" value="ZX CV">
+          </div>
+          <div class="form-group">
+            <label>Location:</label>
+            <input type="text">
+          </div>
+          <div class="form-group">
+            <label>Sub Location:</label>
+            <input type="text">
+          </div>
+          <div class="form-group">
+            <button type="button">Update details</button>
+          </div>
+          <div class="form-group">
+            <p>Change password</p>
+            <label>New password:</label>
+            <input type="password">
+          </div>
+          <div class="form-group">
+            <label>Confirm new password:</label>
+            <input type="password">
+          </div>
+          <div class="form-group">
+            <button type="button">Change password</button>
+          </div>
+          <div class="form-group">
+            <button type="button">Delete account</button>
+            <button type="button">Log out</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('.menu-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    function openChat() {
+      alert('Chat functionality will be added here.');
+    }
+
+    function goToAccount() {
+      alert('You are already on the Account page.');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Ad - Green Gadget BD</title>
+  <link rel="stylesheet" href="post_ads.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Green Gadget BD</div>
+    <div class="header-buttons">
+      <button onclick="openChat()">Chat</button>
+      <button onclick="goToAccount()">Account</button>
+    </div>
+  </header>
+
+  
+  <div class="container">
+    <h2>Post Your Ad</h2>
+    <form id="postAdForm">
+      
+      <div class="form-group">
+        <label for="category">Condition</label>
+        <select id="category" name="category" onchange="populateSubcategories()">
+          <option value="">Select a category</option>
+          <option value="recycled">Recycled Products</option>
+          <option value="refurbished">Refurbished Products</option>
+          <option value="e-waste">E-waste</option>
+        </select>
+      </div>
+
+      <!-- Subcategory Selection -->
+      <div class="form-group">
+        <label for="subcategory">Category</label>
+        <select id="subcategory" name="subcategory" disabled>
+          <option value="">Select a subcategory</option>
+        </select>
+      </div>
+
+      <!-- Ad Details Form -->
+      <div id="adDetailsForm" class="hidden">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" placeholder="Enter ad title">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4" placeholder="Enter ad description"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" placeholder="Enter quantity">
+        </div>
+        <div class="form-group">
+          <label for="price">Price (BDT)</label>
+          <input type="number" id="price" name="price" placeholder="Enter price">
+        </div>
+        <div class="form-group">
+          <label for="pictures">Pictures (Up to 6)</label>
+          <input type="file" id="pictures" name="pictures" accept="image/*" multiple>
+        </div>
+        <div class="form-group">
+          <button type="submit">Post Ad</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Populate subcategories dynamically
+    function populateSubcategories() {
+      const subcategories = [
+        "TV", "Laptop", "Smart Phone", "Monitor", "Speaker", "CPU", "Tablet", "Camera", 
+        "Video Game Console", "Photocopiers"
+      ];
+
+      const categorySelect = document.getElementById("category");
+      const subcategorySelect = document.getElementById("subcategory");
+      const adDetailsForm = document.getElementById("adDetailsForm");
+
+      if (categorySelect.value) {
+        subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+        subcategories.forEach((subcategory) => {
+          const option = document.createElement("option");
+          option.value = subcategory.toLowerCase();
+          option.textContent = subcategory;
+          subcategorySelect.appendChild(option);
+        });
+
+        subcategorySelect.disabled = false;
+      } else {
+        subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+        subcategorySelect.disabled = true;
+        adDetailsForm.classList.add("hidden");
+      }
+    }
+
+    // Show ad details form on subcategory selection
+    document.getElementById("subcategory").addEventListener("change", function () {
+      const adDetailsForm = document.getElementById("adDetailsForm");
+      if (this.value) {
+        adDetailsForm.classList.remove("hidden");
+      } else {
+        adDetailsForm.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
