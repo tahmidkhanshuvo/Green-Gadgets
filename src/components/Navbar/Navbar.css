@@ -45,7 +45,16 @@ ul li button {
   margin-right: 5px; /* Adjusted spacing between buttons */
 }
 
-.dark ul li button{
+ul li button .icon {
+  margin-right: 8px; /* Ensures space between the icon and text */
+  display: inline-block; /* Proper alignment for the icon */
+}
+
+ul li button .icon-text {
+  display: inline-block; /* Proper alignment for the text */
+}
+
+.dark ul li button {
   background-color: #bbbbbb;
   color: rgb(4, 123, 22);
 }
@@ -54,12 +63,6 @@ ul li.chat {
   margin-left: 60px; /* Adjusted spacing between buttons */
 }
 
-ul li button i {
-  margin-left: 20px; /* Space between icon and text */
-  font-size: 20px;
-}
-
-/* Dark mode styles */
 .dark .navbar {
   background: linear-gradient(#579040, #487C3E);
   color: #ffffff;
@@ -68,7 +71,6 @@ ul li button i {
 ul li.ads {
   margin-right: 560px;
 }
-
 
 /* Toggle icon styling */
 .toggle-icon {
