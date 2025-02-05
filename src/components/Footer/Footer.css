@@ -8,13 +8,19 @@ body, html {
 
 /* Footer styles */
 .footer {
-    background-color: #222;
-    padding: 50px 5%;
+    background: linear-gradient(#dcf6da, #b6dbb3); /* Matches navbar background */
+    padding: 60px 5%;
     font-family: 'Arial', sans-serif;
     color: white;
     width: 100%;
     box-sizing: border-box;
+  
     overflow-x: hidden;
+}
+
+/* Dark mode footer */
+.dark .footer {
+    background: linear-gradient(#579040, #487C3E); /* Matches dark mode navbar background */
 }
 
 /* Footer container */
