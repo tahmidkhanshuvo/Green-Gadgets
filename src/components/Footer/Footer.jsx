@@ -4,34 +4,87 @@ import './Footer.css';
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-section">
-        <h4>About Us</h4>
-        <ul>
-          <li>Our Story</li>
-          <li>Careers</li>
-          <li>Contact</li>
-        </ul>
+      <div className="footer-container">
+        {/* About Section */}
+        <div className="footer-section">
+          <h4>About Us</h4>
+          <ul>
+            <li>Our Story</li>
+            <li>Careers</li>
+            <li>Press</li>
+            <li>Contact</li>
+          </ul>
+        </div>
+
+        {/* Support Section */}
+        <div className="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li>Help Center</li>
+            <li>FAQs</li>
+            <li>Terms & Conditions</li>
+            <li>Privacy Policy</li>
+          </ul>
+        </div>
+
+        {/* Explore Section */}
+        <div className="footer-section">
+          <h4>Explore</h4>
+          <ul>
+            <li>Blog</li>
+            <li>Affiliate Program</li>
+            <li>Partners</li>
+            <li>Community</li>
+          </ul>
+        </div>
+
+        {/* Social Media Section */}
+        <div className="footer-section">
+          <h4>Follow Us</h4>
+          <div className="social-icons">
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+
+        {/* Download Section */}
+        <div className="footer-section download-section">
+          <h4>Get Our App</h4>
+          <div className="app-links">
+            <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                alt="Google Play"
+                className="app-badge"
+              />
+            </a>
+            <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="App Store"
+                className="app-badge"
+              />
+            </a>
+          </div>
+        </div>
       </div>
-      <div className="footer-section">
-        <h4>Resources</h4>
-        <ul>
-          <li>Blog</li>
-          <li>Help Center</li>
-          <li>Privacy Policy</li>
-        </ul>
+
+      <hr className="footer-line" />
+
+      {/* Footer Bottom */}
+      <div className="footer-bottom">
+        <p>© 2025. All rights reserved. Green Gadgets BD Limited.</p>
       </div>
-      <div className="footer-section social-icons">
-        <h4>Follow Us</h4>
-        <img src="https://static.vecteezy.com/system/resources/previews/018/930/476/non_2x/facebook-logo-facebook-icon-transparent-free-png.png" alt="Facebook" />
-        <img src="https://static.vecteezy.com/system/resources/thumbnails/027/395/710/small_2x/twitter-brand-new-logo-3-d-with-new-x-shaped-graphic-of-the-world-s-most-popular-social-media-free-png.png" alt="Twitter" />
-        <img src="https://static.vecteezy.com/system/resources/previews/042/148/632/non_2x/instagram-logo-instagram-social-media-icon-free-png.png" alt="Instagram" />
-      </div>
-      <div className="footer-section download-buttons">
-        <h4>Get Our App</h4>
-        <img src="https://w7.pngwing.com/pngs/961/859/png-transparent-google-play-android-app-store-apple-android-text-rectangle-logo.png" alt="Google Play" />
-        <img src="https://e7.pngegg.com/pngimages/1015/380/png-clipart-app-store-logo-iphone-app-store-google-play-apple-app-store-electronics-text.png" alt="App Store" />
-      </div>
-      <div className="footer-bottom">&copy; 2025 Green Gadgets. All rights reserved.</div>
     </footer>
   );
 };

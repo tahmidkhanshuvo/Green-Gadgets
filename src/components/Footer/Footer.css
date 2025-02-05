@@ -1,53 +1,184 @@
-.footer {
-    background-color: #2d2d2d;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    font-family: Arial, sans-serif;
+/* Prevent horizontal scrolling */
+body, html {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
+/* Footer styles */
+.footer {
+    background-color: #222;
+    padding: 50px 5%;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Footer container */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1600px; /* Adjusted for 27-inch screens */
+    margin: 0 auto;
+    flex-wrap: wrap;
+    text-align: left;
+    gap: 40px;
+}
+
+/* Footer sections */
 .footer-section {
-    margin: 15px;
+    flex: 1;
+    min-width: 250px; /* Wider min-width for large screens */
+    max-width: 300px;
+    padding: 0 20px;
 }
 
 .footer-section h4 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #a0e75a; /* Adjusted to match your green theme */
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #f0f0f0;
 }
 
 .footer-section ul {
     list-style: none;
     padding: 0;
+    flex-direction: column;
 }
 
 .footer-section ul li {
+    font-size: 16px;
+    color: #aaa;
     margin-bottom: 8px;
     cursor: pointer;
+    transition: color 0.3s ease-in-out;
 }
 
 .footer-section ul li:hover {
-    color: #a0e75a;
+    color: #fff;
 }
 
-.social-icons img, 
-.download-buttons img {
-    width: 60px;
-    margin: 5px;
+/* Social Media Icons */
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    font-size: 20px;
+    color: white;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+    color: #ddd;
+}
+
+/* Download App Section */
+.download-section {
+    text-align: left;
+}
+
+.app-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.app-badge {
+    width: 150px;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.app-badge:hover {
+    transform: scale(1.1);
+}
+
+/* Footer Bottom Section */
+.footer-line {
+    border: none;
+    height: 1px;
+    background: #555;
+    margin: 25px 0;
 }
 
 .footer-bottom {
-    margin-top: 20px;
-    font-size: 0.9rem;
+    text-align: center;
+    font-size: 16px;
+    color: #aaa;
 }
 
+/* Large Screen Optimization */
+@media (min-width: 1600px) {
+    .footer-container {
+        max-width: 1700px; /* Adjust for ultra-wide screens */
+        gap: 50px;
+    }
+
+    .footer-section {
+        max-width: 320px;
+    }
+}
+
+/* Tablet View */
+@media (max-width: 1024px) {
+    .footer-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        min-width: 250px;
+        margin-bottom: 20px;
+    }
+
+    .app-links {
+        align-items: center;
+    }
+
+    .app-badge {
+        width: 130px;
+    }
+}
+
+/* Mobile View */
 @media (max-width: 768px) {
-    .footer {
+    .footer-container {
         flex-direction: column;
         text-align: center;
+    }
+
+    .footer-section {
+        min-width: auto;
+        margin-bottom: 15px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 480px) {
+    .footer {
+        padding: 40px 15px;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-section ul li {
+        font-size: 14px;
+    }
+
+    .app-badge {
+        width: 120px;
     }
 }
