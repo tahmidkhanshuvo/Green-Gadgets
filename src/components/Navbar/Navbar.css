@@ -1,3 +1,4 @@
+/* Main Navbar */
 .navbar {
   width: 100%;
   display: flex;
@@ -6,52 +7,54 @@
   background: linear-gradient(#dcf6da, #b6dbb3);
   transition: 0.5s;
   height: 55px;
+  padding: 0 2vw;
+  position: relative;
+  flex-wrap: wrap;
 }
 
+/* Logo */
 .logo {
   width: 60px;
   cursor: pointer;
-  margin-left: 30px;
-  margin-right: 50px; /* Keeps the logo on the left */
+  margin-left: 2vw;
 }
 
+/* Navbar Menu */
 ul {
   flex: 1;
   list-style: none;
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 ul li {
   display: inline-block;
-  margin: 10px 20px;
-  font-size: 18px;
+  margin: 10px 1.5vw;
+  font-size: 1rem;
   cursor: pointer;
   transition: margin 0.3s;
 }
 
-/* Button styling with icons */
+/* Navbar Buttons */
 ul li button {
   display: flex;
   align-items: center;
   padding: 10px 15px;
-  font-size: 16px;
+  font-size: 1rem;
   background-color: #66bb6a;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-right: 5px; /* Adjusted spacing between buttons */
+  margin-right: 5px;
+  white-space: nowrap;
 }
 
 ul li button .icon {
-  margin-right: 8px; /* Ensures space between the icon and text */
-  display: inline-block; /* Proper alignment for the icon */
-}
-
-ul li button .icon-text {
-  display: inline-block; /* Proper alignment for the text */
+  margin-right: 8px;
+  display: inline-block;
 }
 
 .dark ul li button {
@@ -60,7 +63,7 @@ ul li button .icon-text {
 }
 
 ul li.chat {
-  margin-left: 60px; /* Adjusted spacing between buttons */
+  margin-left: 5vw;
 }
 
 .dark .navbar {
@@ -68,11 +71,7 @@ ul li.chat {
   color: #ffffff;
 }
 
-ul li.ads {
-  margin-right: 560px;
-}
-
-/* Post Free Ads button gradient animation */
+/* 🔹 Post Free Ads Button Gradient Animation (Only for Large Screens) */
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -96,56 +95,207 @@ ul li:nth-child(4) button { /* Target 'Post Free Ads' button */
   transition: transform 0.3s ease-in-out;
 }
 
-/* Optional: Slight hover effect for more interactivity */
 ul li:nth-child(4) button:hover {
   transform: scale(1.07);
 }
 
-/* Toggle icon styling */
+/* Disable Animation for Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  ul li:nth-child(4) button {
+    background: #66bb6a; /* Mobile devices - No animation */
+    background-size: initial;
+    animation: none;
+  }
+}
+
+/* Theme Toggle Icon */
 .toggle-icon {
   width: 30px;
   cursor: pointer;
-  margin-right: 100px;
+  position: absolute;
+  right: 90px;
+  top: 12px;
+  z-index: 1050;
 }
 
 .toggle-icon:hover {
-  transform: rotate(18deg); /* Rotate toggle icon on hover */
+  transform: rotate(18deg);
 }
 
-/* Theme toggle button */
-.theme-toggle-btn {
+/* Mobile Toggle Button (☰) */
+.mobile-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
   background: none;
   border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  color: inherit;
-  font-size: 18px;
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  z-index: 1051;
 }
 
-/* Responsive navbar */
-@media (max-width: 768px) {
+/* ========== MOBILE MENU (Right Sidebar) ========== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 220px;
+  height: 100vmax;
+  background: linear-gradient(#dcf6da, #b6dbb3);
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Show menu when open */
+.mobile-menu.open {
+  right: 0;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Close Button Inside Menu */
+.mobile-menu .close-btn {
+  position: absolute;
+  top: 50px;
+  right: 5px;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Mobile Menu Items */
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu ul li {
+  display: block;
+  width: auto;
+}
+
+/* Mobile Menu Buttons */
+.mobile-menu ul li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-size: 1rem;
+  background: #66bb6a;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Post Free Ads in Mobile Menu */
+.mobile-menu ul li.post-free-ads {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-menu ul li.post-free-ads button {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Keep Icons Aligned Properly */
+.mobile-menu ul li button .icon {
+  margin-right: 8px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Large Screens */
+@media (max-width: 1440px) {
   .navbar {
-    flex-direction: column;
+    height: auto;
+    padding: 10px 5vw;
+  }
+  ul {
+    justify-content: center;
+  }
+  ul li {
+    font-size: 0.9rem;
+    margin: 5px 1vw;
+  }
+  ul li.chat {
+    margin-left: 2vw;
+  }
+  .toggle-icon {
+    right: 90px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .navbar {
+    flex-direction: row;
     align-items: center;
     height: auto;
+    padding: 10px 3vw;
   }
-
+  ul {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+  ul li {
+    margin: 5px 1vw;
+    text-align: center;
+  }
   .logo {
-    margin: 20px 0;
+    margin-bottom: 10px;
+  }
+  .toggle-icon {
+    right: 85px;
+  }
+}
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 55px;
   }
 
   ul {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  ul li {
-    margin: 10px 0;
+    display: none;
   }
 
   .toggle-icon {
-    margin-right: 0;
+    right: 80px;
+    top: 12px;
+  }
+
+  .mobile-toggle {
+    display: block;
+    right: 20px;
+    top: 12px;
   }
 }
