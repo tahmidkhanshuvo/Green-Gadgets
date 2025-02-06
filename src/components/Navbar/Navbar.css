@@ -72,6 +72,35 @@ ul li.ads {
   margin-right: 560px;
 }
 
+/* Post Free Ads button gradient animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+ul li:nth-child(4) button { /* Target 'Post Free Ads' button */
+  background: linear-gradient(45deg, #a40606, rgb(248 86 57), #ffffff, #f53844, #00237E);
+  background-size: 400% 250%;
+  animation: gradient 8s ease infinite;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Optional: Slight hover effect for more interactivity */
+ul li:nth-child(4) button:hover {
+  transform: scale(1.07);
+}
+
 /* Toggle icon styling */
 .toggle-icon {
   width: 30px;

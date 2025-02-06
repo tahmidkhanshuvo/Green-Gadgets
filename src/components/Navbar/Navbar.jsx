@@ -6,7 +6,7 @@ import logo_light from '../../assets/logo-black.png';
 import logo_dark from '../../assets/logo-white.png';
 import toggle_light from '../../assets/night.png';
 import toggle_dark from '../../assets/day.png';
-import { FaHome, FaSearch, FaComment, FaUserCircle, FaPlusCircle } from 'react-icons/fa';
+import { FaHome, FaSearch, FaComment, FaUserCircle } from 'react-icons/fa';
 
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
@@ -43,7 +43,6 @@ const Navbar = ({ theme, setTheme }) => {
         </li>
         <li>
           <button onClick={() => handleButtonClick('/postAd')}>
-            <FaPlusCircle className="icon" />
             <span className="icon-text">Post Free Ads</span>
           </button>
         </li>
