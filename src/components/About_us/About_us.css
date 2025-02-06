@@ -1,0 +1,242 @@
+/* 🌟 Remove all extra padding/margins to ensure full width */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 🌟 Full-page Background */
+.about-us-container {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    color: #2e7d32;
+    background: #f8f8f8;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 🌟 Hero Section */
+.about-hero {
+    width: 100%;
+    height: 300px;
+    background: url('your-background-image.jpg') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* 🌟 Animated Glitter Effect for "Meet Our Team" */
+@keyframes glitter {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.about-title {
+    font-size: 4rem; /* ✅ Bigger for better visibility */
+    font-weight: bold;
+    font-style: italic; /* ✅ Stylish effect */
+    background: linear-gradient(45deg, #FFD700, #72695e, #FFD700, #FF8C00);
+    background-size: 200% 200%; /* ✅ Expands gradient area */
+    background-clip: text; /* ✅ Standard property for modern browsers */
+    -webkit-background-clip: text; /* ✅ Webkit browsers (Chrome, Safari, Edge) */
+    -webkit-text-fill-color: transparent; /* ✅ Gradient text effect */
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* ✅ Soft glow for readability */
+    letter-spacing: 2px;
+    animation: glitter 3s infinite linear; /* ✅ Smooth continuous animation */
+}
+
+/* 🌟 Dark Mode Enhancements for Glitter */
+.dark .about-title {
+    background: linear-gradient(45deg, #00FFFF, #00CED1, #00FFFF, #00CED1);
+    background-size: 200% 200%;
+    background-clip: text; /* ✅ Standard property */
+    -webkit-background-clip: text; /* ✅ Webkit browsers */
+    -webkit-text-fill-color: transparent;
+    animation: glitter 3s infinite linear;
+    text-shadow: 3px 3px 12px rgba(255, 255, 255, 0.6);
+}
+
+/* 🌟 Dark Mode Styles */
+.dark .about-us-container {
+    background: #121212;
+    color: #ffffff;
+}
+
+.dark .about-hero {
+    background: url('your-darkmode-background.jpg') no-repeat center center/cover;
+}
+
+/* 🌟 Team Section */
+.team-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 50px auto;
+    padding: 0 5vw;
+}
+
+/* 🌟 Individual Team Card */
+.team-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 320px;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌟 Dark Mode for Team Cards */
+.dark .team-card {
+    background: #333;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* 🌟 Team Member Image */
+.team-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* 🌟 Name Styling */
+.team-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 15px;
+}
+
+.dark .team-name {
+    color: #76c7c0;
+}
+
+/* 🌟 ID Styling */
+.team-id {
+    font-size: 20px;
+    color: #000000;
+    margin-top: 5px;
+}
+
+.dark .team-id {
+    color: #ccc;
+}
+
+/* 🌟 About Description Section */
+.about-description {
+    margin-top: 50px;
+    padding: 50px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90vw;
+    max-width: 1700px;
+}
+
+/* 🌟 Dark Mode for About Description */
+.dark .about-description {
+    background: #333;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* 🌟 Big Text Styling */
+.big-text {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #2e7d32;
+    line-height: 1.8;
+    padding: 20px;
+    max-width: 100%;
+    background: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌟 Dark Mode Big Text */
+.dark .big-text {
+    color: #76c7c0;
+    background: #333;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* 🌟 About Description Text */
+.about-description h2 {
+    font-size: 2.5rem;
+    color: #2a7a4b;
+    margin-bottom: 20px;
+}
+
+.dark .about-description h2 {
+    color: #76c7c0;
+}
+
+.about-description p {
+    font-size: 20px;
+    color: #444;
+    line-height: 1.8;
+}
+
+.dark .about-description p {
+    color: #ccc;
+}
+
+/* 🌟 Responsive Fixes */
+@media (max-width: 1024px) {
+    .about-title {
+        font-size: 2.5rem;
+    }
+
+    .team-section {
+        flex-direction: row;
+        align-items: center;
+        padding: 0 3vw;
+    }
+
+    .team-card {
+        width: 90%;
+    }
+
+    .about-description {
+        padding: 40px;
+        width: 95vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-title {
+        font-size: 2rem;
+    }
+
+    .team-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-card {
+        width: 90%;
+    }
+
+    .about-description {
+        padding: 30px;
+        width: 95vw;
+    }
+}

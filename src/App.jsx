@@ -6,6 +6,7 @@ import HomePage from './components/Home/Home';
 import ProductSearch from './components/Product-Search/Product-Search';
 import UserAccount from './components/Account/UserAccount';
 import PostAd from './components/Post_Ad/PostAd';
+import AboutUs from './components/About_us/AboutUs';
 
 const App = () => {
   const current_theme = localStorage.getItem('current_theme') || 'light';
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/search" element={<ProductSearch />} />
             <Route path="/account" element={<UserAccount />} />
             <Route path="/postAd" element={<PostAd />} />
+            <Route path="/about" element={<AboutUs />} />
           </Routes>
         </div>
         <Footer />

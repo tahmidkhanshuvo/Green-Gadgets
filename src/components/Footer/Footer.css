@@ -14,7 +14,6 @@ body, html {
     color: white;
     width: 100%;
     box-sizing: border-box;
-  
     overflow-x: hidden;
 }
 
@@ -65,6 +64,19 @@ body, html {
 
 .footer-section ul li:hover {
     color: #fff;
+}
+
+/* Fix for "Our Story" link to match other footer items */
+.footer-link {
+    text-decoration: none; /* ✅ Removes underline */
+    color: inherit; /* ✅ Uses the same color as other list items */
+    font-weight: normal; /* ✅ Ensures consistency with other links */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover effect to match other links */
+.footer-link:hover {
+    color: #fff; /* ✅ Same hover color as other items */
 }
 
 /* Social Media Icons */
