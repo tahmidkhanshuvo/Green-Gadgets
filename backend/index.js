@@ -1,43 +1,45 @@
-// index.js
-const express = require('express');
-const users = require('./data'); // Import the simulated database (data.js)
+const express = require("express");
+const mongoose = require("mongoose");
 
 const app = express();
-const port = 4000;
+app.use(express.json()); // Middleware to parse JSON
 
-// Middleware to parse JSON data
-app.use(express.json());
+// 🔹 Replace with your actual MongoDB connection string
+const MONGO_URI = "mongodb+srv://test:test123@green-gadgets.i1tu7.mongodb.net/?retryWrites=true&w=majority";
 
-// Simple Test Route
-app.get('/', (req, res) => {
-    res.send('API is working 🚀');
+// 🟢 Connect to MongoDB
+mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ MongoDB connection error:", err));
+
+// 🟢 Define User Schema
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String
 });
+const User = mongoose.model("User", userSchema);
 
-// Get all users
-app.get('/users', (req, res) => {
+// 🟢 GET: Fetch all users
+app.get("/users", async (req, res) => {
+    const users = await User.find();
     res.json(users);
 });
 
-// Get a single user by ID
-app.get('/users/:id', (req, res) => {
-    const user = users.find(u => u.id === parseInt(req.params.id));
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
-});
-
-// Create a new user
-app.post('/users', (req, res) => {
+// 🔵 POST: Add a new user
+app.post("/users", async (req, res) => {
     const { name, email } = req.body;
-    const newUser = {
-        id: users.length + 1,
-        name,
-        email
-    };
-    users.push(newUser);
+    if (!name || !email) {
+        return res.status(400).json({ error: "Name and email are required" });
+    }
+
+    const newUser = new User({ name, email });
+    await newUser.save(); // Save to MongoDB
     res.status(201).json(newUser);
 });
 
 // Start server
-app.listen(port, () => {
-    console.log(`✅ Server running at http://localhost:${port}`);
+app.listen(3000, () => {
+    console.log("🚀 Server running on port 3000");
 });
