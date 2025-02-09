@@ -1,4 +1,8 @@
 /* General Styles */
+
+
+
+
 .product-search {
     padding: 20px;
   }
@@ -12,7 +16,7 @@
   .sorting-bar {
     width: 250px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: '#d9fdd3';
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
@@ -26,7 +30,7 @@
   }
   
   .product-item {
-    background-color: white;
+    background-color:'#d9fdd3';
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -78,7 +82,7 @@
   /* Light Theme */
   .product-search.light {
     background-color: white;
-    color: black;
+    color: #487C3E;
   }
   
   .product-search.light .sorting-bar {
@@ -110,7 +114,7 @@
   
   /* Dark Theme */
   .product-search.dark {
-    background-color: #121212;
+    background-color:linear-gradient(#579040, #487C3E);
     color: white;
   }
   

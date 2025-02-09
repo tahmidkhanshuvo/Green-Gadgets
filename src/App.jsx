@@ -5,8 +5,9 @@ import Footer from './components/Footer/Footer';
 import HomePage from './components/Home/Home';
 import ProductSearch from './components/Product-Search/Product-Search';
 import UserAccount from './components/Account/UserAccount';
-import PostAd from './components/Post_Ad/PostAd';
+import PostAd from './components/Post_ad/PostAd';
 import AboutUs from './components/About_us/AboutUs';
+import Blog from './components/Blog/Blog';
 
 const App = () => {
   const current_theme = localStorage.getItem('current_theme') || 'light';
@@ -16,28 +17,12 @@ const App = () => {
     localStorage.setItem('current_theme', theme);
   }, [theme]);
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'account':
-        return <UserAccount />;
-      case 'postAd':
-        return <PostAd />;
-      default:
-        return (
-          <div className="welcome-page">
-            <h1>Welcome to Green Gadget BD!</h1>
-            <p>Your trusted platform for buying, selling, and recycling gadgets.</p>
-          </div>
-        );
-    }
-  };
-
   return (
     <Router>
       <div
         className={`container ${theme}`}
         style={{
-          minHeight: '100vh', // Ensure the background covers the entire viewport
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -51,6 +36,7 @@ const App = () => {
             <Route path="/account" element={<UserAccount />} />
             <Route path="/postAd" element={<PostAd />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/blog" element={<Blog themeMode={theme} />} />
           </Routes>
         </div>
         <Footer />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Product-Search.css';
+import { Typography } from '@mui/material';
 
 const products = [
   { id: 1, title: 'Refurbished Laptop', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9lE9_0e_RNqR6jcNlwWqNzlp24a5iMSCNrA&s', price: '$200' },
@@ -12,16 +13,11 @@ const products = [
   { id: 8, title: 'Recycled Mouse', image: 'https://5.imimg.com/data5/OV/LP/OU/SELLER-34757003/dell-mouse-old-500x500.jpg', price: '$20' },
 ];
 
-const ProductSearch = () => {
+const ProductSearch = ({ theme }) => {
   const [sortOption, setSortOption] = useState('default');
-  const [theme, setTheme] = useState('light');
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
-  };
-
-  const handleThemeChange = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   const sortedProducts = [...products].sort((a, b) => {
@@ -36,12 +32,9 @@ const ProductSearch = () => {
 
   return (
     <div className={`product-search ${theme}`}>
-      <div className="theme-toggle">
-        <button onClick={handleThemeChange}>Toggle Theme</button>
-      </div>
-      <div className="product-container">
+      <div className={`product-container ${theme === 'dark' ? 'dark-mode' : ''}`}>
         <div className="sorting-bar">
-          <h2>Sort by</h2>
+          <h2 className="text-3xl font-bold underline">Sort by</h2>
           <select onChange={handleSortChange} value={sortOption}>
             <option value="default">Default</option>
             <option value="price">Price</option>

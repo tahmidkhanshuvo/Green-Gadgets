@@ -6,12 +6,13 @@ import {
   CardContent,
   CardMedia,
   Container,
-  Grid,
+  Grid2,
   Typography,
   TextField,
   Stack,
   Divider,
 } from '@mui/material';
+
 import { styled } from '@mui/material/styles';
 
 const DashboardButton = styled(Button)(({ theme }) => ({
@@ -78,9 +79,9 @@ const UserAccount = () => {
     switch (activeTab) {
       case 'myAds':
         return (
-          <Grid container spacing={3}>
+          <Grid2 container spacing={3}>
             {myAds.map((ad) => (
-              <Grid item xs={12} sm={6} md={4} key={ad.id}>
+              <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
                 <AdCard>
                   <CardMedia
                     component="img"
@@ -100,15 +101,15 @@ const UserAccount = () => {
                     </Typography>
                   </CardContent>
                 </AdCard>
-              </Grid>
+              </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         );
       case 'favorites':
         return (
-          <Grid container spacing={3}>
+          <Grid2 container spacing={3}>
             {favoriteAds.map((ad) => (
-              <Grid item xs={12} sm={6} md={4} key={ad.id}>
+              <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
                 <AdCard>
                   <CardMedia
                     component="img"
@@ -128,9 +129,9 @@ const UserAccount = () => {
                     </Typography>
                   </CardContent>
                 </AdCard>
-              </Grid>
+              </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         );
       case 'settings':
         return (
@@ -148,7 +149,7 @@ const UserAccount = () => {
                   <TextField
                     fullWidth
                     label="Name"
-                    defaultValue="ZX CV"
+                    defaultValue="Zx CV"
                   />
                   <TextField
                     fullWidth
