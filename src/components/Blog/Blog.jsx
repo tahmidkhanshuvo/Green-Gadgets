@@ -3,6 +3,7 @@ import { List, Avatar, Space, Button, Card } from "antd";
 import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
 import "antd/dist/reset.css";
 
+
 const articles = {
   recycle: [
     {
@@ -94,12 +95,12 @@ const Blog = ({ themeMode }) => {
 
   // Define colors for light and dark mode
   const isDarkMode = themeMode === "dark";
-  const cardBackground = isDarkMode ? "#579040" : "#e8f5e9";
+  const cardBackground = isDarkMode ? "#e8f5e9" : "#e8f5e9";
   const textColor = isDarkMode ? "#000" : "#000";
 
   return (
     <div style={{ padding: "24px", maxWidth: "800px", margin: "auto", color: textColor }}>
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+      <div style={{ textAlign: "matchParent", margin: "20px" }}>
         {Object.keys(articles).map((topic) => (
           <Button
             key={topic}
