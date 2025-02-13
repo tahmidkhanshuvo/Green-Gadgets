@@ -6,7 +6,7 @@ import logo_light from '../../assets/logo-black.png';
 import logo_dark from '../../assets/logo-white.png';
 import toggle_light from '../../assets/night.png';
 import toggle_dark from '../../assets/day.png';
-import { FaBars, FaTimes, FaSearch, FaComment, FaUserCircle } from 'react-icons/fa';
+import { FaBars, FaComment, FaUserCircle } from 'react-icons/fa';
 
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
@@ -24,15 +24,20 @@ const Navbar = ({ theme, setTheme }) => {
   return (
     <>
       <div className='navbar'>
-        {/* Logo */}
-        <img src={theme === 'light' ? logo_light : logo_dark} alt='logo' className='logo' />
+        {/* Logo - Click to go home */}
+        <img 
+          src={theme === 'light' ? logo_light : logo_dark} 
+          alt='logo' 
+          className='logo' 
+          onClick={() => handleButtonClick('/')} // Redirect to Home
+          style={{ cursor: 'pointer' }} // Ensure it's clickable
+        />
 
         {/* Main Menu (Hidden on Mobile) */}
         <ul className='desktop-menu'>
           <li className='ads'>
             <button onClick={() => handleButtonClick('/search')}>
-              <FaSearch className="icon" />
-              <span className="icon-text">Search</span>
+              <span className="icon-text">All Ads</span>
             </button>
           </li>
           <li className='chat'>
@@ -63,23 +68,18 @@ const Navbar = ({ theme, setTheme }) => {
         />
 
         {/* Mobile Menu Toggle Button (☰) */}
-        <button className="mobile-toggle" onClick={() => setMobileMenuOpen(true)}>
+        <button className="mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           <FaBars />
         </button>
       </div>
 
       {/* Mobile Side Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        {/* Close Button (✖) */}
-        <button className="close-btn" onClick={() => setMobileMenuOpen(false)}>
-          <FaTimes />
-        </button>
-
         {/* Mobile Menu Items */}
         <ul>
           <li>
             <button onClick={() => handleButtonClick('/search')}>
-              <FaSearch className="icon" /> Search
+              Search
             </button>
           </li>
           <li>
