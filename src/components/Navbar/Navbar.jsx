@@ -79,7 +79,7 @@ const Navbar = ({ theme, setTheme }) => {
         <ul>
           <li>
             <button onClick={() => handleButtonClick('/search')}>
-              Search
+              All Ads
             </button>
           </li>
           <li>
