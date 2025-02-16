@@ -140,6 +140,7 @@ const ProductSearch = () => {
                 <div className="product-details">
                   <h3>{product.title}</h3>
                   <p>${product.price}</p>
+                  <p className="location">{product.location}</p> {/* Added location here */}
                 </div>
               </div>
             ))}
