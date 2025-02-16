@@ -1,64 +1,53 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  Button,
-  Container,
-  Box,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  TextField,
-  Stack,
-  Paper,
-} from "@mui/material";
+import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
+import { Menu, Layout, Typography, Button, Container, Box, Select, MenuItem, FormControl, InputLabel, TextField, Stack, Paper } from "antd";
+
+const { Content, Sider } = Layout;
+
+const items = [
+  {
+    key: "sub1",
+    icon: <MailOutlined />,
+    label: "Navigation One",
+    children: [
+      { key: "1", label: "Option 1" },
+      { key: "2", label: "Option 2" },
+    ],
+  },
+  {
+    key: "sub2",
+    icon: <AppstoreOutlined />,
+    label: "Navigation Two",
+    children: [
+      { key: "5", label: "Option 5" },
+      { key: "6", label: "Option 6" },
+    ],
+  },
+  {
+    key: "sub3",
+    icon: <SettingOutlined />,
+    label: "Navigation Three",
+    children: [
+      { key: "9", label: "Option 9" },
+      { key: "10", label: "Option 10" },
+    ],
+  },
+];
 
 const PostAd = () => {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [showAdForm, setShowAdForm] = useState(false);
 
-  const textFieldSx = {
-    backgroundColor: "#e8f5e9", // Light green background
-    "& .MuiOutlinedInput-root": {
-      backgroundColor: "#e8f5e9",
-      "& fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.23)",
-      },
-      "&:hover fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.23)",
-      },
-    },
-    "& .MuiInputLabel-root": {
-      color: "rgba(0, 0, 0, 0.87)",
-    },
-    "& .MuiInputBase-input": {
-      color: "rgba(0, 0, 0, 0.87)",
-    },
-  };
-
-  const subcategories = [
-    "TV",
-    "Laptop",
-    "Smart Phone",
-    "Monitor",
-    "Speaker",
-    "CPU",
-    "Tablet",
-    "Camera",
-    "Video Game Console",
-    "Photocopiers",
-  ];
-
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    setCategory(e);
     setSubcategory("");
     setShowAdForm(false);
   };
 
   const handleSubcategoryChange = (e) => {
-    setSubcategory(e.target.value);
-    setShowAdForm(!!e.target.value);
+    setSubcategory(e);
+    setShowAdForm(!!e);
   };
 
   const handleSubmit = (e) => {
@@ -67,140 +56,55 @@ const PostAd = () => {
   };
 
   return (
-    <Box>
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Typography
-          variant="h4"
-          component="h2"
-          gutterBottom
-          sx={{
-            background: "linear-gradient(#579040, #487C3E)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          Post Your Ad
-        </Typography>
-
-        <Paper
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ p: 4, backgroundColor: "#e8f5e9", borderRadius: "8px" }}
-        >
-          <Stack spacing={3}>
-            <FormControl fullWidth>
-              <InputLabel id="category-label">Category</InputLabel>
-              <Select
-                labelId="category-label"
-                id="category"
-                value={category}
-                label="Category"
-                onChange={handleCategoryChange}
-                sx={textFieldSx}
-              >
-                <MenuItem value="">Select a category</MenuItem>
-                <MenuItem value="recycled">Recycled Product</MenuItem>
-                <MenuItem value="refurbished">Refurbished Products</MenuItem>
-                <MenuItem value="ewaste">E-waste</MenuItem>
-              </Select>
-            </FormControl>
-
-            {category && (
-              <FormControl fullWidth>
-                <InputLabel id="subcategory-label">Sub Category</InputLabel>
-                <Select
-                  labelId="subcategory-label"
-                  id="subcategory"
-                  value={subcategory}
-                  label="Sub Category"
-                  onChange={handleSubcategoryChange}
-                  sx={textFieldSx}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200, // Limit dropdown height
-                        overflow: "auto",
-                      },
-                    },
-                  }}
-                >
-                  <MenuItem value="">Select a sub-category</MenuItem>
-                  {subcategories.map((sub) => (
-                    <MenuItem key={sub} value={sub}>
-                      {sub}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-
-            {showAdForm && (
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider width={256}>
+        <Menu mode="vertical" items={items} />
+      </Sider>
+      <Layout>
+        <Content style={{ padding: "24px", maxWidth: "800px", margin: "auto" }}>
+          <Container maxWidth="md">
+            <Typography.Title level={2} style={{ textAlign: "center" }}>Post Your Ad</Typography.Title>
+            <Paper component="form" onSubmit={handleSubmit} style={{ padding: "24px", backgroundColor: "#e8f5e9", borderRadius: "8px" }}>
               <Stack spacing={3}>
-                <TextField fullWidth label="Title" required sx={textFieldSx} />
-                <TextField
-                  fullWidth
-                  label="Description"
-                  multiline
-                  rows={4}
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Quantity"
-                  type="number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Price"
-                  type="number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Location"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Contact Number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  required
-                  type="file"
-                  id="pictures"
-                  name="pictures"
-                  accept="image/*"
-                  multiple
-                  sx={textFieldSx}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    whiteSpace: "nowrap",
-                    minWidth: "fit-content",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  Post Ad
-                </Button>
+                <FormControl fullWidth>
+                  <InputLabel>Category</InputLabel>
+                  <Select value={category} onChange={handleCategoryChange}>
+                    <MenuItem value="recycled">Recycled Product</MenuItem>
+                    <MenuItem value="refurbished">Refurbished Products</MenuItem>
+                    <MenuItem value="ewaste">E-waste</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {category && (
+                  <FormControl fullWidth>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select value={subcategory} onChange={handleSubcategoryChange}>
+                      {["TV", "Laptop", "Smart Phone"].map((sub) => (
+                        <MenuItem key={sub} value={sub}>
+                          {sub}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+
+                {showAdForm && (
+                  <Stack spacing={3}>
+                    <TextField fullWidth label="Title" required />
+                    <TextField fullWidth label="Description" multiline rows={4} required />
+                    <TextField fullWidth label="Quantity" type="number" required />
+                    <TextField fullWidth label="Price" type="number" required />
+                    <TextField fullWidth label="Location" required />
+                    <TextField fullWidth label="Contact Number" required />
+                    <Button type="submit" variant="contained" color="primary">Post Ad</Button>
+                  </Stack>
+                )}
               </Stack>
-            )}
-          </Stack>
-        </Paper>
-      </Container>
-    </Box>
+            </Paper>
+          </Container>
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 
