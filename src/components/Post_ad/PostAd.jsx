@@ -1,207 +1,204 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  Button,
-  Container,
-  Box,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  TextField,
-  Stack,
-  Paper,
-} from "@mui/material";
+import "./PostAd.css";
 
 const PostAd = () => {
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [showAdForm, setShowAdForm] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("success");
 
-  const textFieldSx = {
-    backgroundColor: "#e8f5e9", // Light green background
-    "& .MuiOutlinedInput-root": {
-      backgroundColor: "#e8f5e9",
-      "& fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.23)",
-      },
-      "&:hover fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.23)",
-      },
-    },
-    "& .MuiInputLabel-root": {
-      color: "rgba(0, 0, 0, 0.87)",
-    },
-    "& .MuiInputBase-input": {
-      color: "rgba(0, 0, 0, 0.87)",
-    },
+  const [selectedCategory, setSelectedCategory] = useState("Select Category");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [adTitle, setAdTitle] = useState("");
+  const [adDescription, setAdDescription] = useState("");
+  const [photos, setPhotos] = useState(null);
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [location, setLocation] = useState("");
+  const [email, setEmail] = useState("");
+
+  // Additional fields
+  const [condition, setCondition] = useState("");
+  const [brand, setBrand] = useState("");
+  const [model, setModel] = useState("");
+
+  const [showCategoryPopup, setShowCategoryPopup] = useState(false);
+
+  const categories = ["Refurbished", "Recycle", "Reuse"];
+  const subCategories = {
+    Mobile: ["Condition", "Brand", "Model"],
+    Laptop: ["Condition", "Brand", "Processor", "RAM", "Storage"],
+    Monitor: ["Condition", "Brand", "Screen Size"],
+    Watch: ["Condition", "Brand", "Type"],
+    TV: ["Condition", "Brand", "Screen Size", "Type"],
+    Speaker: ["Condition", "Brand", "Power"],
+    CPU: ["Condition", "Brand", "Processor", "RAM", "Storage"],
+    Camera: ["Condition", "Brand", "Lens Type"],
+    "Video Game Console": ["Condition", "Brand", "Model"],
+    Photocopiers: ["Condition", "Brand", "Type"],
   };
 
-  const subcategories = [
-    "TV",
-    "Laptop",
-    "Smart Phone",
-    "Monitor",
-    "Speaker",
-    "CPU",
-    "Tablet",
-    "Camera",
-    "Video Game Console",
-    "Photocopiers",
-  ];
+  const handlePostAd = () => {
+    if (
+      selectedCategory === "Select Category" ||
+      selectedSubCategory === "" ||
+      adTitle.trim() === "" ||
+      adDescription.trim() === "" ||
+      !photos ||
+      name.trim() === "" ||
+      mobile.trim() === "" ||
+      location.trim() === "" ||
+      email.trim() === ""
+    ) {
+      setPopupMessage("❌ You must fill in all fields before posting!");
+      setPopupType("error");
+    } else {
+      setPopupMessage("✅ Your Ad has been Posted Successfully!");
+      setPopupType("success");
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setSubcategory("");
-    setShowAdForm(false);
-  };
-
-  const handleSubcategoryChange = (e) => {
-    setSubcategory(e.target.value);
-    setShowAdForm(!!e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Ad submitted successfully!");
+      // Reset form after successful submission
+      setSelectedCategory("Select Category");
+      setSelectedSubCategory("");
+      setAdTitle("");
+      setAdDescription("");
+      setPhotos(null);
+      setName("");
+      setMobile("");
+      setLocation("");
+      setEmail("");
+      setCondition("");
+      setBrand("");
+      setModel("");
+    }
+    setShowPopup(true);
   };
 
   return (
-    <Box>
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Typography
-          variant="h4"
-          component="h2"
-          gutterBottom
-          sx={{
-            background: "linear-gradient(#579040, #487C3E)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          Post Your Ad
-        </Typography>
+    <div className="post-ad-container">
+      <h2 className="title">Post an Ad</h2>
 
-        <Paper
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ p: 4, backgroundColor: "#e8f5e9", borderRadius: "8px" }}
-        >
-          <Stack spacing={3}>
-            <FormControl fullWidth>
-              <InputLabel id="category-label">Category</InputLabel>
-              <Select
-                labelId="category-label"
-                id="category"
-                value={category}
-                label="Category"
-                onChange={handleCategoryChange}
-                sx={textFieldSx}
-              >
-                <MenuItem value="">Select a category</MenuItem>
-                <MenuItem value="recycled">Recycled Product</MenuItem>
-                <MenuItem value="refurbished">Refurbished Products</MenuItem>
-                <MenuItem value="ewaste">E-waste</MenuItem>
-              </Select>
-            </FormControl>
+      {/* Category Selection */}
+      <div className="form-group">
+        <label>Select Category *</label>
+        <button className="dropdown-btn" onClick={() => setShowCategoryPopup(true)}>
+          {selectedCategory}
+        </button>
+      </div>
 
-            {category && (
-              <FormControl fullWidth>
-                <InputLabel id="subcategory-label">Sub Category</InputLabel>
-                <Select
-                  labelId="subcategory-label"
-                  id="subcategory"
-                  value={subcategory}
-                  label="Sub Category"
-                  onChange={handleSubcategoryChange}
-                  sx={textFieldSx}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200, // Limit dropdown height
-                        overflow: "auto",
-                      },
-                    },
+      {showCategoryPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Select a Category</h3>
+            <ul>
+              {categories.map((category) => (
+                <li
+                  key={category}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setShowCategoryPopup(false);
                   }}
                 >
-                  <MenuItem value="">Select a sub-category</MenuItem>
-                  {subcategories.map((sub) => (
-                    <MenuItem key={sub} value={sub}>
-                      {sub}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
+                  {category}
+                </li>
+              ))}
+            </ul>
+            <button className="back-btn" onClick={() => setShowCategoryPopup(false)}>
+              Back
+            </button>
+          </div>
+        </div>
+      )}
 
-            {showAdForm && (
-              <Stack spacing={3}>
-                <TextField fullWidth label="Title" required sx={textFieldSx} />
-                <TextField
-                  fullWidth
-                  label="Description"
-                  multiline
-                  rows={4}
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Quantity"
-                  type="number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Price"
-                  type="number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Location"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  label="Contact Number"
-                  required
-                  sx={textFieldSx}
-                />
-                <TextField
-                  fullWidth
-                  required
-                  type="file"
-                  id="pictures"
-                  name="pictures"
-                  accept="image/*"
-                  multiple
-                  sx={textFieldSx}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    whiteSpace: "nowrap",
-                    minWidth: "fit-content",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  Post Ad
-                </Button>
-              </Stack>
-            )}
-          </Stack>
-        </Paper>
-      </Container>
-    </Box>
+      {/* Subcategory Selection */}
+      <div className="form-group">
+        <label>Sub Category *</label>
+        <select value={selectedSubCategory} onChange={(e) => setSelectedSubCategory(e.target.value)}>
+          <option value="">Select Sub Category</option>
+          {Object.keys(subCategories).map((sub) => (
+            <option key={sub} value={sub}>
+              {sub}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Other Input Fields */}
+      <div className="form-group">
+        <label>Ad Title *</label>
+        <input type="text" placeholder="Enter your ad title" value={adTitle} onChange={(e) => setAdTitle(e.target.value)} />
+      </div>
+
+      <div className="form-group">
+        <label>Ad Description *</label>
+        <textarea placeholder="Write a few lines about your product" value={adDescription} onChange={(e) => setAdDescription(e.target.value)}></textarea>
+      </div>
+
+      {/* Dynamically Show Additional Fields */}
+      {selectedSubCategory && subCategories[selectedSubCategory] && (
+        <>
+          {subCategories[selectedSubCategory].map((field) => (
+            <div className="form-group" key={field}>
+              <label>{field} *</label>
+              <input
+                type="text"
+                placeholder={`Enter ${field}`}
+                value={field === "Condition" ? condition : field === "Brand" ? brand : model}
+                onChange={(e) => {
+                  if (field === "Condition") setCondition(e.target.value);
+                  else if (field === "Brand") setBrand(e.target.value);
+                  else setModel(e.target.value);
+                }}
+              />
+            </div>
+          ))}
+        </>
+      )}
+
+      <div className="form-group">
+        <label>Photos for Your Ad *</label>
+        <input type="file" multiple onChange={(e) => setPhotos(e.target.files.length > 0 ? e.target.files : null)} />
+      </div>
+
+      <div className="form-group">
+        <label>Your Name *</label>
+        <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
+      </div>
+
+      <div className="form-group">
+        <label>Your Mobile No *</label>
+        <input type="text" placeholder="Enter your mobile number" value={mobile} onChange={(e) => setMobile(e.target.value)} />
+      </div>
+
+      <div className="form-group">
+        <label>Your Location *</label>
+        <input type="text" placeholder="Enter your location" value={location} onChange={(e) => setLocation(e.target.value)} />
+      </div>
+
+      <div className="form-group">
+        <label>Your Email Address *</label>
+        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </div>
+
+      <p className="terms">
+        By clicking <b>post</b> button, you accept our{" "}
+        <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
+      </p>
+
+      <button className="post-btn" onClick={handlePostAd}>POST</button>
+
+      {/* Popup Message */}
+      {showPopup && (
+        <div className="popup">
+          <div className={`popup-content ${popupType}`}>
+            <p>{popupMessage}</p>
+            <button className="close-btn" onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default PostAd;
+export default PostAd; 
+
+
+ 

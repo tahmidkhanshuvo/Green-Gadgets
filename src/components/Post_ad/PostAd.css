@@ -1,75 +1,270 @@
-.container {
-  height: calc(100vh - 55px); /* Full screen minus Navbar height */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: #f9f9f9;
+body {
+  background-color: #f8f9fa;
+  font-family: "Arial", sans-serif;
 }
 
-form {
-  width: 100%;
+.post-ad-container {
   max-width: 600px;
-  padding: 30px;
-  background: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin: 50px auto;
+  padding: 25px;
+  background: white;
   border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  color: #ff8800;
+  margin-bottom: 20px;
+  font-size: 24px;
 }
 
 .form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+textarea {
+  height: 100px;
+  resize: none;
+}
+
+input[type="file"] {
+  padding: 5px;
+}
+
+/* Category Dropdown Button */
+.dropdown-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
+}
+
+.dropdown-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Post Button */
+.post-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: 0.3s ease-in-out;
+  font-weight: bold;
+}
+
+.post-btn:hover {
+  background: linear-gradient(135deg, #5fb300, #004494);
+  box-shadow: 0px 5px 15px rgba(0, 187, 16, 0.521);
+}
+
+/* Terms and conditions */
+.terms {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
+.terms a {
+  color: #007bff;
+  text-decoration: none;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.terms a:hover {
+  text-decoration: underline;
+}
+
+/* 🔹 Beautiful Popup Styling */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  outline: none;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+.popup-content {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  width: 450px;
+  animation: popUp 0.3s ease-in-out;
 }
 
-button[type='submit'] {
-  background-color: #007bff;
-  color: #fff;
-  font-size: 1rem;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
+/* Smooth Appearance Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Popup Title */
+.popup-content h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* 🔹 Grid layout for category buttons */
+.popup-content ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* 🔹 Beautiful Animated Category Buttons */
+.popup-content li {
+  padding: 14px 20px;
   cursor: pointer;
-}
-
-button[type='submit']:hover {
-  background-color: #0056b3;
-}
-
-/* Consistency adjustments for buttons and form layouts */
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 5px;
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: 0.3s ease-in-out;
+  text-align: center;
   border: none;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
+  box-shadow: 0px 5px 15px rgba(40, 167, 69, 0.4);
+  display: inline-block;
 }
 
-button:hover {
-  background-color: #699971;
+/* Hover Effect - Glow & Bounce */
+.popup-content li:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  transform: scale(1.1);
+  box-shadow: 0px 8px 20px rgba(30, 126, 52, 0.5);
+}
+
+/* 🔹 Back Button */
+.back-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: none;
+  background: #ff4757;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+}
+
+.back-btn:hover {
+  background: #e84118;
+  transform: scale(1.05);
+}
+
+/* 🔹 Popup Message Styling */
+.popup-content.success {
+  border: 2px solid green;
+  color: green;
+}
+
+.popup-content.error {
+  border: 2px solid red;
+  color: red;
+}
+
+/* Close Button */
+.close-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+}
+
+.close-btn:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+}
+
+/* 🔹 Multiple Photos Upload Section */
+.photo-preview {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.photo-item {
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.photo-item span {
+  font-size: 14px;
+  color: #333;
+}
+
+.photo-item button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 3px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.photo-item button:hover {
+  background: darkred;
 }
