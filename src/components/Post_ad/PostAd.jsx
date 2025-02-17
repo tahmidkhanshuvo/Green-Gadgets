@@ -6,7 +6,7 @@ const PostAd = () => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("success");
 
-  const [selectedCategory, setSelectedCategory] = useState("Select Category");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [adTitle, setAdTitle] = useState("");
   const [adDescription, setAdDescription] = useState("");
@@ -15,13 +15,12 @@ const PostAd = () => {
   const [mobile, setMobile] = useState("");
   const [location, setLocation] = useState("");
   const [email, setEmail] = useState("");
-
-  // Additional fields
-  const [condition, setCondition] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+  const [price, setPrice] = useState("");
 
   const [showCategoryPopup, setShowCategoryPopup] = useState(false);
+
+  // Dynamic fields based on subcategory (separate state for each field)
+  const [dynamicFields, setDynamicFields] = useState({});
 
   const categories = ["Refurbished", "Recycle", "Reuse"];
   const subCategories = {
@@ -37,12 +36,28 @@ const PostAd = () => {
     Photocopiers: ["Condition", "Brand", "Type"],
   };
 
+  const handleSubCategoryChange = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+    // Reset dynamic fields when subcategory changes
+    const initialFields = {};
+    subCategories[subCategory]?.forEach((field) => (initialFields[field] = ""));
+    setDynamicFields(initialFields);
+  };
+
+  const handleDynamicFieldChange = (field, value) => {
+    setDynamicFields((prev) => ({
+      ...prev,
+      [field]: value, // Update only the specific field
+    }));
+  };
+
   const handlePostAd = () => {
     if (
-      selectedCategory === "Select Category" ||
-      selectedSubCategory === "" ||
+      !selectedCategory ||
+      !selectedSubCategory ||
       adTitle.trim() === "" ||
       adDescription.trim() === "" ||
+      price.trim() === "" ||
       !photos ||
       name.trim() === "" ||
       mobile.trim() === "" ||
@@ -55,19 +70,18 @@ const PostAd = () => {
       setPopupMessage("✅ Your Ad has been Posted Successfully!");
       setPopupType("success");
 
-      // Reset form after successful submission
-      setSelectedCategory("Select Category");
+      // Reset form
+      setSelectedCategory("");
       setSelectedSubCategory("");
       setAdTitle("");
       setAdDescription("");
+      setPrice("");
       setPhotos(null);
       setName("");
       setMobile("");
       setLocation("");
       setEmail("");
-      setCondition("");
-      setBrand("");
-      setModel("");
+      setDynamicFields({});
     }
     setShowPopup(true);
   };
@@ -76,114 +90,111 @@ const PostAd = () => {
     <div className="post-ad-container">
       <h2 className="title">Post an Ad</h2>
 
-      {/* Category Selection */}
+      {/* Step 1: Category Selection */}
       <div className="form-group">
         <label>Select Category *</label>
-        <button className="dropdown-btn" onClick={() => setShowCategoryPopup(true)}>
-          {selectedCategory}
-        </button>
-      </div>
-
-      {showCategoryPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <h3>Select a Category</h3>
-            <ul>
-              {categories.map((category) => (
-                <li
-                  key={category}
-                  onClick={() => {
-                    setSelectedCategory(category);
-                    setShowCategoryPopup(false);
-                  }}
-                >
-                  {category}
-                </li>
-              ))}
-            </ul>
-            <button className="back-btn" onClick={() => setShowCategoryPopup(false)}>
-              Back
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Subcategory Selection */}
-      <div className="form-group">
-        <label>Sub Category *</label>
-        <select value={selectedSubCategory} onChange={(e) => setSelectedSubCategory(e.target.value)}>
-          <option value="">Select Sub Category</option>
-          {Object.keys(subCategories).map((sub) => (
-            <option key={sub} value={sub}>
-              {sub}
+        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <option value="">Select Category</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Other Input Fields */}
-      <div className="form-group">
-        <label>Ad Title *</label>
-        <input type="text" placeholder="Enter your ad title" value={adTitle} onChange={(e) => setAdTitle(e.target.value)} />
-      </div>
+      {/* Step 2: Subcategory Selection */}
+      {selectedCategory && (
+        <div className="form-group">
+          <label>Sub Category *</label>
+          <select value={selectedSubCategory} onChange={(e) => handleSubCategoryChange(e.target.value)}>
+            <option value="">Select Sub Category</option>
+            {Object.keys(subCategories).map((sub) => (
+              <option key={sub} value={sub}>
+                {sub}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
-      <div className="form-group">
-        <label>Ad Description *</label>
-        <textarea placeholder="Write a few lines about your product" value={adDescription} onChange={(e) => setAdDescription(e.target.value)}></textarea>
-      </div>
-
-      {/* Dynamically Show Additional Fields */}
-      {selectedSubCategory && subCategories[selectedSubCategory] && (
+      {/* Step 3: Show all other fields only after subcategory is selected */}
+      {selectedSubCategory && (
         <>
-          {subCategories[selectedSubCategory].map((field) => (
+          {/* Other Input Fields */}
+          <div className="form-group">
+            <label>Ad Title *</label>
+            <input type="text" placeholder="Enter your ad title" value={adTitle} onChange={(e) => setAdTitle(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label>Ad Description *</label>
+            <textarea placeholder="Write a few lines about your product" value={adDescription} onChange={(e) => setAdDescription(e.target.value)}></textarea>
+          </div>
+
+          {/* Dynamically Show Additional Fields */}
+          {subCategories[selectedSubCategory]?.map((field) => (
             <div className="form-group" key={field}>
               <label>{field} *</label>
               <input
                 type="text"
                 placeholder={`Enter ${field}`}
-                value={field === "Condition" ? condition : field === "Brand" ? brand : model}
-                onChange={(e) => {
-                  if (field === "Condition") setCondition(e.target.value);
-                  else if (field === "Brand") setBrand(e.target.value);
-                  else setModel(e.target.value);
-                }}
+                value={dynamicFields[field] || ""}
+                onChange={(e) => handleDynamicFieldChange(field, e.target.value)}
               />
             </div>
           ))}
+
+          {/* Price Field */}
+          <div className="form-group">
+            <label>Price ($)</label>
+            <input
+              type="text"
+              placeholder="Enter price"
+              value={price}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setPrice(value);
+                }
+              }}
+            />
+          </div>
+
+          {/* Photos Field */}
+          <div className="form-group">
+            <label>Photos for Your Ad *</label>
+            <input type="file" multiple onChange={(e) => setPhotos(e.target.files.length > 0 ? e.target.files : null)} />
+          </div>
+
+          <div className="form-group">
+            <label>Your Name *</label>
+            <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label>Your Mobile No *</label>
+            <input type="text" placeholder="Enter your mobile number" value={mobile} onChange={(e) => setMobile(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label>Your Location *</label>
+            <input type="text" placeholder="Enter your location" value={location} onChange={(e) => setLocation(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label>Your Email Address *</label>
+            <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
+          <p className="terms">
+            By clicking <b>post</b> button, you accept our{" "}
+            <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
+          </p>
+
+          <button className="post-btn" onClick={handlePostAd}>POST</button>
         </>
       )}
-
-      <div className="form-group">
-        <label>Photos for Your Ad *</label>
-        <input type="file" multiple onChange={(e) => setPhotos(e.target.files.length > 0 ? e.target.files : null)} />
-      </div>
-
-      <div className="form-group">
-        <label>Your Name *</label>
-        <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
-      </div>
-
-      <div className="form-group">
-        <label>Your Mobile No *</label>
-        <input type="text" placeholder="Enter your mobile number" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-      </div>
-
-      <div className="form-group">
-        <label>Your Location *</label>
-        <input type="text" placeholder="Enter your location" value={location} onChange={(e) => setLocation(e.target.value)} />
-      </div>
-
-      <div className="form-group">
-        <label>Your Email Address *</label>
-        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </div>
-
-      <p className="terms">
-        By clicking <b>post</b> button, you accept our{" "}
-        <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
-      </p>
-
-      <button className="post-btn" onClick={handlePostAd}>POST</button>
 
       {/* Popup Message */}
       {showPopup && (
@@ -198,7 +209,4 @@ const PostAd = () => {
   );
 };
 
-export default PostAd; 
-
-
- 
+export default PostAd;
