@@ -25,7 +25,7 @@ const PostAd = () => {
   const categories = ["Refurbished", "Recycle", "Reuse"];
   const subCategories = {
     Mobile: ["Condition", "Brand", "Model"],
-    Laptop: ["Condition", "Brand", "Processor", "RAM", "Storage"],
+    Laptop: ["Condition", "Brand","Model", "Processor", "RAM", "Storage"],
     Monitor: ["Condition", "Brand", "Screen Size"],
     Watch: ["Condition", "Brand", "Type"],
     TV: ["Condition", "Brand", "Screen Size", "Type"],
