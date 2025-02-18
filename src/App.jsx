@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer';
 import HomePage from './components/Home/Home';
 import ProductSearch from './components/Product-Search/Product-Search';
 import UserAccount from './components/Account/UserAccount';
-import PostAd from './components/Post_Ad/PostAd';
+import PostAd from './components/Post_ad/PostAd';
 import AboutUs from './components/About_us/AboutUs';
 
 const App = () => {
