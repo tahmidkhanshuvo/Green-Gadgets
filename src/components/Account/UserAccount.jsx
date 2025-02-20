@@ -1,19 +1,5 @@
-import React, { useState } from 'react';
-import { 
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Grid2,
-  Typography,
-  TextField,
-  Stack,
-  Divider,
-} from '@mui/material';
-
-
+import React, { useState, useEffect } from 'react';
+import { Box, Button, Card, CardContent, CardMedia, Container, Grid, Typography, TextField, Stack, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const DashboardButton = styled(Button)(({ theme }) => ({
@@ -23,8 +9,7 @@ const DashboardButton = styled(Button)(({ theme }) => ({
   width: '200px',
   fontSize: '1.1rem',
   background: `linear-gradient(#579040, #487C3E)`,
-  color: 'white',
-  '&:hover': {
+  color: 'white','&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 5px 8px rgba(0,0,0,0.2)',
   },
@@ -41,6 +26,7 @@ const AdCard = styled(Card)(({ theme }) => ({
 
 const UserAccount = () => {
   const [activeTab, setActiveTab] = useState('myAds');
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {}); // Fetch user from localStorage
 
   const myAds = [
     {
@@ -48,15 +34,15 @@ const UserAccount = () => {
       title: 'iPhone 12',
       price: '৳62,999',
       image: 'https://via.placeholder.com/300x200',
-      description: 'Excellent condition, 1 year old'
+      description: 'Excellent condition, 1 year old',
     },
     {
       id: 2,
       title: 'Samsung Galaxy S21',
       price: '৳52,999',
       image: 'https://via.placeholder.com/300x200',
-      description: 'Like new, complete box'
-    }
+      description: 'Like new, complete box',
+    },
   ];
 
   const favoriteAds = [
@@ -65,31 +51,26 @@ const UserAccount = () => {
       title: 'Gaming Laptop',
       price: '৳85,000',
       image: 'https://via.placeholder.com/300x200',
-      description: 'High-performance gaming laptop with NVIDIA graphics and 16GB RAM'
+      description: 'High-performance gaming laptop with NVIDIA graphics and 16GB RAM',
     },
     {
       id: 2,
       title: '27-inch Monitor',
       price: '৳12,000',
       image: 'https://via.placeholder.com/300x200',
-      description: 'Crystal clear display with 144Hz refresh rate'
-    }
+      description: 'Crystal clear display with 144Hz refresh rate',
+    },
   ];
 
   const renderContent = () => {
     switch (activeTab) {
       case 'myAds':
         return (
-          <Grid2 container spacing={3}>
+          <Grid container spacing={3}>
             {myAds.map((ad) => (
-              <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
+              <Grid item xs={12} sm={6} md={4} key={ad.id}>
                 <AdCard>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={ad.image}
-                    alt={ad.title}
-                  />
+                  <CardMedia component="img" height="200" image={ad.image} alt={ad.title} />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {ad.title}
@@ -102,22 +83,17 @@ const UserAccount = () => {
                     </Typography>
                   </CardContent>
                 </AdCard>
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
         );
       case 'favorites':
         return (
-          <Grid2 container spacing={3}>
+          <Grid container spacing={3}>
             {favoriteAds.map((ad) => (
-              <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
+              <Grid item xs={12} sm={6} md={4} key={ad.id}>
                 <AdCard>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={ad.image}
-                    alt={ad.title}
-                  />
+                  <CardMedia component="img" height="200" image={ad.image} alt={ad.title} />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {ad.title}
@@ -130,9 +106,9 @@ const UserAccount = () => {
                     </Typography>
                   </CardContent>
                 </AdCard>
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
         );
       case 'settings':
         return (
@@ -141,34 +117,11 @@ const UserAccount = () => {
               <Box>
                 <Typography variant="h6" gutterBottom>Change Details</Typography>
                 <Stack spacing={2}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    defaultValue="zx45cv90@gmail.com"
-                    disabled
-                  />
-                  <TextField
-                    fullWidth
-                    label="Name"
-                    defaultValue="Zx CV"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Location"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Sub Location"
-                  />
-                  <Button 
-                    variant="contained" 
-                    color="primary"
-                    sx={{
-                      whiteSpace: 'nowrap',
-                      minWidth: 'fit-content',
-                      alignSelf: 'flex-start'
-                    }}
-                  >
+                  <TextField fullWidth label="Email" defaultValue={user.email || ''} disabled />
+                  <TextField fullWidth label="Name" defaultValue={user.name || ''} />
+                  <TextField fullWidth label="Location" defaultValue={user.location || ''} />
+                  <TextField fullWidth label="Sub Location" defaultValue={user.subLocation || ''} />
+                  <Button variant="contained" color="primary" sx={{ whiteSpace: 'nowrap', minWidth: 'fit-content', alignSelf: 'flex-start' }}>
                     Update Details
                   </Button>
                 </Stack>
@@ -179,25 +132,9 @@ const UserAccount = () => {
               <Box>
                 <Typography variant="h6" gutterBottom>Change Password</Typography>
                 <Stack spacing={2}>
-                  <TextField
-                    fullWidth
-                    type="password"
-                    label="New Password"
-                  />
-                  <TextField
-                    fullWidth
-                    type="password"
-                    label="Confirm New Password"
-                  />
-                  <Button 
-                    variant="contained" 
-                    color="primary"
-                    sx={{
-                      whiteSpace: 'nowrap',
-                      minWidth: 'fit-content',
-                      alignSelf: 'flex-start'
-                    }}
-                  >
+                  <TextField fullWidth type="password" label="New Password" />
+                  <TextField fullWidth type="password" label="Confirm New Password" />
+                  <Button variant="contained" color="primary" sx={{ whiteSpace: 'nowrap', minWidth: 'fit-content', alignSelf: 'flex-start' }}>
                     Change Password
                   </Button>
                 </Stack>
@@ -206,23 +143,10 @@ const UserAccount = () => {
               <Divider />
 
               <Stack direction="row" spacing={2} justifyContent="space-between">
-              <Button 
-                  variant="outlined" 
-                  color="error"
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    minWidth: 'fit-content'
-                  }}
-                >
+                <Button variant="outlined" color="error" sx={{ whiteSpace: 'nowrap', minWidth: 'fit-content' }}>
                   Delete Account
                 </Button>
-                <Button 
-                  variant="outlined"
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    minWidth: 'fit-content'
-                  }}
-                >
+                <Button variant="outlined" sx={{ whiteSpace: 'nowrap', minWidth: 'fit-content' }}>
                   Log Out
                 </Button>
               </Stack>
@@ -250,37 +174,20 @@ const UserAccount = () => {
       >
         My Account
       </Typography>
-      
-      <Box sx={{ 
-        display: 'flex', 
-        flexDirection: { xs: 'column', sm: 'row' }, 
-        justifyContent: 'center', 
-        mb: 6,
-        gap: 2
-      }}>
-        <DashboardButton
-          variant={activeTab === 'myAds' ? 'contained' : 'outlined'}
-          onClick={() => setActiveTab('myAds')}
-        >
+
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', mb: 6, gap: 2 }}>
+        <DashboardButton variant={activeTab === 'myAds' ? 'contained' : 'outlined'} onClick={() => setActiveTab('myAds')}>
           My Ads
         </DashboardButton>
-        <DashboardButton
-          variant={activeTab === 'favorites' ? 'contained' : 'outlined'}
-          onClick={() => setActiveTab('favorites')}
-        >
+        <DashboardButton variant={activeTab === 'favorites' ? 'contained' : 'outlined'} onClick={() => setActiveTab('favorites')}>
           Favorites
         </DashboardButton>
-        <DashboardButton
-          variant={activeTab === 'settings' ? 'contained' : 'outlined'}
-          onClick={() => setActiveTab('settings')}
-        >
+        <DashboardButton variant={activeTab === 'settings' ? 'contained' : 'outlined'} onClick={() => setActiveTab('settings')}>
           Settings
         </DashboardButton>
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        {renderContent()}
-      </Box>
+      <Box sx={{ mt: 4 }}>{renderContent()}</Box>
     </Container>
   );
 };

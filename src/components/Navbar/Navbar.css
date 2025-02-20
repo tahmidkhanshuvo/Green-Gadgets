@@ -84,7 +84,8 @@ ul li.chat {
   }
 }
 
-ul li:nth-child(4) button { /* Target 'Post Free Ads' button */
+/* Apply hover only for Post Free Ads Button */
+ul li.post-ads button { /* Target 'Post Free Ads' button */
   background: linear-gradient(45deg, #a40606, rgb(248 86 57), #ffffff, #f53844, #00237E);
   background-size: 400% 250%;
   animation: gradient 8s ease infinite;
@@ -95,13 +96,13 @@ ul li:nth-child(4) button { /* Target 'Post Free Ads' button */
   transition: transform 0.3s ease-in-out;
 }
 
-ul li:nth-child(4) button:hover {
+ul li.post-ads button:hover {
   transform: scale(1.07);
 }
 
 /* Disable Animation for Mobile (≤ 768px) */
 @media (max-width: 768px) {
-  ul li:nth-child(4) button {
+  ul li.post-ads button {
     background: #66bb6a; /* Mobile devices - No animation */
     background-size: initial;
     animation: none;
