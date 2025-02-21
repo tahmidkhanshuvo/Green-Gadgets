@@ -7,11 +7,7 @@ import logo_light from '../../assets/logo-black.png';
 import logo_dark from '../../assets/logo.png';
 import toggle_light from '../../assets/night.png';
 import toggle_dark from '../../assets/day.png';
-<<<<<<< HEAD
-import { FaBars, FaComment, FaUserCircle } from 'react-icons/fa';
-=======
 import { FaBars, FaTimes, FaSearch, FaComment, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
->>>>>>> check3+saubia
 
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
@@ -30,7 +26,6 @@ const Navbar = ({ theme, setTheme }) => {
   return (
     <>
       <div className='navbar'>
-<<<<<<< HEAD
         {/* Logo - Click to go home */}
         <img 
           src={theme === 'light' ? logo_light : logo_dark} 
@@ -39,9 +34,6 @@ const Navbar = ({ theme, setTheme }) => {
           onClick={() => handleButtonClick('/')} // Redirect to Home
           style={{ cursor: 'pointer' }} // Ensure it's clickable
         />
-=======
-        <img src={theme === 'light' ? logo_light : logo_dark} alt='logo' className='logo' />
->>>>>>> check3+saubia
 
         <ul className='desktop-menu'>
           <li className='ads'>
@@ -94,25 +86,14 @@ const Navbar = ({ theme, setTheme }) => {
           className='toggle-icon'
         />
 
-<<<<<<< HEAD
         {/* Mobile Menu Toggle Button (☰) */}
         <button className="mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-=======
-        <button className="mobile-toggle" onClick={() => setMobileMenuOpen(true)}>
->>>>>>> check3+saubia
           <FaBars />
         </button>
       </div>
 
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-<<<<<<< HEAD
         {/* Mobile Menu Items */}
-=======
-        <button className="close-btn" onClick={() => setMobileMenuOpen(false)}>
-          <FaTimes />
-        </button>
-
->>>>>>> check3+saubia
         <ul>
           <li>
             <button onClick={() => handleButtonClick('/search')}>

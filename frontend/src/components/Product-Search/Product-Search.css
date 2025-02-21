@@ -310,27 +310,20 @@
 
   .sidebar {
     width: 250px;
-<<<<<<< HEAD
-=======
     padding: 20px;
     background-color: '#d9fdd3';
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
->>>>>>> check3+saubia
   }
 
   .product-item {
-<<<<<<< HEAD
-    width: 48%; /* Slightly smaller product cards */
-=======
     background-color:'#d9fdd3';
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
->>>>>>> check3+saubia
   }
 
   .search-bar input {
@@ -348,9 +341,6 @@
   .sidebar {
     width: 280px;
   }
-<<<<<<< HEAD
-
-=======
   
   .product-details h3 {
     font-size: 18px;
@@ -459,7 +449,6 @@
   }
   
   /* Product Item Styles */
->>>>>>> check3+saubia
   .product-item {
     width: 32%; /* Multiple product cards in a row */
   }
