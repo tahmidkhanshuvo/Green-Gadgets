@@ -7,6 +7,10 @@
   margin-bottom: 20px;
 }
 
+.account-title.dark {
+  -webkit-text-fill-color: white;
+}
+
 .tabs-container {
   display: flex;
   justify-content: center;
@@ -18,6 +22,7 @@
   margin-top: 20px;
 }
 
+/* ✅ Settings Container with Light/Dark Mode Support */
 .settings-container {
   max-width: 600px;
   margin: 0 auto;
@@ -27,6 +32,32 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.settings-container.dark {
+  background-color: #222;
+  color: white;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* ✅ Divider */
 .divider {
   margin: 20px 0;
+}
+
+/* ✅ Update Button Styling */
+button {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* ✅ Dark Mode Button */
+.settings-container.dark button {
+  background-color: #579040;
+  color: white;
+}
+
+/* ✅ Logout Button */
+button.logout {
+  background-color: red;
+  color: white;
 }

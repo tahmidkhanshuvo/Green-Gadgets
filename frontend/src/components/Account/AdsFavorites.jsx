@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import "./AdsFavorites.css";
+import "./AdsFavorites.css"; // Ensure this file also exists
 
+// ✅ Hardcoded My Ads
 const myAds = [
   {
     id: 1,
@@ -19,6 +20,7 @@ const myAds = [
   },
 ];
 
+// ✅ Hardcoded Favorite Ads
 const favoriteAds = [
   {
     id: 1,
