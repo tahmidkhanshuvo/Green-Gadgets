@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from "../../context/AuthContext"; // ✅ Import AuthContext
 import './Navbar.css';
 
 import logo_light from '../../assets/logo-black.png';
@@ -10,12 +11,8 @@ import { FaBars, FaTimes, FaSearch, FaComment, FaUserCircle, FaSignOutAlt } from
 
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useContext(AuthContext); // ✅ Use AuthContext
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    setIsAuthenticated(!!localStorage.getItem('user'));
-  }, []);
 
   const toggle_mode = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -26,19 +23,11 @@ const Navbar = ({ theme, setTheme }) => {
     setMobileMenuOpen(false); // Close menu on navigation
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    navigate('/login');
-  };
-
   return (
     <>
       <div className='navbar'>
-        {/* Logo */}
         <img src={theme === 'light' ? logo_light : logo_dark} alt='logo' className='logo' />
 
-        {/* Main Menu (Hidden on Mobile) */}
         <ul className='desktop-menu'>
           <li className='ads'>
             <button onClick={() => handleButtonClick('/search')}>
@@ -53,7 +42,6 @@ const Navbar = ({ theme, setTheme }) => {
             </button>
           </li>
 
-          {/* Show Account for logged-in users, Login/Sign Up for non-authenticated users */}
           {isAuthenticated ? (
             <>
               <li>
@@ -63,7 +51,7 @@ const Navbar = ({ theme, setTheme }) => {
                 </button>
               </li>
               <li>
-                <button onClick={handleLogout}>
+                <button onClick={logout}>
                   <FaSignOutAlt className="icon" />
                   <span className="icon-text">Logout</span>
                 </button>
@@ -78,7 +66,6 @@ const Navbar = ({ theme, setTheme }) => {
             </li>
           )}
 
-          {/* Post Free Ads button */}
           <li className='post-ads'>
             <button onClick={() => handleButtonClick('/postAd')} className="post-ads-button">
               <span className="icon-text">Post Free Ads</span>
@@ -86,7 +73,6 @@ const Navbar = ({ theme, setTheme }) => {
           </li>
         </ul>
 
-        {/* Toggle Theme Icon */}
         <img
           onClick={toggle_mode}
           src={theme === 'light' ? toggle_light : toggle_dark}
@@ -94,20 +80,16 @@ const Navbar = ({ theme, setTheme }) => {
           className='toggle-icon'
         />
 
-        {/* Mobile Menu Toggle Button (☰) */}
         <button className="mobile-toggle" onClick={() => setMobileMenuOpen(true)}>
           <FaBars />
         </button>
       </div>
 
-      {/* Mobile Side Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        {/* Close Button (✖) */}
         <button className="close-btn" onClick={() => setMobileMenuOpen(false)}>
           <FaTimes />
         </button>
 
-        {/* Mobile Menu Items */}
         <ul>
           <li>
             <button onClick={() => handleButtonClick('/search')}>
@@ -120,7 +102,6 @@ const Navbar = ({ theme, setTheme }) => {
             </button>
           </li>
 
-          {/* Show Account for logged-in users, Login/Sign Up for non-authenticated users */}
           {isAuthenticated ? (
             <>
               <li>
@@ -129,7 +110,7 @@ const Navbar = ({ theme, setTheme }) => {
                 </button>
               </li>
               <li>
-                <button onClick={handleLogout}>
+                <button onClick={logout}>
                   <FaSignOutAlt className="icon" /> Logout
                 </button>
               </li>
@@ -142,7 +123,6 @@ const Navbar = ({ theme, setTheme }) => {
             </li>
           )}
 
-          {/* Post Free Ads button */}
           <li>
             <button onClick={() => handleButtonClick('/postAd')} className="post-ads-button">
               📢 Post Free Ads

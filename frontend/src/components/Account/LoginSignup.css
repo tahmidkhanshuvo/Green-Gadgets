@@ -1,0 +1,15 @@
+.login-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+  .center-text {
+    text-align: center;
+  }
+  
+  .gradient-button {
+    background: linear-gradient(#579040, #487C3E);
+    color: white;
+  }
+  
