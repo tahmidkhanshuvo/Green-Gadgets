@@ -12,11 +12,12 @@ app.use(cors({
   credentials: true,
 }));
 
-// ✅ Connect Routes
-app.use("/api/auth", require("./routes/authRoutes"));  // Authentication Routes
-app.use("/api/account", require("./routes/accountRoutes"));  // User Account Routes
+// ✅ Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/account", require("./routes/accountRoutes"));
+app.use("/api/ads", require("./routes/adsRoutes")); // ✅ Product Routes
 
-// ✅ Connect to MongoDB (Fixed Deprecation Warning)
+// ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch(err => console.error("❌ MongoDB Connection Error:", err));

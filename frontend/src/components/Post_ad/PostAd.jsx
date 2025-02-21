@@ -1,210 +1,193 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./PostAd.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
+// Categories and their respective subcategories with dynamic fields
+const categories = ["Refurbished", "Recycle", "Reuse"];
+const subCategories = {
+  Mobile: ["Condition", "Brand", "Model"],
+  Laptop: ["Condition", "Brand", "Processor", "RAM", "Storage"],
+  Monitor: ["Condition", "Brand", "Screen Size"],
+  Watch: ["Condition", "Brand", "Type"],
+  TV: ["Condition", "Brand", "Screen Size", "Type"],
+  Speaker: ["Condition", "Brand", "Power"],
+  CPU: ["Condition", "Brand", "Processor", "RAM", "Storage"],
+  Camera: ["Condition", "Brand", "Lens Type"],
+  "Video Game Console": ["Condition", "Brand", "Model"],
+  Photocopiers: ["Condition", "Brand", "Type"],
+};
+
 const PostAd = () => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupType, setPopupType] = useState("success");
+  const [formData, setFormData] = useState({
+    category: "",
+    subCategory: "",
+    title: "",
+    description: "",
+    price: "",
+    location: "",
+    name: "",
+    email: "",
+    mobile: "",
+    images: [],
+    details: {},
+  });
 
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  const [adTitle, setAdTitle] = useState("");
-  const [adDescription, setAdDescription] = useState("");
-  const [photos, setPhotos] = useState(null);
-  const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [location, setLocation] = useState("");
-  const [email, setEmail] = useState("");
-  const [price, setPrice] = useState("");
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const [showCategoryPopup, setShowCategoryPopup] = useState(false);
-
-  // Dynamic fields based on subcategory (separate state for each field)
-  const [dynamicFields, setDynamicFields] = useState({});
-
-  const categories = ["Refurbished", "Recycle", "Reuse"];
-  const subCategories = {
-    Mobile: ["Condition", "Brand", "Model"],
-    Laptop: ["Condition", "Brand","Model", "Processor", "RAM", "Storage"],
-    Monitor: ["Condition", "Brand", "Screen Size"],
-    Watch: ["Condition", "Brand", "Type"],
-    TV: ["Condition", "Brand", "Screen Size", "Type"],
-    Speaker: ["Condition", "Brand", "Power"],
-    CPU: ["Condition", "Brand", "Processor", "RAM", "Storage"],
-    Camera: ["Condition", "Brand", "Lens Type"],
-    "Video Game Console": ["Condition", "Brand", "Model"],
-    Photocopiers: ["Condition", "Brand", "Type"],
+  // Handle category selection
+  const handleCategoryChange = (category) => {
+    setFormData({ ...formData, category, subCategory: "", details: {} });
   };
 
+  // Handle subcategory selection and reset dynamic fields
   const handleSubCategoryChange = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-    // Reset dynamic fields when subcategory changes
     const initialFields = {};
     subCategories[subCategory]?.forEach((field) => (initialFields[field] = ""));
-    setDynamicFields(initialFields);
+    setFormData({ ...formData, subCategory, details: initialFields });
   };
 
-  const handleDynamicFieldChange = (field, value) => {
-    setDynamicFields((prev) => ({
+  // Handle dynamic field updates
+  const handleDetailChange = (field, value) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value, // Update only the specific field
+      details: { ...prev.details, [field]: value },
     }));
   };
 
-  const handlePostAd = () => {
-    if (
-      !selectedCategory ||
-      !selectedSubCategory ||
-      adTitle.trim() === "" ||
-      adDescription.trim() === "" ||
-      price.trim() === "" ||
-      !photos ||
-      name.trim() === "" ||
-      mobile.trim() === "" ||
-      location.trim() === "" ||
-      email.trim() === ""
-    ) {
-      setPopupMessage("❌ You must fill in all fields before posting!");
-      setPopupType("error");
-    } else {
-      setPopupMessage("✅ Your Ad has been Posted Successfully!");
-      setPopupType("success");
+  // Handle file upload preview
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => URL.createObjectURL(file));
 
-      // Reset form
-      setSelectedCategory("");
-      setSelectedSubCategory("");
-      setAdTitle("");
-      setAdDescription("");
-      setPrice("");
-      setPhotos(null);
-      setName("");
-      setMobile("");
-      setLocation("");
-      setEmail("");
-      setDynamicFields({});
+    setImagePreviews(previews);
+    setFormData({ ...formData, images: files });
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    if (
+      !formData.category ||
+      !formData.subCategory ||
+      !formData.title ||
+      !formData.description ||
+      !formData.price ||
+      !formData.location ||
+      !formData.name ||
+      !formData.email ||
+      !formData.mobile ||
+      formData.images.length === 0
+    ) {
+      setMessage("❌ Please fill in all required fields.");
+      return;
     }
-    setShowPopup(true);
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      // Upload images to the backend (You need a file upload API)
+      const uploadedImages = formData.images.map((file) => URL.createObjectURL(file));
+
+      // Send ad data to the backend
+      const response = await axios.post(`${API_URL}/api/ads`, {
+        ...formData,
+        images: uploadedImages,
+      });
+
+      setMessage("✅ Your Ad has been Posted Successfully!");
+      setFormData({
+        category: "",
+        subCategory: "",
+        title: "",
+        description: "",
+        price: "",
+        location: "",
+        name: "",
+        email: "",
+        mobile: "",
+        images: [],
+        details: {},
+      });
+      setImagePreviews([]);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error posting ad:", error);
+      setMessage("❌ Error posting ad.");
+    }
+
+    setLoading(false);
   };
 
   return (
     <div className="post-ad-container">
-      <h2 className="title">Post an Ad</h2>
+      <h2>Post an Ad</h2>
 
-      {/* Step 1: Category Selection */}
-      <div className="form-group">
-        <label>Select Category *</label>
-        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-          <option value="">Select Category</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
+      <label>Category *</label>
+      <select value={formData.category} onChange={(e) => handleCategoryChange(e.target.value)}>
+        <option value="">Select Category</option>
+        {categories.map((category) => (
+          <option key={category} value={category}>{category}</option>
+        ))}
+      </select>
 
-      {/* Step 2: Subcategory Selection */}
-      {selectedCategory && (
-        <div className="form-group">
+      {formData.category && (
+        <>
           <label>Sub Category *</label>
-          <select value={selectedSubCategory} onChange={(e) => handleSubCategoryChange(e.target.value)}>
+          <select value={formData.subCategory} onChange={(e) => handleSubCategoryChange(e.target.value)}>
             <option value="">Select Sub Category</option>
             {Object.keys(subCategories).map((sub) => (
-              <option key={sub} value={sub}>
-                {sub}
-              </option>
+              <option key={sub} value={sub}>{sub}</option>
             ))}
           </select>
-        </div>
-      )}
-
-      {/* Step 3: Show all other fields only after subcategory is selected */}
-      {selectedSubCategory && (
-        <>
-          {/* Other Input Fields */}
-          <div className="form-group">
-            <label>Ad Title *</label>
-            <input type="text" placeholder="Enter your ad title" value={adTitle} onChange={(e) => setAdTitle(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Ad Description *</label>
-            <textarea placeholder="Write a few lines about your product" value={adDescription} onChange={(e) => setAdDescription(e.target.value)}></textarea>
-          </div>
-
-          {/* Dynamically Show Additional Fields */}
-          {subCategories[selectedSubCategory]?.map((field) => (
-            <div className="form-group" key={field}>
-              <label>{field} *</label>
-              <input
-                type="text"
-                placeholder={`Enter ${field}`}
-                value={dynamicFields[field] || ""}
-                onChange={(e) => handleDynamicFieldChange(field, e.target.value)}
-              />
-            </div>
-          ))}
-
-          {/* Price Field */}
-          <div className="form-group">
-            <label>Price ($)</label>
-            <input
-              type="text"
-              placeholder="Enter price"
-              value={price}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*\.?\d*$/.test(value)) {
-                  setPrice(value);
-                }
-              }}
-            />
-          </div>
-
-          {/* Photos Field */}
-          <div className="form-group">
-            <label>Photos for Your Ad *</label>
-            <input type="file" multiple onChange={(e) => setPhotos(e.target.files.length > 0 ? e.target.files : null)} />
-          </div>
-
-          <div className="form-group">
-            <label>Your Name *</label>
-            <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Your Mobile No *</label>
-            <input type="text" placeholder="Enter your mobile number" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Your Location *</label>
-            <input type="text" placeholder="Enter your location" value={location} onChange={(e) => setLocation(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Your Email Address *</label>
-            <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-
-          <p className="terms">
-            By clicking <b>post</b> button, you accept our{" "}
-            <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
-          </p>
-
-          <button className="post-btn" onClick={handlePostAd}>POST</button>
         </>
       )}
 
-      {/* Popup Message */}
-      {showPopup && (
-        <div className="popup">
-          <div className={`popup-content ${popupType}`}>
-            <p>{popupMessage}</p>
-            <button className="close-btn" onClick={() => setShowPopup(false)}>Close</button>
+      {formData.subCategory &&
+        subCategories[formData.subCategory]?.map((field) => (
+          <div key={field}>
+            <label>{field} *</label>
+            <input type="text" value={formData.details[field] || ""} onChange={(e) => handleDetailChange(field, e.target.value)} />
           </div>
-        </div>
-      )}
+        ))}
+
+      <label>Title *</label>
+      <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+
+      <label>Description *</label>
+      <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
+
+      <label>Price *</label>
+      <input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+
+      <label>Location *</label>
+      <input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} />
+
+      <label>Your Name *</label>
+      <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+
+      <label>Your Email *</label>
+      <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+
+      <label>Your Mobile No *</label>
+      <input type="text" value={formData.mobile} onChange={(e) => setFormData({ ...formData, mobile: e.target.value })} />
+
+      <label>Upload Images *</label>
+      <input type="file" multiple onChange={handleImageUpload} />
+      <div className="image-preview">
+        {imagePreviews.map((src, index) => (
+          <img key={index} src={src} alt="Preview" />
+        ))}
+      </div>
+
+      <button className="post-btn" onClick={handleSubmit} disabled={loading}>
+        {loading ? "Posting..." : "Post Ad"}
+      </button>
+
+      {message && <p className="message">{message}</p>}
     </div>
   );
 };
