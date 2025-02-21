@@ -33,14 +33,14 @@ const UserAccount = () => {
       id: 1,
       title: 'iPhone 12',
       price: '৳62,999',
-      image: 'https://via.placeholder.com/300x200',
+      image: 'https://brotherselectronicsbd.com/image/cache/catalog/demo/product/Apple/iPhone%2012/4-800x800.jpg',
       description: 'Excellent condition, 1 year old',
     },
     {
       id: 2,
       title: 'Samsung Galaxy S21',
       price: '৳52,999',
-      image: 'https://via.placeholder.com/300x200',
+      image: 'https://adminapi.applegadgetsbd.com/storage/media/large/4204-88781.jpg/500x500',
       description: 'Like new, complete box',
     },
   ];
@@ -50,14 +50,14 @@ const UserAccount = () => {
       id: 1,
       title: 'Gaming Laptop',
       price: '৳85,000',
-      image: 'https://via.placeholder.com/300x200',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuU4xoB0jFOPgXEh-cCko9IFr01FL7AE6Rbw&s/400x400',
       description: 'High-performance gaming laptop with NVIDIA graphics and 16GB RAM',
     },
     {
       id: 2,
       title: '27-inch Monitor',
       price: '৳12,000',
-      image: 'https://via.placeholder.com/300x200',
+      image: 'https://rosetech.com.bd/wp-content/uploads/2021/10/27fw-01-500x500-1.jpg',
       description: 'Crystal clear display with 144Hz refresh rate',
     },
   ];

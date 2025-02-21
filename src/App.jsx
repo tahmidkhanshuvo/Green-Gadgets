@@ -8,7 +8,13 @@ import UserAccount from './components/Account/UserAccount';
 import PostAd from './components/Post_ad/PostAd';
 import AboutUs from './components/About_us/AboutUs';
 import Blog from './components/Blog/Blog';
+import BlogDetails from './components/Blog/BlogDetails';  // Import BlogDetails component
 import LoginSignup from './components/Account/LoginSignup';
+import PostBlog from './components/Blog/PostBlog';
+
+
+
+
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
@@ -46,6 +52,8 @@ const App = () => {
             <Route path="/postAd" element={<PostAd />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/blog" element={<Blog themeMode={theme} />} />
+             <Route path="/blog/:id" element={<BlogDetails />} /> {/* ✅ Dynamic Route */}
+             <Route path="/PostBlog" element={<PostBlog />} /> {/* New route for PostBlog */}
             <Route
               path="/account"
               element={isAuthenticated ? <UserAccount user={user} /> : <Navigate to="/login" />}
