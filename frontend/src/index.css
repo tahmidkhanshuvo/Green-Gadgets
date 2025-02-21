@@ -13,3 +13,6 @@
 .container.dark{
   background: #263427;
 }
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

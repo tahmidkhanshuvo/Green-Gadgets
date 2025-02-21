@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Product-Search.css';
+import { Typography } from '@mui/material';
 
 // Combined products array with additional products (30 products in total)
 const products = [
@@ -15,6 +16,7 @@ const products = [
   { id: 9, title: 'Used Monitor', image: 'https://i.bikroy-st.com/used-monitor-for-sale-dhaka/07a620fa-57a4-4741-a5d5-e0dddc8df62f/1200/800/fitted.jpg', price: 100, category: 'Reused', subCategory: 'Monitor', location: 'Comilla' },
 ];
 
+<<<<<<< HEAD
 const ProductSearch = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedSubCategory, setSelectedSubCategory] = useState('All');
@@ -25,6 +27,10 @@ const ProductSearch = () => {
   const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = displayLimit;
+=======
+const ProductSearch = ({ theme }) => {
+  const [sortOption, setSortOption] = useState('default');
+>>>>>>> check3+saubia
 
   const navigate = useNavigate();
 
@@ -33,6 +39,7 @@ const ProductSearch = () => {
     setSelectedSubCategory('All'); // Reset subcategory when main category changes
   };
 
+<<<<<<< HEAD
   const handleSubCategoryChange = (subCategory) => setSelectedSubCategory(subCategory);
   const handleLocationChange = (location) => setSelectedLocation(location);
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
@@ -104,6 +111,39 @@ const ProductSearch = () => {
             <button key={category} className={selectedCategory === category ? 'active' : ''} onClick={() => handleCategoryChange(category)}>
               {category}
             </button>
+=======
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortOption === 'price') {
+      return parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1));
+    }
+    if (sortOption === 'title') {
+      return a.title.localeCompare(b.title);
+    }
+    return 0; // Default sorting
+  });
+
+  return (
+    <div className={`product-search ${theme}`}>
+      <div className={`product-container ${theme === 'dark' ? 'dark-mode' : ''}`}>
+        <div className="sorting-bar">
+          <h2 className="text-3xl font-bold underline">Sort by</h2>
+          <select onChange={handleSortChange} value={sortOption}>
+            <option value="default">Default</option>
+            <option value="price">Price</option>
+            <option value="title">Title</option>
+          </select>
+        </div>
+        <div className="product-list">
+          {sortedProducts.map((product) => (
+            <div key={product.id} className="product-item">
+              <img src={product.image} alt={product.title} />
+              <div className="product-details">
+                <h3>{product.title}</h3>
+                <p>{product.price}</p>
+                <button className="buy-button">Add to Cart</button>
+              </div>
+            </div>
+>>>>>>> check3+saubia
           ))}
 
           {/* Subcategories Section */}

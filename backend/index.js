@@ -1,45 +1,25 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON
 
-// 🔹 Replace with your actual MongoDB connection string
-const MONGO_URI = "mongodb+srv://test:test123@green-gadgets.i1tu7.mongodb.net/?retryWrites=true&w=majority";
+// ✅ Middleware
+app.use(express.json());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+}));
 
-// 🟢 Connect to MongoDB
-mongoose.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+// ✅ Connect Routes
+app.use("/api/auth", require("./routes/authRoutes"));  // Authentication Routes
+app.use("/api/account", require("./routes/accountRoutes"));  // User Account Routes
 
-// 🟢 Define User Schema
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: String
-});
-const User = mongoose.model("User", userSchema);
+// ✅ Connect to MongoDB (Fixed Deprecation Warning)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
-// 🟢 GET: Fetch all users
-app.get("/users", async (req, res) => {
-    const users = await User.find();
-    res.json(users);
-});
-
-// 🔵 POST: Add a new user
-app.post("/users", async (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json({ error: "Name and email are required" });
-    }
-
-    const newUser = new User({ name, email });
-    await newUser.save(); // Save to MongoDB
-    res.status(201).json(newUser);
-});
-
-// Start server
-app.listen(3000, () => {
-    console.log("🚀 Server running on port 3000");
-});
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

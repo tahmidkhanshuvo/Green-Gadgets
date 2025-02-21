@@ -34,7 +34,10 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Explore</h4>
           <ul>
-            <li>Blog</li>
+            <li>
+  <Link to="/blog" className="footer-link">Blog</Link>
+</li>
+
             <li>Affiliate Program</li>
             <li>Partners</li>
             <li>Community</li>

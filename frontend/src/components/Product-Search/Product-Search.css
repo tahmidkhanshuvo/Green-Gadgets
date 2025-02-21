@@ -1,4 +1,8 @@
 /* General Styles */
+
+
+
+
 .product-search {
   padding: 20px;
   transition: background-color 0.3s ease-in-out;
@@ -306,10 +310,27 @@
 
   .sidebar {
     width: 250px;
+<<<<<<< HEAD
+=======
+    padding: 20px;
+    background-color: '#d9fdd3';
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+>>>>>>> check3+saubia
   }
 
   .product-item {
+<<<<<<< HEAD
     width: 48%; /* Slightly smaller product cards */
+=======
+    background-color:'#d9fdd3';
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+>>>>>>> check3+saubia
   }
 
   .search-bar input {
@@ -327,7 +348,118 @@
   .sidebar {
     width: 280px;
   }
+<<<<<<< HEAD
 
+=======
+  
+  .product-details h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .product-details p {
+    font-size: 16px;
+    color: #66bb6a;
+    margin-bottom: 10px;
+  }
+  
+  .product-details .buy-button {
+    background-color: #66bb6a;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .product-details .buy-button:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Light Theme */
+  .product-search.light {
+    background-color: white;
+    color: #487C3E;
+  }
+  
+  .product-search.light .sorting-bar {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-search.light .theme-toggle {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  
+  .product-search.light button.buy-button {
+    background-color: #66bb6a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+  }
+  
+  .product-search.light button.buy-button:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Dark Theme */
+  .product-search.dark {
+    background-color:linear-gradient(#579040, #487C3E);
+    color: white;
+  }
+  
+  .product-search.dark .sorting-bar {
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .product-search.dark .theme-toggle {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  
+  .product-search.dark button.buy-button {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+  }
+  
+  .product-search.dark button.buy-button:hover {
+    background-color: #66bb6a;
+  }
+  
+  /* Sorting Bar Styles */
+  .sorting-bar h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .sorting-bar select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Product Item Styles */
+>>>>>>> check3+saubia
   .product-item {
     width: 32%; /* Multiple product cards in a row */
   }
