@@ -49,9 +49,14 @@ const LoginSignup = () => {
       <Title level={2} className="center-text">{isLogin ? "Login" : "Sign Up"}</Title>
       <Form layout="vertical" onFinish={handleSubmit}>
         {!isLogin && (
-          <Form.Item name="name" label="Full Name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
+          <>
+            <Form.Item name="name" label="Full Name" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="location" label="Location" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </>
         )}
         <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}>
           <Input />
@@ -68,6 +73,12 @@ const LoginSignup = () => {
           {isLogin ? "Login" : "Sign Up"}
         </Button>
       </Form>
+
+      <div className="switch-auth">
+        <Button type="link" onClick={() => setIsLogin(!isLogin)}>
+          {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+        </Button>
+      </div>
     </div>
   );
 };
