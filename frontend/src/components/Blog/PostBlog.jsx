@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import React Quill styles
 
-const PostBlogForm = ({ visible, onCancel, onPost }) => {
+const PostBlog = ({ visible, onCancel, onPost }) => {
   const [form] = Form.useForm();
   const [imageList, setImageList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [content, setContent] = useState('');
 
   const handleImageUpload = ({ fileList }) => {
     setImageList(fileList);
   };
 
   const handleSubmit = (values) => {
-    const formData = { ...values, images: imageList };
+    const formData = { ...values, content, images: imageList };
     onPost(formData);
     form.resetFields();
     setImageList([]);
-    messageApi.success("Blog posted successfully!");
+    setContent(''); // Reset the content field
+    messageApi.success('Blog posted successfully!');
   };
 
   return (
@@ -27,14 +31,22 @@ const PostBlogForm = ({ visible, onCancel, onPost }) => {
         title="Post Blog"
         onCancel={onCancel}
         footer={[
-          <Button key="back" onClick={onCancel} style={{ background: '#f44336', color: 'white', border: 'none' }}>
+          <Button
+            key="back"
+            onClick={onCancel}
+            style={{ background: '#f44336', color: 'white', border: 'none' }}
+          >
             Cancel
           </Button>,
           <Button
             key="submit"
             type="primary"
             onClick={() => form.submit()}
-            style={{ background: 'linear-gradient(to right, #4CAF50, #2E7D32)', color: 'white', border: 'none' }}
+            style={{
+              background: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+              color: 'white',
+              border: 'none',
+            }}
           >
             Post
           </Button>,
@@ -46,7 +58,7 @@ const PostBlogForm = ({ visible, onCancel, onPost }) => {
           layout="vertical"
           initialValues={{
             title: '',
-            content: '',
+            shortDescription: '',
           }}
         >
           <Form.Item
@@ -57,12 +69,29 @@ const PostBlogForm = ({ visible, onCancel, onPost }) => {
             <Input />
           </Form.Item>
 
+          {/* Replace TextArea with React Quill for rich text */}
           <Form.Item
             name="content"
             label="Content"
             rules={[{ required: true, message: 'Please enter the content of the blog!' }]}
           >
-            <Input.TextArea rows={6} />
+            <ReactQuill
+              value={content}
+              onChange={setContent} // Set the content when changed
+              theme="snow"
+              modules={{
+                toolbar: [
+                  [{ header: '1' }, { header: '2' }, { font: [] }],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['bold', 'italic', 'underline', 'strike'],
+                  [{ color: [] }, { background: [] }],
+                  [{ align: [] }],
+                  ['link', 'image'],
+                  ['blockquote', 'code-block'],
+                  ['clean'],
+                ],
+              }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -83,7 +112,7 @@ const PostBlogForm = ({ visible, onCancel, onPost }) => {
               multiple
             >
               <div>
-                <UploadOutlined style={{ fontSize: 24, color: "#1890ff" }} />
+                <UploadOutlined style={{ fontSize: 24, color: '#1890ff' }} />
                 <div>Upload</div>
               </div>
             </Upload>
@@ -94,4 +123,4 @@ const PostBlogForm = ({ visible, onCancel, onPost }) => {
   );
 };
 
-export default PostBlogForm;
+export default PostBlog;

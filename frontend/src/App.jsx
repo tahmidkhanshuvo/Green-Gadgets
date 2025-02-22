@@ -9,6 +9,8 @@ import PostAd from './components/Post_ad/PostAd';
 import AboutUs from './components/About_us/AboutUs';
 import ProductDetails from './components/Product_Details/ProductDetails';
 import Blog from './components/Blog/Blog';
+import BlogDetails from './components/Blog/BlogDetails';
+import PostBlog from './components/Blog/PostBlog';
 import LoginSignup from './components/Account/LoginSignup';
 
 const App = () => {
@@ -49,6 +51,8 @@ const App = () => {
             <Route path="/" element={<ProductSearch />} />
         <Route path="/productdetails/:id" element={<ProductDetails />} />
             <Route path="/blog" element={<Blog themeMode={theme} />} />
+             <Route path="/blog/:id" element={<BlogDetails />} />
+             <Route path="/PostBlog" element={<PostBlog />} />
             <Route
               path="/account"
               element={isAuthenticated ? <UserAccount user={user} /> : <Navigate to="/login" />}
