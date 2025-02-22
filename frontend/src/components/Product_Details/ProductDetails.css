@@ -1,4 +1,4 @@
-/* General Container */
+/* ✅ General Container */
 .product-details-container {
     width: 90%;
     max-width: 1200px;
@@ -10,53 +10,94 @@
     border-radius: 10px;
 }
 
-/* Breadcrumbs */
+/* ✅ Breadcrumbs */
 .breadcrumbs {
     font-size: 14px;
     color: #666;
     margin-bottom: 15px;
 }
 
-/* Layout */
+/* ✅ Layout */
 .product-details-content {
     display: flex;
     gap: 30px;
 }
 
-/* Left Section */
+/* ✅ Left Section */
 .left-section {
     flex: 2;
 }
 
-/* Image Slider */
+/* ✅ Image Slider */
 .image-slider {
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
+    position: relative;
 }
 
+/* ✅ Main Slider Image */
 .slider-image {
     width: 100%;
-    height: 350px;
-    object-fit: cover;
+    height: 400px;
+    object-fit: contain;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Slick Slider Customization */
+/* ✅ Slick Slider Navigation Buttons */
 .slick-prev,
 .slick-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     z-index: 100;
-    font-size: 20px;
-    color: #222;
+    transition: background 0.3s ease-in-out;
 }
 
+/* ✅ Positioning Previous & Next Buttons */
+.slick-prev {
+    left: -40px;
+}
+
+.slick-next {
+    right: -40px;
+}
+
+/* ✅ Hover Effect for Navigation Buttons */
 .slick-prev:hover,
 .slick-next:hover {
-    color: #388e3c;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Title & Metadata */
+/* ✅ Custom Dots (Pagination) */
+.slick-dots {
+    bottom: 10px;
+}
+
+.slick-dots li button:before {
+    font-size: 12px;
+    color: white;
+    opacity: 0.75;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #388e3c;
+    opacity: 1;
+}
+
+/* ✅ Title & Metadata */
 .product-title {
     margin-top: 15px;
     font-size: 28px;
@@ -74,7 +115,7 @@
     margin: 3px 0;
 }
 
-/* Price */
+/* ✅ Price */
 .product-price {
     font-size: 30px;
     font-weight: bold;
@@ -82,7 +123,7 @@
     margin: 20px 0;
 }
 
-/* Features Section */
+/* ✅ Features Section */
 .features-container {
     background-color: #f9f9f9;
     padding: 15px;
@@ -114,7 +155,7 @@
     border-bottom: none;
 }
 
-/* Responsive Features Section */
+/* ✅ Responsive Features Section */
 @media (max-width: 1024px) {
     .features-container {
         padding: 12px;
@@ -147,7 +188,7 @@
     }
 }
 
-/* Description */
+/* ✅ Description */
 .description-section h2 {
     font-size: 22px;
     margin-bottom: 10px;
@@ -158,29 +199,7 @@
     color: #444;
 }
 
-.description-section ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 10px;
-}
-
-.description-section ul li {
-    padding: 5px 0;
-    font-size: 16px;
-    color: #333;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.description-section ul li::before {
-    content: "✔";
-    color: #28a745;
-    margin-right: 8px;
-    font-size: 18px;
-}
-
-/* Report Button */
+/* ✅ Report Button */
 .report-button {
     margin-top: 20px;
     background-color: transparent;
@@ -199,7 +218,7 @@
     color: white;
 }
 
-/* Right Section (Seller & Contact) */
+/* ✅ Right Section (Seller & Contact) */
 .right-section {
     flex: 1;
     display: flex;
@@ -207,7 +226,7 @@
     gap: 20px;
 }
 
-/* Seller Card */
+/* ✅ Seller Card */
 .seller-card {
     display: flex;
     flex-direction: column;
@@ -239,7 +258,7 @@
     color: #777;
 }
 
-/* Contact Button */
+/* ✅ Contact Button */
 .contact-button {
     background-color: #007bff;
     color: white;
@@ -263,7 +282,7 @@
     animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Contact Reveal Animation */
+/* ✅ Contact Reveal Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -275,7 +294,7 @@
     }
 }
 
-/* Revealed Contact Button Style */
+/* ✅ Revealed Contact Button Style */
 .contact-button.revealed {
     background-color: #28a745;
     cursor: default;
@@ -283,7 +302,7 @@
     animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Message Section */
+/* ✅ Message Section */
 .message-section {
     display: flex;
     flex-direction: column;

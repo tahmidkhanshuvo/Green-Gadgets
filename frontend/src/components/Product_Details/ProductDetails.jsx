@@ -24,7 +24,7 @@ const ProductDetails = () => {
 
   if (!product) return <p className="loading-text">Loading product details...</p>;
 
-  // Slick slider settings
+  // ✅ Slick Slider Settings (Improved)
   const settings = {
     dots: true,
     infinite: true,
@@ -32,19 +32,21 @@ const ProductDetails = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
+    prevArrow: <button className="slick-prev">❮</button>,
+    nextArrow: <button className="slick-next">❯</button>,
   };
 
   return (
     <div className="product-details-container">
-      {/* Breadcrumbs */}
+      {/* ✅ Breadcrumbs */}
       <div className="breadcrumbs">
         Home &gt; {product.category} &gt; {product.subCategory}
       </div>
 
       <div className="product-details-content">
-        {/* Left Section */}
+        {/* ✅ Left Section */}
         <div className="left-section">
-          {/* Image Slider */}
+          {/* ✅ Image Slider */}
           <div className="image-slider">
             <Slider {...settings}>
               {product.images.map((image, index) => (
@@ -55,17 +57,17 @@ const ProductDetails = () => {
             </Slider>
           </div>
 
-          {/* Title & Metadata */}
+          {/* ✅ Title & Metadata */}
           <h1 className="product-title">{product.title}</h1>
           <div className="product-meta">
             <p>Posted on: {new Date(product.createdAt).toDateString()}</p>
             <p>Location: {product.location}</p>
           </div>
 
-          {/* Price */}
+          {/* ✅ Price */}
           <div className="product-price">৳ {product.price}</div>
 
-          {/* Product Features */}
+          {/* ✅ Product Features */}
           <div className="features-container">
             <h2>Features</h2>
             <ul className="features-list">
@@ -77,17 +79,17 @@ const ProductDetails = () => {
             </ul>
           </div>
 
-          {/* Description */}
+          {/* ✅ Description */}
           <div className="description-section">
             <h2>Description</h2>
             <p>{product.description}</p>
           </div>
 
-          {/* Report Button */}
+          {/* ✅ Report Button */}
           <button className="report-button">Report</button>
         </div>
 
-        {/* Right Section (Seller Info, Contact, etc.) */}
+        {/* ✅ Right Section (Seller Info, Contact, etc.) */}
         <div className="right-section">
           <div className="seller-card">
             <img src="https://cdn.pixabay.com/photo/2017/03/19/20/19/ball-2157465_640.png" alt="Seller Avatar" className="user-avatar" />
@@ -96,7 +98,7 @@ const ProductDetails = () => {
               <p>{product.email}</p>
             </div>
 
-            {/* Reveal Contact Button */}
+            {/* ✅ Reveal Contact Button */}
             <button
               className={`contact-button ${isContactRevealed ? "revealed" : ""}`}
               onClick={() => setIsContactRevealed(true)}
@@ -106,6 +108,7 @@ const ProductDetails = () => {
             </button>
           </div>
 
+          {/* ✅ Message Section */}
           <div className="message-section">
             <textarea placeholder="Type a message..."></textarea>
             <button className="send-message-button">Send Message</button>
