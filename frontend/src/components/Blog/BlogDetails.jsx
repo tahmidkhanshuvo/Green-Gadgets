@@ -437,10 +437,8 @@ const BlogDetails = () => {
   return (
     <div
       style={{
-        padding: "40px 20px",
-        maxWidth: "900px",
-        margin: "0 auto",
-        backgroundColor: "#f0f2f5",
+        width: "100%",
+        backgroundColor: "#fff",
         minHeight: "100vh",
       }}
     >
@@ -448,7 +446,7 @@ const BlogDetails = () => {
         onClick={() => navigate("/blogs")}
         type="link"
         style={{
-          marginBottom: "20px",
+          margin: "20px",
           fontSize: "16px",
           textDecoration: "underline",
         }}
@@ -458,51 +456,63 @@ const BlogDetails = () => {
       <Card
         bordered={false}
         style={{
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          overflow: "hidden",
-          marginBottom: "40px",
-          backgroundColor: "#fff",
+          borderRadius: "0",
+          boxShadow: "none",
+          margin: "0",
+          padding: "0",
         }}
       >
         <img
           src={blog.image}
           alt={blog.title}
-          style={{ width: "100%", height: "auto", display: "block" }}
+          style={{
+            width: "100%",
+            height: "80vh",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
-        <div style={{ padding: "20px" }}>
-          <Title level={2} style={{ marginBottom: "0" }}>
+        <div style={{ padding: "60px 40px", backgroundColor: "#f0f2f5" }}>
+          <Title level={2} style={{ marginBottom: "20px" }}>
             {blog.title}
           </Title>
           <p style={{ color: "#888", marginBottom: "20px" }}>
             Published on: {blog.date}
           </p>
-          <Paragraph style={{ fontSize: "16px", lineHeight: "1.8", color: "#333" }}>
+          <Paragraph
+            style={{
+              fontSize: "18px",
+              lineHeight: "1.8",
+              color: "#333",
+              maxWidth: "1200px",
+              margin: "auto",
+            }}
+          >
             {blog.content || blog.description}
           </Paragraph>
         </div>
       </Card>
 
-      {/* Related Blogs Section */}
-      <Divider orientation="left" style={{ color: "#333" }}>
+      <Divider orientation="left" style={{ color: "#333", margin: "40px 40px 20px" }}>
         Related Blogs
       </Divider>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[24, 24]} style={{ padding: "0 40px 40px" }}>
         {relatedBlogs.map((related) => (
           <Col xs={24} sm={12} md={8} key={related.id}>
             <Card
               hoverable
+              onClick={() => navigate(`/blog/${related.id}`)}
+              bordered={false}
+              style={{ borderRadius: "8px" }}
               cover={
                 <img
                   alt={related.title}
                   src={related.image}
-                  style={{ height: "150px", objectFit: "cover" }}
+                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
               }
-              style={{ borderRadius: "8px" }}
-              onClick={() => navigate(`/blog/${related.id}`)}
             >
-              <Title level={4} style={{ margin: "0 0 10px 0" }}>
+              <Title level={4} style={{ margin: "0 0 10px" }}>
                 {related.title}
               </Title>
               <Paragraph ellipsis={{ rows: 2 }}>{related.description}</Paragraph>
