@@ -16,6 +16,7 @@ app.use(cors({
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/account", require("./routes/accountRoutes"));
 app.use("/api/ads", require("./routes/adsRoutes")); // ✅ Product Routes
+app.use("/api/upload", require("./routes/uploadRoutes")); // ✅ Image Upload Routes
 
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

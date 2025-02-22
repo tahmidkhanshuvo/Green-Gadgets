@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Product-Search.css";
@@ -7,7 +7,6 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 const ProductSearch = () => {
   const [ads, setAds] = useState([]);
-  const [filteredAds, setFilteredAds] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubCategory, setSelectedSubCategory] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
@@ -17,16 +16,15 @@ const ProductSearch = () => {
   const productsPerPage = 9;
   const navigate = useNavigate();
 
+  // Fetch Ads from API
   useEffect(() => {
     axios.get(`${API_URL}/api/ads`)
-      .then((response) => {
-        setAds(response.data);
-        setFilteredAds(response.data);
-      })
+      .then((response) => setAds(response.data))
       .catch((error) => console.error("Error fetching ads:", error));
   }, []);
 
-  useEffect(() => {
+  // Optimized Filtering & Sorting
+  const filteredAds = useMemo(() => {
     let updatedAds = ads.filter(
       (ad) =>
         (selectedCategory === "All" || ad.category === selectedCategory) &&
@@ -41,18 +39,25 @@ const ProductSearch = () => {
       updatedAds.sort((a, b) => b.price - a.price);
     }
 
-    setFilteredAds(updatedAds);
-  }, [selectedCategory, selectedSubCategory, selectedLocation, searchTerm, sortOption, ads]);
+    return updatedAds;
+  }, [ads, selectedCategory, selectedSubCategory, selectedLocation, searchTerm, sortOption]);
 
+  // Pagination Logic
   const totalPages = Math.ceil(filteredAds.length / productsPerPage);
   const currentProducts = filteredAds.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage);
 
-  const handlePageChange = (page) => setCurrentPage(page);
+  // Handle Page Change
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="product-search">
       <div className="product-container">
-        {/* Sidebar for Filters */}
+        
+        {/* Sidebar Filters */}
         <div className="sidebar">
           <h2>Categories</h2>
           {["All", "Recycle", "Refurbished", "Reuse"].map((category) => (
@@ -95,6 +100,7 @@ const ProductSearch = () => {
         {/* Product Section */}
         <div className="product-section">
           <div className="search-filter-container">
+            
             {/* Search Bar */}
             <div className="search-bar">
               <input
@@ -110,8 +116,8 @@ const ProductSearch = () => {
               <label>Sort: </label>
               <select onChange={(e) => setSortOption(e.target.value)}>
                 <option value="default">Default</option>
-                <option value="lowToHigh">Low to High</option>
-                <option value="highToLow">High to Low</option>
+                <option value="lowToHigh">Price: Low to High</option>
+                <option value="highToLow">Price: High to Low</option>
               </select>
             </div>
           </div>
@@ -123,11 +129,15 @@ const ProductSearch = () => {
                 <div key={ad._id} className="product-item" onClick={() => navigate(`/productdetails/${ad._id}`)}>
                   <div className="image-container">
                     <span className="badge">{ad.category}</span>
-                    <img src={ad.images[0] || "https://via.placeholder.com/200"} alt={ad.title} />
+                    <img
+                      src={ad.images.length > 0 ? ad.images[0] : "https://via.placeholder.com/200"}
+                      alt={ad.title}
+                      className="product-image"
+                    />
                   </div>
                   <div className="product-details">
                     <h3>{ad.title}</h3>
-                    <p>${ad.price}</p>
+                    <p>৳ {ad.price}</p>
                     <p className="location">{ad.location}</p>
                   </div>
                 </div>
@@ -138,23 +148,25 @@ const ProductSearch = () => {
           </div>
 
           {/* Pagination */}
-          <div className="pagination">
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-              PREV
-            </button>
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index + 1}
-                className={currentPage === index + 1 ? "active" : ""}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                Prev
               </button>
-            ))}
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              NEXT
-            </button>
-          </div>
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index + 1}
+                  className={currentPage === index + 1 ? "active" : ""}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

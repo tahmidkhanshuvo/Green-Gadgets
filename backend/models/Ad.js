@@ -10,9 +10,13 @@ const AdSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   mobile: { type: String, required: true },
-  images: { type: [String], required: true },
-  details: { type: mongoose.Schema.Types.Mixed, default: {} },
-  createdAt: { type: Date, default: Date.now },
+
+  // ✅ Main Image & Additional Images
+  mainImage: { type: String, required: true }, // URL for the primary image
+  images: { type: [String], required: true },  // Array of additional images
+
+  details: { type: mongoose.Schema.Types.Mixed, default: {} }, // Dynamic fields
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Ad", AdSchema);
