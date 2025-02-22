@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext"; // ✅ Import Auth Context
 import "./PostAd.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
@@ -20,16 +21,15 @@ const subCategories = {
 };
 
 const PostAd = () => {
+  const { user, isAuthenticated } = useContext(AuthContext); // ✅ Get user details
+
   const [formData, setFormData] = useState({
     category: "",
     subCategory: "",
     title: "",
     description: "",
     price: "",
-    location: "",
-    name: "",
-    email: "",
-    mobile: "",
+    mobile: user?.mobile || "", // Auto-fill from user data
     mainImage: "",
     images: [],
     details: {},
@@ -38,6 +38,11 @@ const PostAd = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // ✅ Redirect if not authenticated
+  if (!isAuthenticated) {
+    return <h2>Please login to post an ad.</h2>;
+  }
 
   // ✅ Handle Category Change
   const handleCategoryChange = (category) => {
@@ -67,11 +72,11 @@ const PostAd = () => {
     setLoading(true);
     setMessage("");
 
-    const formData = new FormData();
-    files.forEach((file) => formData.append("images", file));
+    const uploadData = new FormData();
+    files.forEach((file) => uploadData.append("images", file));
 
     try {
-      const response = await axios.post(`${API_URL}/api/upload`, formData, {
+      const response = await axios.post(`${API_URL}/api/upload`, uploadData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -93,7 +98,7 @@ const PostAd = () => {
 
   // ✅ Handle Form Submission
   const handleSubmit = async () => {
-    if (!formData.category || !formData.subCategory || !formData.title || !formData.description || !formData.price || !formData.location || !formData.name || !formData.email || !formData.mobile || formData.images.length === 0) {
+    if (!formData.category || !formData.subCategory || !formData.title || !formData.description || !formData.price || !formData.mobile || formData.images.length === 0) {
       setMessage("❌ Please fill in all required fields.");
       return;
     }
@@ -102,7 +107,19 @@ const PostAd = () => {
     setMessage("");
 
     try {
-      const response = await axios.post(`${API_URL}/api/ads`, formData);
+      const response = await axios.post(
+        `${API_URL}/api/ads`,
+        {
+          ...formData,
+          name: user.name, // Auto-fill
+          email: user.email, // Auto-fill
+          location: user.location, // Auto-fill
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+
       setMessage("✅ Your Ad has been Posted Successfully!");
       setFormData({
         category: "",
@@ -110,10 +127,7 @@ const PostAd = () => {
         title: "",
         description: "",
         price: "",
-        location: "",
-        name: "",
-        email: "",
-        mobile: "",
+        mobile: user.mobile,
         mainImage: "",
         images: [],
         details: {},
@@ -131,6 +145,19 @@ const PostAd = () => {
   return (
     <div className="post-ad-container">
       <h2>Post an Ad</h2>
+
+      {/* Auto-Filled User Info */}
+      <label>Name *</label>
+      <input type="text" value={user.name} disabled />
+
+      <label>Email *</label>
+      <input type="email" value={user.email} disabled />
+
+      <label>Location *</label>
+      <input type="text" value={user.location} disabled />
+
+      <label>Mobile *</label>
+      <input type="text" value={formData.mobile} onChange={(e) => setFormData({ ...formData, mobile: e.target.value })} />
 
       {/* Category Selection */}
       <label>Category *</label>
@@ -159,11 +186,7 @@ const PostAd = () => {
         subCategories[formData.subCategory]?.map((field) => (
           <div key={field}>
             <label>{field} *</label>
-            <input
-              type="text"
-              value={formData.details[field] || ""}
-              onChange={(e) => handleDetailChange(field, e.target.value)}
-            />
+            <input type="text" value={formData.details[field] || ""} onChange={(e) => handleDetailChange(field, e.target.value)} />
           </div>
         ))}
 
@@ -178,20 +201,6 @@ const PostAd = () => {
       {/* Price */}
       <label>Price *</label>
       <input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
-
-      {/* Location */}
-      <label>Location *</label>
-      <input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} />
-
-      {/* Contact Information */}
-      <label>Your Name *</label>
-      <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-
-      <label>Your Email *</label>
-      <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-
-      <label>Your Mobile No *</label>
-      <input type="text" value={formData.mobile} onChange={(e) => setFormData({ ...formData, mobile: e.target.value })} />
 
       {/* Upload Images */}
       <label>Upload Images *</label>
