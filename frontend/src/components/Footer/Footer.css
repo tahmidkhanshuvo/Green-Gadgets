@@ -8,8 +8,8 @@ body, html {
 
 /* Footer styles */
 .footer {
-    background: linear-gradient(#dcf6da, #b6dbb3); /* Matches navbar background */
-    padding: 60px 5%;
+    background: linear-gradient(#355E3B, #006400); /* Matches navbar background */
+    padding: 35px 5%; /* Further reduced padding for better responsiveness */
     font-family: 'Arial', sans-serif;
     color: white;
     width: 100%;
@@ -30,21 +30,21 @@ body, html {
     margin: 0 auto;
     flex-wrap: wrap;
     text-align: left;
-    gap: 40px;
+    gap: 25px; /* Further reduced gap to prevent breaking */
 }
 
 /* Footer sections */
 .footer-section {
     flex: 1;
-    min-width: 250px; /* Wider min-width for large screens */
-    max-width: 300px;
-    padding: 0 20px;
+    min-width: 200px; /* Adjusted from 220px */
+    max-width: 270px; /* Adjusted from 280px */
+    padding: 0 10px; /* Reduced padding from 15px */
 }
 
 .footer-section h4 {
-    font-size: 18px;
+    font-size: 17px; /* Slightly reduced from 18px */
     font-weight: bold;
-    margin-bottom: 12px;
+    margin-bottom: 8px; /* Reduced margin from 10px */
     color: #f0f0f0;
 }
 
@@ -55,9 +55,9 @@ body, html {
 }
 
 .footer-section ul li {
-    font-size: 16px;
+    font-size: 14px; /* Reduced from 15px */
     color: #aaa;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     cursor: pointer;
     transition: color 0.3s ease-in-out;
 }
@@ -68,25 +68,25 @@ body, html {
 
 /* Fix for "Our Story" link to match other footer items */
 .footer-link {
-    text-decoration: none; /* ✅ Removes underline */
-    color: inherit; /* ✅ Uses the same color as other list items */
-    font-weight: normal; /* ✅ Ensures consistency with other links */
+    text-decoration: none;
+    color: inherit;
+    font-weight: normal;
     transition: color 0.3s ease-in-out;
 }
 
 /* Hover effect to match other links */
 .footer-link:hover {
-    color: #fff; /* ✅ Same hover color as other items */
+    color: #fff;
 }
 
 /* Social Media Icons */
 .social-icons {
     display: flex;
-    gap: 15px;
+    gap: 10px; /* Reduced from 12px */
 }
 
 .social-icons a {
-    font-size: 20px;
+    font-size: 17px; /* Reduced from 18px */
     color: white;
     transition: transform 0.3s ease-in-out;
 }
@@ -104,11 +104,11 @@ body, html {
 .app-links {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px; /* Reduced from 6px */
 }
 
 .app-badge {
-    width: 150px;
+    width: 135px; /* Reduced from 140px */
     height: auto;
     transition: transform 0.3s ease-in-out;
 }
@@ -122,24 +122,47 @@ body, html {
     border: none;
     height: 1px;
     background: #555;
-    margin: 25px 0;
+    margin: 18px 0; /* Reduced from 20px */
 }
 
 .footer-bottom {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px; /* Reduced from 15px */
     color: #aaa;
 }
 
 /* Large Screen Optimization */
 @media (min-width: 1600px) {
     .footer-container {
-        max-width: 1700px; /* Adjust for ultra-wide screens */
-        gap: 50px;
+        max-width: 1700px;
+        gap: 35px; /* Adjusted from 40px */
     }
 
     .footer-section {
-        max-width: 320px;
+        max-width: 290px; /* Adjusted from 300px */
+    }
+}
+
+/* Screens below 1356px */
+@media (max-width: 1356px) {
+    .footer-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        gap: 20px; /* Further reduced gap */
+    }
+
+    .footer-section {
+        min-width: 160px; /* Adjusted to fit smaller screens */
+        margin-bottom: 15px; /* Adjusted spacing */
+    }
+
+    .app-links {
+        align-items: center;
+    }
+
+    .app-badge {
+        width: 120px; /* Adjusted to be smaller */
     }
 }
 
@@ -149,11 +172,12 @@ body, html {
         flex-wrap: wrap;
         justify-content: center;
         text-align: center;
+        gap: 15px; /* Adjusted for better fit */
     }
 
     .footer-section {
-        min-width: 250px;
-        margin-bottom: 20px;
+        min-width: 180px; /* Adjusted */
+        margin-bottom: 10px; /* Reduced */
     }
 
     .app-links {
@@ -161,20 +185,21 @@ body, html {
     }
 
     .app-badge {
-        width: 130px;
+        width: 115px; /* Further reduced */
     }
 }
 
 /* Mobile View */
 @media (max-width: 768px) {
     .footer-container {
+
         flex-direction: column;
         text-align: center;
     }
 
     .footer-section {
         min-width: auto;
-        margin-bottom: 15px;
+        margin-bottom: 8px; /* Further reduced */
     }
 
     .social-icons {
@@ -185,7 +210,7 @@ body, html {
 /* Small Mobile Screens */
 @media (max-width: 480px) {
     .footer {
-        padding: 40px 15px;
+        padding: 15px 100px; /* Further reduced */
     }
 
     .footer-section {
@@ -193,10 +218,10 @@ body, html {
     }
 
     .footer-section ul li {
-        font-size: 14px;
+        font-size: 13px; /* Further reduced */
     }
 
     .app-badge {
-        width: 120px;
+        width: 100px; /* Further reduced */
     }
 }
