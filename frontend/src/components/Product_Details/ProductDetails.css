@@ -338,96 +338,114 @@
     background-color: #218838;
   }
   
-  /* ========== DARK MODE STYLES ========== */
-  .dark .product-details-container {
-    background-color: #121212;
-    color: white;
-  }
-  
-  .dark .breadcrumbs {
-    color: #aaa;
-  }
-  
-  .dark .product-details-content {
-    color: white;
-  }
-  
-  .dark .product-title {
-    color: #f1f1f1;
-  }
-  
-  .dark .product-meta p {
-    color: #aaa;
-  }
-  
-  .dark .product-price {
-    color: #28a745;
-  }
-  
-  .dark .features-container {
-    background-color: #333;
-    border: 1px solid #444;
-  }
-  
-  .dark .features-container h2 {
-    color: #fff;
-  }
-  
-  .dark .features-list li {
-    color: #ddd;
-  }
-  
-  .dark .description-section h2 {
-    color: #fff;
-  }
-  
-  .dark .description-section p {
-    color: #ccc;
-  }
-  
-  .dark .report-button {
-    border: 2px solid red;
-    color: red;
-  }
-  
-  .dark .report-button:hover {
-    background-color: red;
-    color: white;
-  }
-  
-  .dark .seller-card {
-    background: #333;
-    border: 2px solid #444;
-  }
-  
-  .dark .user-avatar {
-    border: 3px solid #555;
-  }
-  
-  .dark .seller-info h3 {
-    color: #ddd;
-  }
-  
-  .dark .contact-button {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .dark .contact-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .dark .contact-button.revealed {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .dark .send-message-button {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .dark .send-message-button:hover {
-    background-color: #218838;
-  }
-  
+ /* ========== DARK MODE STYLES ========== */
+.dark .product-details-container {
+  background-color: #121212;
+  color: white;
+}
+
+.dark .breadcrumbs {
+  color: #aaa;
+}
+
+.dark .product-details-content {
+  color: white;
+}
+
+.dark .product-title {
+  color: #f1f1f1;
+}
+
+.dark .product-meta p {
+  color: #aaa;
+}
+
+.dark .product-price {
+  color: #28a745;
+}
+
+.dark .features-container {
+  background-color: #333;
+  border: 1px solid #444;
+}
+
+.dark .features-container h2 {
+  color: #fff;
+}
+
+.dark .features-list li {
+  color: #ddd;
+}
+
+.dark .description-section h2 {
+  color: #fff;
+}
+
+.dark .description-section p {
+  color: #ccc;
+}
+
+.dark .report-button {
+  border: 2px solid red;
+  color: red;
+}
+
+.dark .report-button:hover {
+  background-color: red;
+  color: white;
+}
+
+.dark .seller-card {
+  background: #333;
+  border: 2px solid #444;
+}
+
+.dark .user-avatar {
+  border: 3px solid #555;
+}
+
+.dark .seller-info h3 {
+  color: #ddd;
+}
+
+.dark .contact-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.dark .contact-button:hover {
+  background-color: #0056b3;
+}
+
+.dark .contact-button.revealed {
+  background-color: #28a745;
+  color: white;
+}
+
+.dark .send-message-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.dark .send-message-button:hover {
+  background-color: #218838;
+}
+
+/* Light Mode Styles */
+.product-details-container {
+  background-color: #fff;
+  color: black;
+}
+
+.product-details-content {
+  color: black;
+}
+
+.message-section textarea {
+  color: black; /* Black text in light mode */
+}
+
+/* Dark Mode Textarea Color */
+.dark .message-section textarea {
+  color: white; /* White text in dark mode */
+}
