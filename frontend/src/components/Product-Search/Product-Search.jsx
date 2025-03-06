@@ -13,8 +13,14 @@ const ProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(8); // Default number of products per page
+  const [productsPerPage, setProductsPerPage] = useState(9); // Default number of products per page
+  const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+
+  // Toggle Dark Mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   // Fetch Ads from API
   useEffect(() => {
@@ -59,6 +65,15 @@ const ProductSearch = () => {
       (ad) => ad.subCategory === subCategory && (selectedCategory === "All" || ad.category === selectedCategory)
     ).length;
   };
+
+  // Add or remove the dark class based on darkMode state
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   return (
     <div className="product-search">
