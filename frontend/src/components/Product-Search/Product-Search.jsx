@@ -13,7 +13,7 @@ const ProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 9;
+  const [productsPerPage, setProductsPerPage] = useState(8); // Default number of products per page
   const navigate = useNavigate();
 
   // Fetch Ads from API
@@ -53,6 +53,13 @@ const ProductSearch = () => {
     }
   };
 
+  // Get count of subcategories based on selected category
+  const getSubCategoryCount = (subCategory) => {
+    return ads.filter(
+      (ad) => ad.subCategory === subCategory && (selectedCategory === "All" || ad.category === selectedCategory)
+    ).length;
+  };
+
   return (
     <div className="product-search">
       <div className="product-container">
@@ -74,16 +81,26 @@ const ProductSearch = () => {
           ))}
 
           <h2>Subcategories</h2>
-          {selectedCategory !== "All" &&
-            ["All", "Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
-              <button
-                key={subCategory}
-                className={selectedSubCategory === subCategory ? "active" : ""}
-                onClick={() => setSelectedSubCategory(subCategory)}
-              >
-                {subCategory}
-              </button>
-            ))}
+          {selectedCategory === "All"
+            ? ["Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
+                <button
+                  key={subCategory}
+                  className={selectedSubCategory === subCategory ? "active" : ""}
+                  onClick={() => setSelectedSubCategory(subCategory)}
+                >
+                  {subCategory} ({getSubCategoryCount(subCategory)})
+                </button>
+              ))
+            : selectedCategory !== "All" &&
+              ["All", "Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
+                <button
+                  key={subCategory}
+                  className={selectedSubCategory === subCategory ? "active" : ""}
+                  onClick={() => setSelectedSubCategory(subCategory)}
+                >
+                  {subCategory} ({getSubCategoryCount(subCategory)})
+                </button>
+              ))}
 
           <h2>Location</h2>
           {["All", "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Barishal"].map((location) => (
@@ -111,10 +128,22 @@ const ProductSearch = () => {
               />
             </div>
 
+            {/* Show More Options */}
+            <div className="show-more-options">
+              <label>Show: </label>
+              <select onChange={(e) => setProductsPerPage(Number(e.target.value))} value={productsPerPage}>
+                <option value={20}>20</option>
+                <option value={40}>40</option>
+                <option value={60}>60</option>
+                <option value={75}>75</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
+
             {/* Sorting Options */}
             <div className="filter-section">
               <label>Sort: </label>
-              <select onChange={(e) => setSortOption(e.target.value)}>
+              <select onChange={(e) => setSortOption(e.target.value)} value={sortOption}>
                 <option value="default">Default</option>
                 <option value="lowToHigh">Price: Low to High</option>
                 <option value="highToLow">Price: High to Low</option>
