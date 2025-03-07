@@ -1,0 +1,76 @@
+/* Container for the entire FAQ section */
+.faq-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  /* Heading style for the FAQ title */
+  .faq-container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: linear-gradient(#579040, #487C3E);
+    margin-bottom: 2rem;
+  }
+  
+  /* Style for each FAQ item */
+  .faq-item {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #e0f2e9;
+  }
+  
+  /* Style for FAQ question (h3) */
+  .faq-item h3 {
+    font-size: 1.5rem;
+    color: linear-gradient(#579040, #487C3E);;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  /* Style for FAQ answers (p) */
+  .faq-item p {
+    font-size: 1rem;
+    color: linear-gradient(#579040, #487C3E);
+  }
+  
+  /* Style for list in FAQ answers */
+  .faq-item ul, .faq-item ol {
+    margin-left: 2rem;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Hyperlink style */
+  .faq-item a {
+    color: linear-gradient(#579040, #487C3E);
+    text-decoration: none;
+  }
+  
+  .faq-item a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Styling for mobile devices: make FAQ questions more prominent */
+  @media (max-width: 768px) {
+    .faq-container {
+      padding: 1rem;
+    }
+  
+    .faq-container h1 {
+      font-size: 2rem;
+    }
+  
+    .faq-item {
+      padding: 1rem;
+    }
+  
+    .faq-item h3 {
+      font-size: 1.25rem;
+    }
+  }
+  

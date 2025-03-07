@@ -12,6 +12,10 @@ import Blog from './components/Blog/Blog';
 import BlogDetails from './components/Blog/BlogDetails';
 import PostBlog from './components/Blog/PostBlog';
 import LoginSignup from './components/Account/LoginSignup';
+import TermsAndConditions from './components/Support/TermsAndConditions';  // Correct import
+import FAQ from './components/Support/FAQ';  // Correct import
+import HelpCenter from './components/Support/HelpCenter';  // Correct import
+import PrivacyPolicy from './components/Support/PrivacyPolicy';  // Correct import
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
@@ -32,15 +36,7 @@ const App = () => {
 
   return (
     <Router>
-      <div
-        className={`container ${theme}`}
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className={`container ${theme}`} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Navbar theme={theme} setTheme={setTheme} isAuthenticated={isAuthenticated} setUser={setUser} />
         <div style={{ flex: 1 }}>
           <Routes>
@@ -48,19 +44,16 @@ const App = () => {
             <Route path="/search" element={<ProductSearch />} />
             <Route path="/postAd" element={<PostAd />} />
             <Route path="/about" element={<AboutUs />} />
-            <Route path="/" element={<ProductSearch />} />
-        <Route path="/productdetails/:id" element={<ProductDetails />} />
+            <Route path="/productdetails/:id" element={<ProductDetails />} />
             <Route path="/blog" element={<Blog themeMode={theme} />} />
-             <Route path="/blog/:id" element={<BlogDetails />} />
-             <Route path="/PostBlog" element={<PostBlog />} />
-            <Route
-              path="/account"
-              element={isAuthenticated ? <UserAccount user={user} /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/login"
-              element={<LoginSignup setIsAuthenticated={setIsAuthenticated} setUser={setUser} />}
-            />
+            <Route path="/blog/:id" element={<BlogDetails />} />
+            <Route path="/PostBlog" element={<PostBlog />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />  {/* Correct route */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Correct route */}
+            <Route path="/help-center" element={<HelpCenter />} />  {/* Correct route */}
+            <Route path="/faq" element={<FAQ />} />  {/* Correct route */}
+            <Route path="/account" element={isAuthenticated ? <UserAccount user={user} /> : <Navigate to="/login" />} />
+            <Route path="/login" element={<LoginSignup setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
           </Routes>
         </div>
         <Footer />
