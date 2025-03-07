@@ -16,6 +16,8 @@ import TermsAndConditions from './components/Support/TermsAndConditions';  // Co
 import FAQ from './components/Support/FAQ';  // Correct import
 import HelpCenter from './components/Support/HelpCenter';  // Correct import
 import PrivacyPolicy from './components/Support/PrivacyPolicy';  // Correct import
+import Contact from './components/Contact/Contact';
+
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
@@ -48,6 +50,7 @@ const App = () => {
             <Route path="/blog" element={<Blog themeMode={theme} />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/PostBlog" element={<PostBlog />} />
+            <Route path="/Contact" element={<Contact />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />  {/* Correct route */}
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Correct route */}
             <Route path="/help-center" element={<HelpCenter />} />  {/* Correct route */}

@@ -109,7 +109,7 @@ const PrivacyPolicy = () => {
         <ul>
           <li>Email: <a href="mailto:support@greengadgets.com">support@greengadgets.com</a></li>
           <li>Phone: 123-456-7890</li>
-          <li>Address: Green Gadgets, [Your Address]</li>
+          <li>Address:123 Green Road Street,Dhanmondi,Dhaka, Bangladesh</li>
         </ul>
       </section>
     </div>

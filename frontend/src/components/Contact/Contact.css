@@ -1,0 +1,55 @@
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #e0f2e9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif; /* You can change the font to any typography you prefer */
+    font-size: 2rem;
+    transition: color 0.3s ease;
+  }
+  
+  .contact-title:hover {
+    background: linear-gradient(#dcf6da, #b6dbb3);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .contact-item {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-item h4 {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .contact-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .footer-note {
+    text-align: center;
+    margin-top: 2rem;
+    font-style: italic;
+    background-color: #e0f2e9;
+  }
+  
