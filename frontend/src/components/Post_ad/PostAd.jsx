@@ -76,7 +76,7 @@ const PostAd = () => {
     files.forEach((file) => uploadData.append("images", file));
 
     try {
-      const response = await axios.post(`${API_URL}/api/upload`, uploadData, {
+      const response = await axios.post(`${API_URL}/api/upload/ad`, uploadData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
