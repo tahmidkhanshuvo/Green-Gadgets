@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Grid2, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import "./AdsFavorites.css"; // Ensure this file also exists
 
 // ✅ Hardcoded My Ads
@@ -43,9 +43,9 @@ const AdsFavorites = ({ activeTab }) => {
 
   return (
     <Box>
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {adsToShow.map((ad) => (
-          <Grid item xs={12} sm={6} md={4} key={ad.id}>
+          <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
             <Card className="ad-card">
               <CardMedia component="img" height="200" image={ad.image} alt={ad.title} />
               <CardContent>
@@ -54,9 +54,9 @@ const AdsFavorites = ({ activeTab }) => {
                 <Typography variant="body2" color="text.secondary">{ad.description}</Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Box>
   );
 };
