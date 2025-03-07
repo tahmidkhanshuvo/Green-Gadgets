@@ -1,6 +1,6 @@
 import React from 'react';
 import './TermsAndConditions.css'; // Optional: You can create a custom CSS file for styling
-import TermsAndConditions from './components/Support/TermsAndConditions.css';
+
 const TermsAndConditions = () => {
   return (
     <div className="terms-container">
