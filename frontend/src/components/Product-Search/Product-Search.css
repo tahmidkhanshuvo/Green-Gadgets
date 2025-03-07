@@ -1,6 +1,7 @@
 /* ✅ General Styles */
 .product-search {
   padding: 20px;
+  font-family: 'Arial', sans-serif;
   transition: background-color 0.3s ease-in-out;
 }
 

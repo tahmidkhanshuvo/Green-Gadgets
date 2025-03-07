@@ -1,59 +1,79 @@
-body {
-  background-color: #f8f9fa;
-  font-family: "Arial", sans-serif;
-}
-
+/* Container styling */
 .post-ad-container {
   max-width: 600px;
-  margin: 50px auto;
-  padding: 25px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-textarea {
-  height: 100px;
-  resize: none;
-}
-
-input[type="file"] {
-  padding: 5px;
-}
-
-/* ✅ Small Thumbnail Preview */
-.image-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.image-preview img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
+  margin: 40px auto;
+  padding: 24px;
+  background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* ✅ Post Button */
+/* Heading styling */
+.post-ad-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 28px;
+  color: #333;
+}
+
+/* Form layout */
+.post-ad-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Group each form field */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+.form-group label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: #555;
+}
+
+/* Input and textarea styling */
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 4px rgba(24, 144, 255, 0.5);
+}
+
+/* Select dropdown styling */
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='4'%20height='5'%3E%3Cpath%20fill='%23555'%20d='M2%200L0%202h4L2%200zM2%205L0%203h4l-2%202z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 8px 10px;
+}
+
+/* Upload area styling */
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+}
+
+/* Button styling */
 .post-btn {
   width: 100%;
   padding: 12px;
@@ -70,4 +90,31 @@ input[type="file"] {
 .post-btn:hover {
   background: linear-gradient(135deg, #5fb300, #004494);
   box-shadow: 0px 5px 15px rgba(0, 187, 16, 0.521);
+}
+
+.post-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Message styling */
+.message {
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .post-ad-container {
+    padding: 16px;
+    margin: 20px;
+  }
+  .post-ad-container h2 {
+    font-size: 24px;
+  }
+  .post-btn {
+    font-size: 16px;
+  }
 }
