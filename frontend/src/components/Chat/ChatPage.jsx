@@ -10,36 +10,37 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const ChatPage = () => {
   const { chatId } = useParams();
   const { user } = useContext(AuthContext);
+  const [chat, setChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [textInput, setTextInput] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const socketRef = useRef();
   const fileInputRef = useRef();
 
-  // Fetch existing chat history on mount
+  // Fetch chat details on mount
   useEffect(() => {
-    const fetchChatHistory = async () => {
+    const fetchChatDetails = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/chats/${chatId}`);
+        setChat(response.data);
         setMessages(response.data.messages);
       } catch (error) {
-        console.error("Error fetching chat history:", error);
+        console.error("Error fetching chat details:", error);
       }
     };
-    fetchChatHistory();
+    fetchChatDetails();
   }, [chatId]);
 
   // Setup Socket.io connection
   useEffect(() => {
-    // Use websocket transport for consistency
     socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.emit("joinChat", { chatId });
     console.log(`Joining chat room ${chatId}`);
 
     socketRef.current.on("message", (message) => {
       console.log("Received message:", message);
-      // Use a new object reference to force re-render if needed
       setMessages((prev) => [...prev, { ...message }]);
     });
 
@@ -59,7 +60,8 @@ const ChatPage = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedImage(file);
-      // Generate a local preview for the selected image
+      setIsImageUploading(false); // Ready state => green outline
+      // Generate local preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -70,8 +72,9 @@ const ChatPage = () => {
 
   const sendImageMessage = async () => {
     if (!selectedImage || !user || !user._id) return;
+    setIsImageUploading(true); // Mark as uploading (red outline)
     const formData = new FormData();
-    formData.append("images", selectedImage); // Ensure key "images" matches your upload middleware
+    formData.append("images", selectedImage);
 
     try {
       const response = await axios.post(`${API_URL}/api/upload/chat`, formData, {
@@ -83,48 +86,72 @@ const ChatPage = () => {
       socketRef.current.emit("sendMessage", payload);
       setSelectedImage(null);
       setImagePreview(null);
+      setIsImageUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading image:", error);
+      setIsImageUploading(false);
     }
   };
 
+  // Get the other participant's name
+  const otherUserName =
+    chat && chat.participants && user
+      ? chat.participants.find((p) => p._id !== user._id)?.name || "Chat"
+      : "Chat";
+
   return (
-    <div className="chatpage-container">
-      <h2 className="chatpage-title">Chat Conversation</h2>
-      <div className="chatpage-messages">
-        {messages.length === 0 ? (
-          <p>No messages yet.</p>
-        ) : (
-          messages.map((msg, index) => (
-            <div key={index} className="chatpage-message">
-              {msg.text && <span className="chatpage-text">{msg.text}</span>}
-              {msg.image && (
-                // Append a timestamp query parameter so the image is re-fetched
-                <img
-                  src={`${msg.image}?t=${new Date(msg.createdAt).getTime()}`}
-                  alt="sent content"
-                  className="chatpage-image"
-                />
-              )}
-              <small className="chatpage-timestamp">
-                {new Date(msg.createdAt).toLocaleTimeString()}
-              </small>
+    <div className="chatpage-wrapper">
+      <header className="chatpage-header">
+        <h2>{otherUserName}</h2>
+      </header>
+      <div className="chatpage-container">
+        <div className="chatpage-messages">
+          {messages.length === 0 ? (
+            <p className="chatpage-no-messages">No messages yet.</p>
+          ) : (
+            messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`chatpage-message ${msg.sender === user._id ? "sent" : "received"}`}
+              >
+                {msg.text && <div className="message-content">{msg.text}</div>}
+                {msg.image && (
+                  <img
+                    src={`${msg.image}?t=${new Date(msg.createdAt).getTime()}`}
+                    alt="sent content"
+                    className="chatpage-image"
+                  />
+                )}
+                <div className="chatpage-timestamp">
+                  {new Date(msg.createdAt).toLocaleTimeString()}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        <div className="chatpage-input-section">
+          <div className="chatpage-input-row">
+            <textarea
+              className="chatpage-input"
+              placeholder="Type a message..."
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+            />
+            <div className="chatpage-icons">
+              <button
+                className="chatpage-icon-btn"
+                onClick={() =>
+                  fileInputRef.current && fileInputRef.current.click()
+                }
+              >
+                📷
+              </button>
+              <button className="chatpage-send-btn" onClick={sendTextMessage}>
+                ➤
+              </button>
             </div>
-          ))
-        )}
-      </div>
-      <div className="chatpage-input-container">
-        <textarea
-          className="chatpage-input"
-          placeholder="Type a message..."
-          value={textInput}
-          onChange={(e) => setTextInput(e.target.value)}
-        />
-        <div className="chatpage-buttons">
-          <button className="chatpage-btn" onClick={sendTextMessage}>
-            Send Text
-          </button>
+          </div>
           <input
             type="file"
             accept="image/*"
@@ -132,24 +159,18 @@ const ChatPage = () => {
             style={{ display: "none" }}
             ref={fileInputRef}
           />
-          <button
-            className="chatpage-btn"
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-          >
-            Choose Image
-          </button>
           {selectedImage && (
-            <button className="chatpage-btn" onClick={sendImageMessage}>
-              Send Image
-            </button>
+            <div
+              className={`chatpage-image-preview ${isImageUploading ? "uploading" : "ready"}`}
+            >
+              <p>Preview:</p>
+              <img src={imagePreview} alt="Preview" />
+              <button className="chatpage-send-btn" onClick={sendImageMessage}>
+                Send Image
+              </button>
+            </div>
           )}
         </div>
-        {imagePreview && (
-          <div className="chatpage-image-preview">
-            <p>Image Preview:</p>
-            <img src={imagePreview} alt="Preview" />
-          </div>
-        )}
       </div>
     </div>
   );

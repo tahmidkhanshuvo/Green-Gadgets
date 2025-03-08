@@ -15,6 +15,7 @@ exports.createChat = async (req, res) => {
     }
 
     // Check if a chat with these participants already exists
+    // This finds a chat whose participants array exactly matches the given array
     let chat = await Chat.findOne({
       participants: { $all: participants, $size: participants.length }
     });
@@ -40,7 +41,7 @@ exports.createChat = async (req, res) => {
 exports.getChat = async (req, res) => {
   try {
     const { chatId } = req.params;
-    const chat = await Chat.findById(chatId).populate("participants", "name email");
+    const chat = await Chat.findById(chatId).populate("participants", "name email avatar");
     if (!chat) {
       return res.status(404).json({ error: "Chat not found" });
     }
@@ -94,8 +95,9 @@ exports.addMessage = async (req, res) => {
 exports.getChatsForUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const chats = await Chat.find({ participants: userId })
-      .populate("participants", "name email");
+    // Use $in to match any chat where the participants array includes the userId
+    const chats = await Chat.find({ participants: { $in: [userId] } })
+      .populate("participants", "name email avatar");
     res.json(chats);
   } catch (error) {
     console.error("Error fetching chats for user:", error);

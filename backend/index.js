@@ -24,6 +24,7 @@ app.use("/api/ad", require("./routes/adsRoutes")); // Product Routes
 app.use("/api/upload", require("./routes/uploadRoutes")); // Image Upload Routes
 app.use("/api/blog", require("./routes/blogRoutes")); // Blog Routes
 app.use("/api/chats", require("./routes/chatRoutes")); // Chat Routes
+app.use("/api/users", require("./routes/userRoutes")); // User Routes
 
 // Connect to MongoDB
 mongoose

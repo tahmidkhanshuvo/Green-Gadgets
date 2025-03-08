@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import io from "socket.io-client";
@@ -11,10 +11,13 @@ const ChatList = () => {
   const { user } = useContext(AuthContext);
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const socketRef = React.useRef();
+  const [unreadCounts, setUnreadCounts] = useState({});
+  const socketRef = useRef();
+  const location = useLocation();
 
   const fetchChats = async () => {
     try {
+      if (!user || !user._id) return;
       const response = await axios.get(`${API_URL}/api/chats/user/${user._id}`);
       console.log("Fetched chats:", response.data);
       setChats(response.data);
@@ -31,15 +34,28 @@ const ChatList = () => {
     }
   }, [user]);
 
-  // Listen for new chat message events to update chat list automatically
+  // Listen for new chat message events (real-time notifications)
   useEffect(() => {
     socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.on("newChatMessage", (data) => {
       console.log("New chat message event received:", data);
+      // If the current URL is not the chat page, update unread count
+      if (!location.pathname.includes(`/chat/${data.chatId}`)) {
+        setUnreadCounts((prev) => ({
+          ...prev,
+          [data.chatId]: (prev[data.chatId] || 0) + 1,
+        }));
+      }
+      // Also re-fetch chats to update last message preview
       fetchChats();
     });
     return () => socketRef.current.disconnect();
-  }, []);
+  }, [location]);
+
+  const handleChatClick = (chatId) => {
+    // Reset unread count for the chat when clicked
+    setUnreadCounts((prev) => ({ ...prev, [chatId]: 0 }));
+  };
 
   if (loading) {
     return <p className="chatlist-loading">Loading chats...</p>;
@@ -51,7 +67,7 @@ const ChatList = () => {
 
   return (
     <div className="chatlist-container">
-      <h2 className="chatlist-title">Your Chats</h2>
+      <h2 className="chatlist-title">Chats</h2>
       <ul className="chatlist-list">
         {chats.map((chat) => {
           const otherUser = chat.participants.find(
@@ -61,11 +77,27 @@ const ChatList = () => {
             chat.messages.length > 0
               ? chat.messages[chat.messages.length - 1]
               : null;
+          const unread = unreadCounts[chat._id] || 0;
+
           return (
             <li key={chat._id} className="chatlist-item">
-              <Link to={`/chat/${chat._id}`} className="chatlist-link">
+              <Link
+                to={`/chat/${chat._id}`}
+                className="chatlist-link"
+                onClick={() => handleChatClick(chat._id)}
+              >
                 <div className="chatlist-avatar">
-                  {otherUser ? otherUser.name.charAt(0).toUpperCase() : "?"}
+                  {otherUser && otherUser.avatar ? (
+                    <img
+                      src={otherUser.avatar}
+                      alt={otherUser.name}
+                      className="chatlist-avatar-img"
+                    />
+                  ) : (
+                    <span>
+                      {otherUser ? otherUser.name.charAt(0).toUpperCase() : "?"}
+                    </span>
+                  )}
                 </div>
                 <div className="chatlist-info">
                   <h3 className="chatlist-name">
@@ -75,7 +107,7 @@ const ChatList = () => {
                     <div className="chatlist-extra">
                       <p className="chatlist-preview">
                         {lastMessage.text ||
-                          (lastMessage.image ? "Image" : "")}
+                          (lastMessage.image ? "📷 Image" : "")}
                       </p>
                       <span className="chatlist-time">
                         {new Date(lastMessage.createdAt).toLocaleTimeString([], {
@@ -86,6 +118,9 @@ const ChatList = () => {
                     </div>
                   )}
                 </div>
+                {unread > 0 && (
+                  <div className="chatlist-unread-badge">{unread}</div>
+                )}
               </Link>
             </li>
           );
