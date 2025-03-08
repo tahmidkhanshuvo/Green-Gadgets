@@ -1,5 +1,5 @@
 const express = require("express");
-const { uploadBlogImages, uploadAdImages } = require("../middleware/upload");
+const { uploadBlogImages, uploadAdImages, uploadChatImages } = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -10,12 +10,10 @@ router.post("/blog", (req, res) => {
       console.error("Image upload error:", err);
       return res.status(500).json({ message: "Image upload failed", error: err.message });
     }
-
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded!" });
     }
-
-    const imageUrls = req.files.map(file => file.path); // ✅ Cloudinary image URLs
+    const imageUrls = req.files.map(file => file.path);
     res.json({ message: "Blog images uploaded successfully", imageUrls });
   });
 });
@@ -27,11 +25,9 @@ router.post("/ad", (req, res) => {
       console.error("Image upload error:", err);
       return res.status(500).json({ message: "Image upload failed", error: err.message });
     }
-
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded!" });
     }
-
     const imageUrls = req.files.map(file => file.path);
     res.json({ message: "Ad images uploaded successfully", imageUrls });
   });
@@ -44,13 +40,11 @@ router.post("/chat", (req, res) => {
       console.error("Image upload error:", err);
       return res.status(500).json({ message: "Image upload failed", error: err.message });
     }
-
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No image uploaded!" });
     }
-
     // Assuming one image per upload
-    const imageUrl = req.files[0].path; // Cloudinary returns the URL in the file path
+    const imageUrl = req.files[0].path;
     res.json({ message: "Chat image uploaded successfully", imageUrl });
   });
 });

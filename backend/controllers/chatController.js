@@ -64,16 +64,20 @@ exports.addMessage = async (req, res) => {
       return res.status(400).json({ error: "chatId and sender are required." });
     }
 
-    const message = { sender, text, image };
-    const chat = await Chat.findByIdAndUpdate(
-      chatId,
-      { $push: { messages: message } },
-      { new: true }
-    );
-
+    // Retrieve the chat first
+    let chat = await Chat.findById(chatId);
     if (!chat) {
       return res.status(404).json({ error: "Chat not found" });
     }
+
+    // Ensure the sender is in the participants array (if not, add them)
+    if (!chat.participants.includes(sender)) {
+      chat.participants.push(sender);
+    }
+
+    // Push the new message
+    chat.messages.push({ sender, text, image });
+    await chat.save();
 
     res.json(chat);
   } catch (error) {

@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", async (data) => {
     console.log("Message received via socket:", data);
     try {
-      // Persist the message to the database by updating the chat document
+      // Persist the message by pushing it into the chat document
       const updatedChat = await Chat.findByIdAndUpdate(
         data.chatId,
         {
@@ -76,17 +76,15 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // Broadcast the message to all clients in the chat room
-      io.to(data.chatId).emit("message", {
-        ...data,
-        createdAt: new Date(),
-      });
+      // Broadcast the new message to all clients in the chat room
+      io.to(data.chatId).emit("message", { ...data, createdAt: new Date() });
+      // Also, notify all connected clients that a chat document was updated
+      io.emit("newChatMessage", { chatId: data.chatId });
     } catch (error) {
       console.error("Error persisting message:", error);
     }
   });
 
-  // Client disconnects
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
   });

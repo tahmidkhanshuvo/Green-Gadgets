@@ -5,10 +5,10 @@
     padding: 20px;
     background: #fff;
     border-radius: 8px;
-    min-height: 500px; /* default size to avoid footer touching */
+    min-height: 500px; /* fixed minimum height */
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
   .chatpage-title {
@@ -88,5 +88,17 @@
   
   .chatpage-btn:hover {
     background: #0056b3;
+  }
+  
+  /* Styling for image preview */
+  .chatpage-image-preview {
+    margin-top: 16px;
+    text-align: center;
+  }
+  
+  .chatpage-image-preview img {
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
   

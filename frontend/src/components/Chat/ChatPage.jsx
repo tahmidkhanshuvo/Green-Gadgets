@@ -13,9 +13,24 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [textInput, setTextInput] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const socketRef = useRef();
   const fileInputRef = useRef();
 
+  // Fetch existing chat history on mount
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/chats/${chatId}`);
+        setMessages(response.data.messages);
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
+      }
+    };
+    fetchChatHistory();
+  }, [chatId]);
+
+  // Setup socket connection
   useEffect(() => {
     socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.emit("joinChat", { chatId });
@@ -31,9 +46,8 @@ const ChatPage = () => {
 
   const sendTextMessage = () => {
     if (textInput.trim() && user && user._id) {
-      const senderId = user._id;
-      const payload = { chatId, sender: senderId, text: textInput };
-      console.log("Sending message:", payload);
+      const payload = { chatId, sender: user._id, text: textInput };
+      console.log("Sending text message:", payload);
       socketRef.current.emit("sendMessage", payload);
       setTextInput("");
     }
@@ -43,12 +57,19 @@ const ChatPage = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedImage(file);
+      // Generate a preview of the selected image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const sendImageMessage = async () => {
     if (!selectedImage || !user || !user._id) return;
     const formData = new FormData();
+    // Append with key "images" as expected by your multer middleware
     formData.append("images", selectedImage);
 
     try {
@@ -56,12 +77,11 @@ const ChatPage = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const imageUrl = response.data.imageUrl;
-      const senderId = user._id;
-      const payload = { chatId, sender: senderId, image: imageUrl };
+      const payload = { chatId, sender: user._id, image: imageUrl };
       console.log("Sending image message:", payload);
       socketRef.current.emit("sendMessage", payload);
-
       setSelectedImage(null);
+      setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -72,21 +92,21 @@ const ChatPage = () => {
     <div className="chatpage-container">
       <h2 className="chatpage-title">Chat Conversation</h2>
       <div className="chatpage-messages">
-        {messages.map((msg, index) => (
-          <div key={index} className="chatpage-message">
-            {msg.text && <span className="chatpage-text">{msg.text}</span>}
-            {msg.image && (
-              <img
-                src={msg.image}
-                alt="sent content"
-                className="chatpage-image"
-              />
-            )}
-            <small className="chatpage-timestamp">
-              {new Date(msg.createdAt).toLocaleTimeString()}
-            </small>
-          </div>
-        ))}
+        {messages.length === 0 ? (
+          <p>No messages yet.</p>
+        ) : (
+          messages.map((msg, index) => (
+            <div key={index} className="chatpage-message">
+              {msg.text && <span className="chatpage-text">{msg.text}</span>}
+              {msg.image && (
+                <img src={msg.image} alt="sent content" className="chatpage-image" />
+              )}
+              <small className="chatpage-timestamp">
+                {new Date(msg.createdAt).toLocaleTimeString()}
+              </small>
+            </div>
+          ))
+        )}
       </div>
       <div className="chatpage-input-container">
         <textarea
@@ -118,6 +138,12 @@ const ChatPage = () => {
             </button>
           )}
         </div>
+        {imagePreview && (
+          <div className="chatpage-image-preview">
+            <p>Image Preview:</p>
+            <img src={imagePreview} alt="Preview" />
+          </div>
+        )}
       </div>
     </div>
   );
