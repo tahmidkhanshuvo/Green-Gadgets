@@ -24,7 +24,7 @@ const ProductSearch = () => {
 
   // Fetch Ads from API
   useEffect(() => {
-    axios.get(`${API_URL}/api/ads`)
+    axios.get(`${API_URL}/api/ad`)
       .then((response) => setAds(response.data))
       .catch((error) => console.error("Error fetching ads:", error));
   }, []);
