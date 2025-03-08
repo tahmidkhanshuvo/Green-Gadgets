@@ -30,15 +30,17 @@ const ChatPage = () => {
     fetchChatHistory();
   }, [chatId]);
 
-  // Setup socket connection
+  // Setup Socket.io connection
   useEffect(() => {
+    // Use websocket transport for consistency
     socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.emit("joinChat", { chatId });
     console.log(`Joining chat room ${chatId}`);
 
     socketRef.current.on("message", (message) => {
       console.log("Received message:", message);
-      setMessages((prev) => [...prev, message]);
+      // Use a new object reference to force re-render if needed
+      setMessages((prev) => [...prev, { ...message }]);
     });
 
     return () => socketRef.current.disconnect();
@@ -57,7 +59,7 @@ const ChatPage = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedImage(file);
-      // Generate a preview of the selected image
+      // Generate a local preview for the selected image
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -69,8 +71,7 @@ const ChatPage = () => {
   const sendImageMessage = async () => {
     if (!selectedImage || !user || !user._id) return;
     const formData = new FormData();
-    // Append with key "images" as expected by your multer middleware
-    formData.append("images", selectedImage);
+    formData.append("images", selectedImage); // Ensure key "images" matches your upload middleware
 
     try {
       const response = await axios.post(`${API_URL}/api/upload/chat`, formData, {
@@ -99,7 +100,12 @@ const ChatPage = () => {
             <div key={index} className="chatpage-message">
               {msg.text && <span className="chatpage-text">{msg.text}</span>}
               {msg.image && (
-                <img src={msg.image} alt="sent content" className="chatpage-image" />
+                // Append a timestamp query parameter so the image is re-fetched
+                <img
+                  src={`${msg.image}?t=${new Date(msg.createdAt).getTime()}`}
+                  alt="sent content"
+                  className="chatpage-image"
+                />
               )}
               <small className="chatpage-timestamp">
                 {new Date(msg.createdAt).toLocaleTimeString()}
