@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaLeaf, FaShieldAlt, FaRecycle, FaTrashAlt } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Home.css';
 
@@ -20,47 +20,58 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 // Dummy data for testimonials slider
 const testimonialsData = [
   {
-    quote: "Green Gadgets has transformed my business by offering sustainable solutions that not only reduce waste but also cut costs significantly. Highly recommended for any forward-thinking entrepreneur in Bangladesh.",
+    quote:
+      "Green Gadgets has transformed my business by offering sustainable solutions that not only reduce waste but also cut costs significantly. Highly recommended for any forward-thinking entrepreneur in Bangladesh.",
     customer: "Rifat Chowdhury Roni",
-    image: "https://www.shutterstock.com/image-photo/happy-bangladesh-business-man-holding-600nw-391133695.jpg",
+    image:
+      "https://www.shutterstock.com/image-photo/happy-bangladesh-business-man-holding-600nw-391133695.jpg",
   },
   {
-    quote: "The quality of refurbished products is exceptional, and the service is truly top-notch. I am proud to support an eco-friendly initiative that benefits both my business and the community.",
+    quote:
+      "The quality of refurbished products is exceptional, and the service is truly top-notch. I am proud to support an eco-friendly initiative that benefits both my business and the community.",
     customer: "Md. Hasibuzzaman Tuhin",
-    image: "https://www.tuhinhossainphotography.com/wp-content/themes/tuhin-photography/assets/img/corporate/large/CORPORATE-PHOTO_19.jpg",
+    image:
+      "https://www.tuhinhossainphotography.com/wp-content/themes/tuhin-photography/assets/img/corporate/large/CORPORATE-PHOTO_19.jpg",
   },
   {
-    quote: "As a small business owner in Dhaka, I appreciate how Green Gadgets provides reliable electronics at affordable prices while actively promoting environmental sustainability.",
+    quote:
+      "As a small business owner in Dhaka, I appreciate how Green Gadgets provides reliable electronics at affordable prices while actively promoting environmental sustainability.",
     customer: "Sadia Akhter",
-    image: "https://businessinspection.com.bd/wp-content/uploads/2022/09/Samira-Zuberi-Himika-1.jpg", // Replace with a real image URL
+    image:
+      "https://businessinspection.com.bd/wp-content/uploads/2022/09/Samira-Zuberi-Himika-1.jpg",
   },
   {
-    quote: "Their commitment to quality and sustainable practices is evident in every product. Green Gadgets sets a high standard in the industry, and I am delighted with the results.",
+    quote:
+      "Their commitment to quality and sustainable practices is evident in every product. Green Gadgets sets a high standard in the industry, and I am delighted with the results.",
     customer: "Arifa Hossain",
-    image: "https://st2.depositphotos.com/37996792/42271/i/450/depositphotos_422718976-stock-photo-pretty-young-indian-woman-using.jpg", // Replace with a real image URL
+    image:
+      "https://st2.depositphotos.com/37996792/42271/i/450/depositphotos_422718976-stock-photo-pretty-young-indian-woman-using.jpg",
   },
   {
-    quote: "I am extremely satisfied with the exceptional customer service and innovative eco-friendly products offered by Green Gadgets. It’s a true game changer for the local market.",
+    quote:
+      "I am extremely satisfied with the exceptional customer service and innovative eco-friendly products offered by Green Gadgets. It’s a true game changer for the local market.",
     customer: "Anika Tasnim",
-    image: "https://www.sumitomocorp.com/jp/-/media/Images/hq/Enriching/0012/contents_kv.jpg",
+    image:
+      "https://www.sumitomocorp.com/jp/-/media/Images/hq/Enriching/0012/contents_kv.jpg",
   },
 ];
 
-
 export default function HomePage({ theme }) {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentImage, setCurrentImage] = useState(0);
   const [randomBlogs, setRandomBlogs] = useState([]);
-  
+
   // Testimonial slider state with fade effect
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [fadeClass, setFadeClass] = useState("fade-in");
-  
+
   // Impact counters
   const [recycledCount, setRecycledCount] = useState(0);
   const [refurbishedCount, setRefurbishedCount] = useState(0);
   const [happyCustomersCount, setHappyCustomersCount] = useState(0);
 
-  // SLIDER: Cycle background images (unchanged)
+  // Cycle background images
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -131,21 +142,44 @@ export default function HomePage({ theme }) {
           type="text"
           placeholder="Search for products..."
           className="home-search-box"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="home-buttons">
-          <button className="home-button">
+          <button
+            className="home-button"
+            onClick={() =>
+              navigate("/search", {
+                state: { searchTerm: searchTerm, category: "Recycle" },
+              })
+            }
+          >
             <FaRecycle /> Recycled
           </button>
-          <button className="home-button">
+          <button
+            className="home-button"
+            onClick={() =>
+              navigate("/search", {
+                state: { searchTerm: searchTerm, category: "Refurbished" },
+              })
+            }
+          >
             <FontAwesomeIcon icon={faScrewdriverWrench} /> Refurbished
           </button>
-          <button className="home-button">
+          <button
+            className="home-button"
+            onClick={() =>
+              navigate("/search", {
+                state: { searchTerm: searchTerm, category: "Reuse" },
+              })
+            }
+          >
             <FaTrashAlt /> E-waste
           </button>
         </div>
       </div>
 
-      {/* Elaborate Features Section */}
+      {/* Features Section */}
       <div className="home-features">
         <h2>Our Features</h2>
         <div className="features-grid">
@@ -180,7 +214,7 @@ export default function HomePage({ theme }) {
         </div>
       </div>
 
-      {/* Testimonials Section with improved fade transition */}
+      {/* Testimonials Section */}
       <div className="home-testimonials">
         <h2>What Our Customers Say</h2>
         <div className={`testimonial-slider ${fadeClass}`}>

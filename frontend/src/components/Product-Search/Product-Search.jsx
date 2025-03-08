@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Product-Search.css";
 
@@ -13,9 +13,10 @@ const ProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(9); // Default number of products per page
+  const [productsPerPage, setProductsPerPage] = useState(9);
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Toggle Dark Mode
   const toggleDarkMode = () => {
@@ -24,10 +25,23 @@ const ProductSearch = () => {
 
   // Fetch Ads from API
   useEffect(() => {
-    axios.get(`${API_URL}/api/ad`)
+    axios
+      .get(`${API_URL}/api/ad`)
       .then((response) => setAds(response.data))
       .catch((error) => console.error("Error fetching ads:", error));
   }, []);
+
+  // Set initial search term and category from location state if available
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.searchTerm) {
+        setSearchTerm(location.state.searchTerm);
+      }
+      if (location.state.category) {
+        setSelectedCategory(location.state.category);
+      }
+    }
+  }, [location.state]);
 
   // Optimized Filtering & Sorting
   const filteredAds = useMemo(() => {
@@ -50,7 +64,10 @@ const ProductSearch = () => {
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredAds.length / productsPerPage);
-  const currentProducts = filteredAds.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage);
+  const currentProducts = filteredAds.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
 
   // Handle Page Change
   const handlePageChange = (page) => {
@@ -62,23 +79,24 @@ const ProductSearch = () => {
   // Get count of subcategories based on selected category
   const getSubCategoryCount = (subCategory) => {
     return ads.filter(
-      (ad) => ad.subCategory === subCategory && (selectedCategory === "All" || ad.category === selectedCategory)
+      (ad) =>
+        ad.subCategory === subCategory &&
+        (selectedCategory === "All" || ad.category === selectedCategory)
     ).length;
   };
 
-  // Add or remove the dark class based on darkMode state
+  // Apply dark mode class to body
   useEffect(() => {
     if (darkMode) {
-      document.body.classList.add('dark');
+      document.body.classList.add("dark");
     } else {
-      document.body.classList.remove('dark');
+      document.body.classList.remove("dark");
     }
   }, [darkMode]);
 
   return (
     <div className="product-search">
       <div className="product-container">
-        
         {/* Sidebar Filters */}
         <div className="sidebar">
           <h2>Categories</h2>
@@ -106,8 +124,7 @@ const ProductSearch = () => {
                   {subCategory} ({getSubCategoryCount(subCategory)})
                 </button>
               ))
-            : selectedCategory !== "All" &&
-              ["All", "Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
+            : ["All", "Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
                 <button
                   key={subCategory}
                   className={selectedSubCategory === subCategory ? "active" : ""}
@@ -118,21 +135,22 @@ const ProductSearch = () => {
               ))}
 
           <h2>Location</h2>
-          {["All", "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Barishal"].map((location) => (
-            <button
-              key={location}
-              className={selectedLocation === location ? "active" : ""}
-              onClick={() => setSelectedLocation(location)}
-            >
-              {location}
-            </button>
-          ))}
+          {["All", "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Barishal"].map(
+            (locationName) => (
+              <button
+                key={locationName}
+                className={selectedLocation === locationName ? "active" : ""}
+                onClick={() => setSelectedLocation(locationName)}
+              >
+                {locationName}
+              </button>
+            )
+          )}
         </div>
 
         {/* Product Section */}
         <div className="product-section">
           <div className="search-filter-container">
-            
             {/* Search Bar */}
             <div className="search-bar">
               <input
@@ -146,7 +164,10 @@ const ProductSearch = () => {
             {/* Show More Options */}
             <div className="show-more-options">
               <label>Show: </label>
-              <select onChange={(e) => setProductsPerPage(Number(e.target.value))} value={productsPerPage}>
+              <select
+                onChange={(e) => setProductsPerPage(Number(e.target.value))}
+                value={productsPerPage}
+              >
                 <option value={20}>20</option>
                 <option value={40}>40</option>
                 <option value={60}>60</option>
@@ -170,11 +191,19 @@ const ProductSearch = () => {
           <div className="product-list">
             {currentProducts.length > 0 ? (
               currentProducts.map((ad) => (
-                <div key={ad._id} className="product-item" onClick={() => navigate(`/productdetails/${ad._id}`)}>
+                <div
+                  key={ad._id}
+                  className="product-item"
+                  onClick={() => navigate(`/productdetails/${ad._id}`)}
+                >
                   <div className="image-container">
                     <span className="badge">{ad.category}</span>
                     <img
-                      src={ad.images.length > 0 ? ad.images[0] : "https://via.placeholder.com/200"}
+                      src={
+                        ad.images.length > 0
+                          ? ad.images[0]
+                          : "https://via.placeholder.com/200"
+                      }
                       alt={ad.title}
                       className="product-image"
                     />
