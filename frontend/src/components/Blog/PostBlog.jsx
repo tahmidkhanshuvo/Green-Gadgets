@@ -1,125 +1,127 @@
-import React, { useState } from 'react';
-import { Modal, Form, Input, Button, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import React Quill styles
+import React, { useState, useContext } from "react";
+import { Modal, Form, Input, Button, Upload, message, Select } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
-const PostBlog = ({ visible, onCancel, onPost }) => {
+const { Option } = Select;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
+const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
   const [form] = Form.useForm();
   const [imageList, setImageList] = useState([]);
-  const [messageApi, contextHolder] = message.useMessage();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
+  const { user, isAuthenticated } = useContext(AuthContext);
 
-  const handleImageUpload = ({ fileList }) => {
-    setImageList(fileList);
+  if (!isAuthenticated) return null;
+
+  const handleImageUpload = async ({ file, onSuccess, onError }) => {
+    const formData = new FormData();
+    formData.append("images", file);
+
+    try {
+      const { data } = await axios.post(`${API_URL}/api/upload/blog`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setImageList((prevList) => [...prevList, ...data.imageUrls]);
+      onSuccess();
+      message.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Upload error:", error);
+      onError(error);
+      message.error("Image upload failed!");
+    }
   };
 
-  const handleSubmit = (values) => {
-    const formData = { ...values, content, images: imageList };
-    onPost(formData);
-    form.resetFields();
-    setImageList([]);
-    setContent(''); // Reset the content field
-    messageApi.success('Blog posted successfully!');
+  const handleSubmit = async (values) => {
+    // Manually validate content field
+    if (!content || content.trim() === "") {
+      message.error("Content is required");
+      return;
+    }
+
+    console.log("User in PostBlog:", user);
+    if (!user || !user._id) {
+      message.error("User information not loaded. Please log in again.");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API_URL}/api/blog`,
+        {
+          ...values,
+          content,
+          images: imageList,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      message.success("Blog posted successfully!");
+      fetchBlogs();
+      form.resetFields();
+      setImageList([]);
+      setContent("");
+      onCancel();
+    } catch (error) {
+      console.error("Error posting blog:", error);
+      message.error("Error posting blog!");
+    }
   };
 
   return (
-    <>
-      {contextHolder}
-      <Modal
-        open={visible}
-        title="Post Blog"
-        onCancel={onCancel}
-        footer={[
-          <Button
-            key="back"
-            onClick={onCancel}
-            style={{ background: '#f44336', color: 'white', border: 'none' }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={() => form.submit()}
-            style={{
-              background: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-              color: 'white',
-              border: 'none',
-            }}
-          >
-            Post
-          </Button>,
-        ]}
-      >
-        <Form
-          form={form}
-          onFinish={handleSubmit}
-          layout="vertical"
-          initialValues={{
-            title: '',
-            shortDescription: '',
-          }}
+    <Modal open={visible} title="Post Blog" onCancel={onCancel} footer={null}>
+      <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form.Item
+          name="title"
+          label="Blog Title"
+          rules={[{ required: true, message: "Title is required" }]}
         >
-          <Form.Item
-            name="title"
-            label="Blog Title"
-            rules={[{ required: true, message: 'Please enter the blog title!' }]}
-          >
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          {/* Replace TextArea with React Quill for rich text */}
-          <Form.Item
-            name="content"
-            label="Content"
-            rules={[{ required: true, message: 'Please enter the content of the blog!' }]}
-          >
-            <ReactQuill
-              value={content}
-              onChange={setContent} // Set the content when changed
-              theme="snow"
-              modules={{
-                toolbar: [
-                  [{ header: '1' }, { header: '2' }, { font: [] }],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['bold', 'italic', 'underline', 'strike'],
-                  [{ color: [] }, { background: [] }],
-                  [{ align: [] }],
-                  ['link', 'image'],
-                  ['blockquote', 'code-block'],
-                  ['clean'],
-                ],
-              }}
-            />
-          </Form.Item>
+        <Form.Item
+          name="shortDescription"
+          label="Short Description"
+          rules={[{ required: true, message: "Short description is required" }]}
+        >
+          <Input.TextArea rows={2} />
+        </Form.Item>
 
-          <Form.Item
-            name="shortDescription"
-            label="Short Description"
-            rules={[{ required: true, message: 'Please enter a short description for the blog!' }]}
-          >
-            <Input.TextArea rows={4} />
-          </Form.Item>
+        {/* Removed name and rules to handle content separately */}
+        <Form.Item label="Content">
+          <ReactQuill value={content} onChange={setContent} theme="snow" />
+        </Form.Item>
 
-          <Form.Item label="Upload Images">
-            <Upload
-              action="/upload"
-              listType="picture-card"
-              fileList={imageList}
-              onChange={handleImageUpload}
-              onPreview={(file) => window.open(file.url)}
-              multiple
-            >
-              <div>
-                <UploadOutlined style={{ fontSize: 24, color: '#1890ff' }} />
-                <div>Upload</div>
-              </div>
-            </Upload>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+        <Form.Item
+          name="category"
+          label="Category"
+          rules={[{ required: true, message: "Please select a category" }]}
+        >
+          <Select placeholder="Select a category">
+            <Option value="Recycle">Recycle</Option>
+            <Option value="Refurbish">Refurbish</Option>
+            <Option value="E-waste">E-waste</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="Upload Images">
+          <Upload customRequest={handleImageUpload} listType="picture-card" multiple>
+            <div>
+              <UploadOutlined style={{ fontSize: 24, color: "#1890ff" }} />
+              <div>Upload</div>
+            </div>
+          </Upload>
+        </Form.Item>
+
+        <Button type="primary" htmlType="submit">
+          Post
+        </Button>
+      </Form>
+    </Modal>
   );
 };
 

@@ -1,6 +1,7 @@
 /* ✅ General Styles */
 .product-search {
   padding: 20px;
+  font-family: 'Arial', sans-serif;
   transition: background-color 0.3s ease-in-out;
 }
 
@@ -292,4 +293,84 @@
   .search-bar input {
     width: 60%;
   }
+}
+
+/* ========== DARK MODE STYLES ========== */
+.dark .product-search {
+  background-color: #121212;
+  color: white;
+}
+
+.dark .product-container {
+  color: white;
+}
+
+.dark .sidebar {
+  background: #333;
+}
+
+.dark .sidebar button {
+  background: #555;
+  color: white;
+}
+
+.dark .product-item {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+}
+
+.dark .product-item:hover {
+  background-color: #333;
+}
+
+.dark .badge {
+  background: #388e3c;
+}
+
+.dark .product-details h3 {
+  color: #e0e0e0;
+}
+
+.dark .pagination button {
+  background: #444;
+  color: white;
+}
+
+.dark .pagination button:hover {
+  background: #666;
+}
+
+/* ✅ Search Input */
+.dark .search-bar input {
+  background-color: #333; /* Dark background */
+  color: white; /* Light text */
+  border-color: #555; /* Border color for dark mode */
+}
+
+.dark .search-bar input:focus {
+  border-color: #388e3c; /* Green focus border */
+}
+
+/* ✅ Show More and Sort Dropdown */
+.dark .show-more-options select,
+.dark .filter-section select {
+  background-color: #444;
+  color: white;
+  border: 1px solid #555;
+}
+
+.dark .show-more-options select:focus,
+.dark .filter-section select:focus {
+  border-color: #388e3c; /* Green focus border */
+}
+
+.dark .show-more,
+.dark .pagination button {
+  background-color: #444; /* Dark background */
+  color: white; /* Light text */
+}
+
+.dark .show-more:hover,
+.dark .pagination button:hover {
+  background-color: #666; /* Lighter background on hover */
 }

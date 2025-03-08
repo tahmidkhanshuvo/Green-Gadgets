@@ -1,53 +1,54 @@
 /* ✅ General Container */
 .product-details-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 30px auto;
+    width: 100%; /* Ensures the container takes the full width */
+    max-width: 4000px;/* Keeps the max-width constraint */
+  
     padding: 20px;
     font-family: 'Arial', sans-serif;
     background: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-/* ✅ Breadcrumbs */
-.breadcrumbs {
+    border-radius: 0px;
+  }
+  
+  /* ✅ Breadcrumbs */
+  .breadcrumbs {
     font-size: 14px;
     color: #666;
     margin-bottom: 15px;
-}
-
-/* ✅ Layout */
-.product-details-content {
+  }
+  
+  /* ✅ Layout */
+  .product-details-content {
     display: flex;
     gap: 30px;
-}
-
-/* ✅ Left Section */
-.left-section {
+    width: 100%; /* Ensures full width */
+  }
+  
+  /* ✅ Left Section */
+  .left-section {
     flex: 2;
-}
-
-/* ✅ Image Slider */
-.image-slider {
+  }
+  
+  /* ✅ Image Slider */
+  .image-slider {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
     position: relative;
-}
-
-/* ✅ Main Slider Image */
-.slider-image {
+  }
+  
+  /* ✅ Main Slider Image */
+  .slider-image {
     width: 100%;
     height: 400px;
     object-fit: contain;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ Slick Slider Navigation Buttons */
-.slick-prev,
-.slick-next {
+  }
+  
+  /* ✅ Slick Slider Navigation Buttons */
+  .slick-prev,
+  .slick-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -64,143 +65,143 @@
     cursor: pointer;
     z-index: 100;
     transition: background 0.3s ease-in-out;
-}
-
-/* ✅ Positioning Previous & Next Buttons */
-.slick-prev {
+  }
+  
+  /* ✅ Positioning Previous & Next Buttons */
+  .slick-prev {
     left: -40px;
-}
-
-.slick-next {
+  }
+  
+  .slick-next {
     right: -40px;
-}
-
-/* ✅ Hover Effect for Navigation Buttons */
-.slick-prev:hover,
-.slick-next:hover {
+  }
+  
+  /* ✅ Hover Effect for Navigation Buttons */
+  .slick-prev:hover,
+  .slick-next:hover {
     background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* ✅ Custom Dots (Pagination) */
-.slick-dots {
+  }
+  
+  /* ✅ Custom Dots (Pagination) */
+  .slick-dots {
     bottom: 10px;
-}
-
-.slick-dots li button:before {
+  }
+  
+  .slick-dots li button:before {
     font-size: 12px;
     color: white;
     opacity: 0.75;
-}
-
-.slick-dots li.slick-active button:before {
+  }
+  
+  .slick-dots li.slick-active button:before {
     color: #388e3c;
     opacity: 1;
-}
-
-/* ✅ Title & Metadata */
-.product-title {
+  }
+  
+  /* ✅ Title & Metadata */
+  .product-title {
     margin-top: 15px;
     font-size: 28px;
     font-weight: bold;
     color: #222;
-}
-
-.product-meta {
+  }
+  
+  .product-meta {
     font-size: 14px;
     color: #666;
     margin-top: 5px;
-}
-
-.product-meta p {
+  }
+  
+  .product-meta p {
     margin: 3px 0;
-}
-
-/* ✅ Price */
-.product-price {
+  }
+  
+  /* ✅ Price */
+  .product-price {
     font-size: 30px;
     font-weight: bold;
     color: #28a745;
     margin: 20px 0;
-}
-
-/* ✅ Features Section */
-.features-container {
+  }
+  
+  /* ✅ Features Section */
+  .features-container {
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     margin-top: 20px;
     border: 1px solid #ddd;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.features-container h2 {
+  }
+  
+  .features-container h2 {
     color: #333;
     font-size: 22px;
     margin-bottom: 10px;
-}
-
-.features-list {
+  }
+  
+  .features-list {
     list-style: none;
     padding: 0;
-}
-
-.features-list li {
+  }
+  
+  .features-list li {
     padding: 8px 0;
     font-size: 16px;
     border-bottom: 1px solid #ddd;
     color: #444;
-}
-
-.features-list li:last-child {
+  }
+  
+  .features-list li:last-child {
     border-bottom: none;
-}
-
-/* ✅ Responsive Features Section */
-@media (max-width: 1024px) {
+  }
+  
+  /* ✅ Responsive Features Section */
+  @media (max-width: 1024px) {
     .features-container {
-        padding: 12px;
-        margin-top: 15px;
+      padding: 12px;
+      margin-top: 15px;
     }
-
+  
     .features-container h2 {
-        font-size: 20px;
+      font-size: 20px;
     }
-
+  
     .features-list li {
-        font-size: 15px;
-        padding: 6px 0;
+      font-size: 15px;
+      padding: 6px 0;
     }
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     .features-container {
-        padding: 10px;
-        margin-top: 12px;
+      padding: 10px;
+      margin-top: 12px;
     }
-
+  
     .features-container h2 {
-        font-size: 18px;
+      font-size: 18px;
     }
-
+  
     .features-list li {
-        font-size: 14px;
-        padding: 5px 0;
+      font-size: 14px;
+      padding: 5px 0;
     }
-}
-
-/* ✅ Description */
-.description-section h2 {
+  }
+  
+  /* ✅ Description */
+  .description-section h2 {
     font-size: 22px;
     margin-bottom: 10px;
-}
-
-.description-section p {
+  }
+  
+  .description-section p {
     margin-bottom: 10px;
     color: #444;
-}
-
-/* ✅ Report Button */
-.report-button {
+  }
+  
+  /* ✅ Report Button */
+  .report-button {
     margin-top: 20px;
     background-color: transparent;
     border: 2px solid red;
@@ -211,23 +212,23 @@
     border-radius: 6px;
     cursor: pointer;
     transition: 0.3s;
-}
-
-.report-button:hover {
+  }
+  
+  .report-button:hover {
     background-color: red;
     color: white;
-}
-
-/* ✅ Right Section (Seller & Contact) */
-.right-section {
+  }
+  
+  /* ✅ Right Section (Seller & Contact) */
+  .right-section {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-/* ✅ Seller Card */
-.seller-card {
+  }
+  
+  /* ✅ Seller Card */
+  .seller-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -236,30 +237,30 @@
     border-radius: 10px;
     background: #f9f9f9;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
-}
-
-.user-avatar {
+  }
+  
+  .user-avatar {
     width: 90px;
     height: 90px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
     border: 3px solid #ddd;
-}
-
-.seller-info h3 {
+  }
+  
+  .seller-info h3 {
     margin: 5px 0;
     font-size: 20px;
     color: #333;
-}
-
-.seller-info p {
+  }
+  
+  .seller-info p {
     margin: 2px 0;
     color: #777;
-}
-
-/* ✅ Contact Button */
-.contact-button {
+  }
+  
+  /* ✅ Contact Button */
+  .contact-button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -269,47 +270,47 @@
     font-size: 16px;
     font-weight: bold;
     transition: 0.3s;
-}
-
-.contact-button:hover {
+  }
+  
+  .contact-button:hover {
     background-color: #0056b3;
-}
-
-.contact-button:disabled {
+  }
+  
+  .contact-button:disabled {
     background-color: #28a745;
     cursor: default;
     color: white;
     animation: fadeIn 0.5s ease-in-out;
-}
-
-/* ✅ Contact Reveal Animation */
-@keyframes fadeIn {
+  }
+  
+  /* ✅ Contact Reveal Animation */
+  @keyframes fadeIn {
     from {
-        opacity: 0;
-        transform: scale(0.9);
+      opacity: 0;
+      transform: scale(0.9);
     }
     to {
-        opacity: 1;
-        transform: scale(1);
+      opacity: 1;
+      transform: scale(1);
     }
-}
-
-/* ✅ Revealed Contact Button Style */
-.contact-button.revealed {
+  }
+  
+  /* ✅ Revealed Contact Button Style */
+  .contact-button.revealed {
     background-color: #28a745;
     cursor: default;
     font-weight: bold;
     animation: fadeIn 0.5s ease-in-out;
-}
-
-/* ✅ Message Section */
-.message-section {
+  }
+  
+  /* ✅ Message Section */
+  .message-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.message-section textarea {
+  }
+  
+  .message-section textarea {
     width: 100%;
     height: 100px;
     border: 2px solid #ccc;
@@ -317,9 +318,10 @@
     padding: 12px;
     font-size: 14px;
     resize: none;
-}
-
-.send-message-button {
+    color: #222; /* Make the text visible */
+  }
+  
+  .send-message-button {
     align-self: flex-end;
     background-color: #28a745;
     color: white;
@@ -330,8 +332,120 @@
     font-size: 16px;
     font-weight: bold;
     transition: 0.3s;
+  }
+  
+  .send-message-button:hover {
+    background-color: #218838;
+  }
+  
+ /* ========== DARK MODE STYLES ========== */
+.dark .product-details-container {
+  background-color: #121212;
+  color: white;
 }
 
-.send-message-button:hover {
-    background-color: #218838;
+.dark .breadcrumbs {
+  color: #aaa;
+}
+
+.dark .product-details-content {
+  color: white;
+}
+
+.dark .product-title {
+  color: #f1f1f1;
+}
+
+.dark .product-meta p {
+  color: #aaa;
+}
+
+.dark .product-price {
+  color: #28a745;
+}
+
+.dark .features-container {
+  background-color: #333;
+  border: 1px solid #444;
+}
+
+.dark .features-container h2 {
+  color: #fff;
+}
+
+.dark .features-list li {
+  color: #ddd;
+}
+
+.dark .description-section h2 {
+  color: #fff;
+}
+
+.dark .description-section p {
+  color: #ccc;
+}
+
+.dark .report-button {
+  border: 2px solid red;
+  color: red;
+}
+
+.dark .report-button:hover {
+  background-color: red;
+  color: white;
+}
+
+.dark .seller-card {
+  background: #333;
+  border: 2px solid #444;
+}
+
+.dark .user-avatar {
+  border: 3px solid #555;
+}
+
+.dark .seller-info h3 {
+  color: #ddd;
+}
+
+.dark .contact-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.dark .contact-button:hover {
+  background-color: #0056b3;
+}
+
+.dark .contact-button.revealed {
+  background-color: #28a745;
+  color: white;
+}
+
+.dark .send-message-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.dark .send-message-button:hover {
+  background-color: #218838;
+}
+
+/* Light Mode Styles */
+.product-details-container {
+  background-color: #fff;
+  color: black;
+}
+
+.product-details-content {
+  color: black;
+}
+
+.message-section textarea {
+  color: black; /* Black text in light mode */
+}
+
+/* Dark Mode Textarea Color */
+.dark .message-section textarea {
+  color: white; /* White text in dark mode */
 }

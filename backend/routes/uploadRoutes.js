@@ -1,36 +1,52 @@
 const express = require("express");
-const multer = require("multer");
-const cloudinary = require("../config/cloudinary");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { uploadBlogImages, uploadAdImages, uploadChatImages } = require("../middleware/upload");
 
 const router = express.Router();
 
-// ✅ Multer Storage for Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "green-gadgets-ads",
-    allowed_formats: ["jpg", "png", "jpeg", "webp"],
-  },
+// ✅ Upload Blog Images Route
+router.post("/blog", (req, res) => {
+  uploadBlogImages(req, res, (err) => {
+    if (err) {
+      console.error("Image upload error:", err);
+      return res.status(500).json({ message: "Image upload failed", error: err.message });
+    }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "No images uploaded!" });
+    }
+    const imageUrls = req.files.map(file => file.path);
+    res.json({ message: "Blog images uploaded successfully", imageUrls });
+  });
 });
 
-const upload = multer({ storage });
-
-// ✅ Upload Multiple Images to Cloudinary
-router.post("/", upload.array("images", 5), async (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "No images uploaded" });
+// ✅ Upload Ad Images Route
+router.post("/ad", (req, res) => {
+  uploadAdImages(req, res, (err) => {
+    if (err) {
+      console.error("Image upload error:", err);
+      return res.status(500).json({ message: "Image upload failed", error: err.message });
     }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "No images uploaded!" });
+    }
+    const imageUrls = req.files.map(file => file.path);
+    res.json({ message: "Ad images uploaded successfully", imageUrls });
+  });
+});
 
-    const imageUrls = req.files.map((file) => file.path);
-    res.json({ 
-      mainImage: imageUrls[0], // First image as main image
-      images: imageUrls
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Image upload failed", error });
-  }
+// ✅ Upload Chat Image Route
+router.post("/chat", (req, res) => {
+  uploadChatImages(req, res, (err) => {
+    if (err) {
+      console.error("Image upload error:", err);
+      return res.status(500).json({ message: "Image upload failed", error: err.message });
+    }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "No image uploaded!" });
+    }
+    // Assuming one image per upload
+    const imageUrl = req.files[0].path;
+    res.json({ message: "Chat image uploaded successfully", imageUrl });
+  });
 });
 
 module.exports = router;

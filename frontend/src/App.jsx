@@ -17,7 +17,8 @@ import FAQ from './components/Support/FAQ';  // Correct import
 import HelpCenter from './components/Support/HelpCenter';  // Correct import
 import PrivacyPolicy from './components/Support/PrivacyPolicy';  // Correct import
 import Contact from './components/Contact/Contact';
-
+import ChatPage from './components/Chat/ChatPage';
+import ChatList from './components/Chat/ChatList';
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
@@ -46,6 +47,9 @@ const App = () => {
             <Route path="/search" element={<ProductSearch />} />
             <Route path="/postAd" element={<PostAd />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/chatlist" element={<ChatList />} />
+            <Route path="/chat/:chatId" element={<ChatPage />} />
+            <Route path="/" element={<ProductSearch />} />
             <Route path="/productdetails/:id" element={<ProductDetails />} />
             <Route path="/blog" element={<Blog themeMode={theme} />} />
             <Route path="/blog/:id" element={<BlogDetails />} />

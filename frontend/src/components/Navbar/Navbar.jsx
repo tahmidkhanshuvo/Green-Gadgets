@@ -42,7 +42,7 @@ const Navbar = ({ theme, setTheme }) => {
             </button>
           </li>
           <li className='chat'>
-            <button onClick={() => handleButtonClick('/chat')}>
+            <button onClick={() => handleButtonClick('/chatlist')}>
               <FaComment className="icon" />
               <span className="icon-text">Chat</span>
             </button>
