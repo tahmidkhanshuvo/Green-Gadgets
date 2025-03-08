@@ -12,13 +12,14 @@ import Blog from './components/Blog/Blog';
 import BlogDetails from './components/Blog/BlogDetails';
 import PostBlog from './components/Blog/PostBlog';
 import LoginSignup from './components/Account/LoginSignup';
-import TermsAndConditions from './components/Support/TermsAndConditions';  // Correct import
-import FAQ from './components/Support/FAQ';  // Correct import
-import HelpCenter from './components/Support/HelpCenter';  // Correct import
-import PrivacyPolicy from './components/Support/PrivacyPolicy';  // Correct import
+import TermsAndConditions from './components/Support/TermsAndConditions';
+import FAQ from './components/Support/FAQ';
+import HelpCenter from './components/Support/HelpCenter';
+import PrivacyPolicy from './components/Support/PrivacyPolicy';
 import Contact from './components/Contact/Contact';
 import ChatPage from './components/Chat/ChatPage';
 import ChatList from './components/Chat/ChatList';
+import FloatingAIChat from './components/FloatingAIChat/FloatingAIChat';
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
@@ -49,21 +50,21 @@ const App = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/chatlist" element={<ChatList />} />
             <Route path="/chat/:chatId" element={<ChatPage />} />
-            <Route path="/" element={<ProductSearch />} />
             <Route path="/productdetails/:id" element={<ProductDetails />} />
             <Route path="/blog" element={<Blog themeMode={theme} />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/PostBlog" element={<PostBlog />} />
             <Route path="/Contact" element={<Contact />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />  {/* Correct route */}
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Correct route */}
-            <Route path="/help-center" element={<HelpCenter />} />  {/* Correct route */}
-            <Route path="/faq" element={<FAQ />} />  {/* Correct route */}
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/account" element={isAuthenticated ? <UserAccount user={user} /> : <Navigate to="/login" />} />
             <Route path="/login" element={<LoginSignup setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
           </Routes>
         </div>
         <Footer />
+        <FloatingAIChat />
       </div>
     </Router>
   );
