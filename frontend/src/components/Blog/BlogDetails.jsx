@@ -41,28 +41,26 @@ const BlogDetails = () => {
   }
 
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 auto", backgroundColor: "#fff" }}>
-      <Button
-        onClick={() => navigate("/blogs")}
-        type="link"
-        style={{
-          margin: "20px",
-          fontSize: "16px",
-          textDecoration: "underline",
-        }}
-      >
-        ← Back to Blogs
-      </Button>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", backgroundColor: "#fff", paddingBottom: "40px" }}>
+      <div style={{ margin: "20px" }}>
+        <Button 
+          type="primary" 
+          onClick={() => navigate(-1)}
+          style={{ fontSize: "16px" }}
+        >
+          ← Back to Blogs
+        </Button>
+      </div>
 
       <Card
         bordered={false}
         style={{
-          margin: "0",
+          margin: "0 20px",
           padding: "0",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        {/* If multiple images, use Carousel; otherwise, display single image */}
+        {/* Display multiple images with Carousel if available */}
         {blog.images && blog.images.length > 1 ? (
           <Carousel autoplay>
             {blog.images.map((img, index) => (
@@ -92,10 +90,10 @@ const BlogDetails = () => {
           />
         )}
         <div style={{ padding: "60px 40px", backgroundColor: "#f0f2f5" }}>
-          <Title level={2} style={{ marginBottom: "20px" }}>
+          <Title level={2} style={{ marginBottom: "20px", color: "#333" }}>
             {blog.title}
           </Title>
-          <Paragraph style={{ color: "#888", marginBottom: "20px" }}>
+          <Paragraph style={{ color: "#888", marginBottom: "20px", fontSize: "16px" }}>
             Published on: {new Date(blog.createdAt).toLocaleDateString()} by{" "}
             {blog.createdBy?.name || "Unknown"}
           </Paragraph>
@@ -112,10 +110,10 @@ const BlogDetails = () => {
         </div>
       </Card>
 
-      <Divider orientation="left" style={{ color: "#333", margin: "40px 40px 20px" }}>
+      <Divider orientation="left" style={{ color: "#333", margin: "40px 20px 20px" }}>
         Related Blogs
       </Divider>
-      <Row gutter={[24, 24]} style={{ padding: "0 40px 40px" }}>
+      <Row gutter={[24, 24]} style={{ padding: "0 20px" }}>
         {relatedBlogs.map((related) => (
           <Col xs={24} sm={12} md={8} key={related._id}>
             <Card
@@ -142,8 +140,10 @@ const BlogDetails = () => {
               <Title level={4} style={{ margin: "0 0 10px" }}>
                 {related.title}
               </Title>
-              <Paragraph ellipsis={{ rows: 2 }}>{related.shortDescription}</Paragraph>
-              <Button type="primary" block style={{ marginTop: "10px" }}>
+              <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: "10px" }}>
+                {related.shortDescription}
+              </Paragraph>
+              <Button type="primary" block>
                 Read More
               </Button>
             </Card>
