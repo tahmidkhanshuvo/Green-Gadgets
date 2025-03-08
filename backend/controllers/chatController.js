@@ -15,7 +15,6 @@ exports.createChat = async (req, res) => {
     }
 
     // Check if a chat with these participants already exists
-    // This finds a chat whose participants array exactly matches the given array
     let chat = await Chat.findOne({
       participants: { $all: participants, $size: participants.length }
     });
@@ -34,7 +33,7 @@ exports.createChat = async (req, res) => {
 
 /**
  * Retrieve a specific chat by its ID.
- * Populates participant details (e.g., name and email).
+ * Populates participant details (e.g., name, email, avatar).
  *
  * Expected req.params: { chatId: "chatId" }
  */
@@ -56,7 +55,6 @@ exports.getChat = async (req, res) => {
  * Add a message to an existing chat.
  *
  * Expected req.body: { chatId, sender, text, image }
- * Either text or image (or both) can be provided.
  */
 exports.addMessage = async (req, res) => {
   try {
@@ -65,18 +63,15 @@ exports.addMessage = async (req, res) => {
       return res.status(400).json({ error: "chatId and sender are required." });
     }
 
-    // Retrieve the chat first
     let chat = await Chat.findById(chatId);
     if (!chat) {
       return res.status(404).json({ error: "Chat not found" });
     }
 
-    // Ensure the sender is in the participants array (if not, add them)
     if (!chat.participants.includes(sender)) {
       chat.participants.push(sender);
     }
 
-    // Push the new message
     chat.messages.push({ sender, text, image });
     await chat.save();
 
@@ -95,12 +90,30 @@ exports.addMessage = async (req, res) => {
 exports.getChatsForUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    // Use $in to match any chat where the participants array includes the userId
     const chats = await Chat.find({ participants: { $in: [userId] } })
       .populate("participants", "name email avatar");
     res.json(chats);
   } catch (error) {
     console.error("Error fetching chats for user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+/**
+ * Delete a chat by its ID.
+ *
+ * Expected req.params: { chatId: "chatId" }
+ */
+exports.deleteChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const deletedChat = await Chat.findByIdAndDelete(chatId);
+    if (!deletedChat) {
+      return res.status(404).json({ error: "Chat not found" });
+    }
+    res.json({ message: "Chat deleted successfully", chatId });
+  } catch (error) {
+    console.error("Error deleting chat:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

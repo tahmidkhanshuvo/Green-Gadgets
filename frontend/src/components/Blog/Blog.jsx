@@ -107,14 +107,19 @@ const Blog = () => {
                 <img 
                   alt={blog.title} 
                   src={blog.images[0] || "https://via.placeholder.com/300"} 
+                  style={{ height: "200px", objectFit: "cover" }}
                 />
               }
+              style={{ height: "450px", display: "flex", flexDirection: "column" }}
+              styles={{ body: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" } }}
             >
               <Meta
                 title={blog.title}
                 description={
                   <>
-                    <p>{blog.shortDescription}</p>
+                    <p style={{ overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>
+                      {blog.shortDescription}
+                    </p>
                     <small>
                       Posted by: {blog.createdBy && blog.createdBy.name ? blog.createdBy.name : "Unknown"}
                     </small>

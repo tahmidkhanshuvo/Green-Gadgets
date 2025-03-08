@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import io from "socket.io-client";
@@ -14,6 +14,7 @@ const ChatList = () => {
   const [unreadCounts, setUnreadCounts] = useState({});
   const socketRef = useRef();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const fetchChats = async () => {
     try {
@@ -39,14 +40,12 @@ const ChatList = () => {
     socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.on("newChatMessage", (data) => {
       console.log("New chat message event received:", data);
-      // If the current URL is not the chat page, update unread count
       if (!location.pathname.includes(`/chat/${data.chatId}`)) {
         setUnreadCounts((prev) => ({
           ...prev,
           [data.chatId]: (prev[data.chatId] || 0) + 1,
         }));
       }
-      // Also re-fetch chats to update last message preview
       fetchChats();
     });
     return () => socketRef.current.disconnect();
@@ -57,12 +56,33 @@ const ChatList = () => {
     setUnreadCounts((prev) => ({ ...prev, [chatId]: 0 }));
   };
 
+  const handleDeleteChat = async (chatId, e) => {
+    e.preventDefault(); // Prevent link navigation if we want to remain on the page
+    try {
+      await axios.delete(`${API_URL}/api/chats/${chatId}`);
+      // Remove deleted chat from state
+      setChats((prevChats) => prevChats.filter((chat) => chat._id !== chatId));
+    } catch (error) {
+      console.error("Error deleting chat:", error);
+    }
+  };
+
   if (loading) {
     return <p className="chatlist-loading">Loading chats...</p>;
   }
 
+  // Show an image if no chats are available
   if (!chats.length) {
-    return <p className="chatlist-empty">No chats available.</p>;
+    return (
+      <div className="chatlist-empty-container">
+        <img
+          src="https://i.pinimg.com/736x/54/85/6a/54856ab427f28a0b40b1a305792a3b00.jpg"
+          alt="No Chats"
+          className="chatlist-empty-image"
+        />
+        <p className="chatlist-empty-text">No chats available.</p>
+      </div>
+    );
   }
 
   return (
@@ -106,8 +126,7 @@ const ChatList = () => {
                   {lastMessage && (
                     <div className="chatlist-extra">
                       <p className="chatlist-preview">
-                        {lastMessage.text ||
-                          (lastMessage.image ? "📷 Image" : "")}
+                        {lastMessage.text || (lastMessage.image ? "📷 Image" : "")}
                       </p>
                       <span className="chatlist-time">
                         {new Date(lastMessage.createdAt).toLocaleTimeString([], {
@@ -122,6 +141,14 @@ const ChatList = () => {
                   <div className="chatlist-unread-badge">{unread}</div>
                 )}
               </Link>
+              {/* Delete icon (outside the Link) */}
+              <button
+                className="chatlist-delete-btn"
+                onClick={(e) => handleDeleteChat(chat._id, e)}
+                title="Delete Chat"
+              >
+                🗑
+              </button>
             </li>
           );
         })}

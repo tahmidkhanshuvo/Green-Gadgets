@@ -1,5 +1,12 @@
-/* ChatList.css - Messenger-like Chat List with Custom Avatar & Unread Badge */
+/* ChatList.css */
+
+/* Container is resizable */
 .chatlist-container {
+  resize: both;               /* allow user to resize in both directions */
+  overflow: auto;            /* show scrollbars if resized smaller */
+  min-width: 300px;          /* define minimum width */
+  min-height: 200px;         /* define minimum height */
+
   max-width: 600px;
   margin: 20px auto;
   background: #fff;
@@ -9,7 +16,6 @@
   font-family: "Helvetica", "Arial", sans-serif;
 }
 
-/* Title */
 .chatlist-title {
   font-size: 22px;
   font-weight: bold;
@@ -19,18 +25,23 @@
   padding-left: 12px;
 }
 
-/* Chat List */
+/* 
+   List the chats in a vertical column 
+   Each li is a row 
+*/
 .chatlist-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 80vh; /* Allow the list to expand and scroll */
+  max-height: 80vh;
   overflow-y: auto;
 }
 
-/* Chat Item */
 .chatlist-item {
   display: flex;
+  flex-direction: row;
   align-items: center;
   padding: 12px;
   border-bottom: 1px solid #e0e0e0;
@@ -42,18 +53,17 @@
   background: #f5f5f5;
 }
 
-/* Chat Link */
 .chatlist-link {
   display: flex;
+  flex-direction: row;
   align-items: center;
   text-decoration: none;
-  width: 100%;
+  flex: 1; 
   padding: 8px;
   color: #222;
-  transition: background 0.2s;
 }
 
-/* Chat Avatar */
+/* Avatar */
 .chatlist-avatar {
   width: 45px;
   height: 45px;
@@ -76,14 +86,13 @@
   object-fit: cover;
 }
 
-/* Chat Information */
+/* Chat info */
 .chatlist-info {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-/* Chat Name */
 .chatlist-name {
   font-size: 18px;
   font-weight: bold;
@@ -91,7 +100,6 @@
   color: #222;
 }
 
-/* Extra Info (Last Message & Time) */
 .chatlist-extra {
   display: flex;
   justify-content: space-between;
@@ -101,7 +109,6 @@
   margin-top: 2px;
 }
 
-/* Chat Preview (Last Message) */
 .chatlist-preview {
   flex: 1;
   white-space: nowrap;
@@ -110,7 +117,6 @@
   margin: 0;
 }
 
-/* Chat Time */
 .chatlist-time {
   font-size: 12px;
   color: #888;
@@ -131,14 +137,52 @@
   justify-content: center;
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 40px; 
 }
 
-/* Loading & empty state */
+/* Delete button */
+.chatlist-delete-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ff3b30;
+  margin-right: 10px;
+  transition: color 0.2s ease-in-out;
+}
+
+.chatlist-delete-btn:hover {
+  color: #d32f2f;
+}
+
+/* Loading & empty states */
 .chatlist-loading,
 .chatlist-empty {
   text-align: center;
   font-size: 16px;
   color: #555;
   margin-top: 20px;
+}
+
+/* 
+   If no chats, show an image 
+*/
+.chatlist-empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+.chatlist-empty-image {
+  width: 500px;
+  height: 500px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.chatlist-empty-text {
+  font-size: 16px;
+  color: #666;
 }
