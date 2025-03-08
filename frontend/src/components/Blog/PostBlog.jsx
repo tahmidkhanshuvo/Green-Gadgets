@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Modal, Form, Input, Button, Upload, message } from "antd";
+import { Modal, Form, Input, Button, Upload, message, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext"; // Import AuthContext
+import AuthContext from "../../context/AuthContext";
 
+const { Option } = Select;
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
@@ -14,19 +15,17 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
   const [content, setContent] = useState("");
   const { user, isAuthenticated } = useContext(AuthContext);
 
-  if (!isAuthenticated) return null; // Prevent access if not logged in
+  if (!isAuthenticated) return null;
 
-  // ✅ Handle Image Upload
   const handleImageUpload = async ({ file, onSuccess, onError }) => {
     const formData = new FormData();
-    formData.append("images", file); // ✅ Match backend field name
-  
+    formData.append("images", file);
+
     try {
       const { data } = await axios.post(`${API_URL}/api/upload/blog`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
-      setImageList((prevList) => [...prevList, ...data.imageUrls]); // ✅ Store uploaded image URLs
+      setImageList((prevList) => [...prevList, ...data.imageUrls]);
       onSuccess();
       message.success("Image uploaded successfully!");
     } catch (error) {
@@ -36,60 +35,74 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
     }
   };
 
-  // ✅ Handle Blog Submission
   const handleSubmit = async (values) => {
     try {
       const token = localStorage.getItem("token");
-
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/api/blog`,
         {
           ...values,
           content,
-          images: imageList, // Send image URLs to the backend
+          images: imageList,
+          createdBy: user.name || "Unknown", // Added: Use user.name for createdBy
         },
         {
-          headers: { Authorization: `Bearer ${token}` }, // Attach token for authentication
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       message.success("Blog posted successfully!");
-      fetchBlogs(); // Refresh the blog list after posting
+      fetchBlogs();
       form.resetFields();
       setImageList([]);
       setContent("");
       onCancel();
     } catch (error) {
-      message.error("Error posting blog!");
       console.error(error);
+      message.error("Error posting blog!");
     }
   };
 
   return (
     <Modal open={visible} title="Post Blog" onCancel={onCancel} footer={null}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
-        <Form.Item name="title" label="Blog Title" rules={[{ required: true }]}>
+        <Form.Item
+          name="title"
+          label="Blog Title"
+          rules={[{ required: true, message: "Title is required" }]}
+        >
           <Input />
         </Form.Item>
 
         <Form.Item
           name="shortDescription"
           label="Short Description"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Short description is required" }]}
         >
           <Input.TextArea rows={2} />
         </Form.Item>
 
-        <Form.Item name="content" label="Content" rules={[{ required: true }]}>
+        <Form.Item
+          name="content"
+          label="Content"
+          rules={[{ required: true, message: "Content is required" }]}
+        >
           <ReactQuill value={content} onChange={setContent} theme="snow" />
         </Form.Item>
 
+        <Form.Item
+          name="category"
+          label="Category"
+          rules={[{ required: true, message: "Please select a category" }]}
+        >
+          <Select placeholder="Select a category">
+            <Option value="Recycle">Recycle</Option>
+            <Option value="Refurbish">Refurbish</Option>
+            <Option value="E-waste">E-waste</Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item label="Upload Images">
-          <Upload
-            customRequest={handleImageUpload}
-            listType="picture-card"
-            multiple
-          >
+          <Upload customRequest={handleImageUpload} listType="picture-card" multiple>
             <div>
               <UploadOutlined style={{ fontSize: 24, color: "#1890ff" }} />
               <div>Upload</div>

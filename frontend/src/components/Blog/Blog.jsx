@@ -125,7 +125,7 @@ const Blog = () => {
                 description={
                   <>
                     <p>{blog.shortDescription}</p>
-                    <small>Posted by: {blog.createdBy.name}</small>
+                    <small>Posted by: {blog.createdBy}</small>
                     <br />
                     <small>{new Date(blog.createdAt).toLocaleDateString()}</small>
                   </>

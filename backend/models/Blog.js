@@ -6,7 +6,7 @@ const BlogSchema = new mongoose.Schema({
   content: { type: String, required: true },
   images: [{ type: String }], // Store image URLs
   category: { type: String, required: true },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to User model
+  createdBy: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
