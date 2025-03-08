@@ -1,0 +1,96 @@
+/* ChatList.css */
+.chatlist-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chatlist-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .chatlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .chatlist-item {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .chatlist-item:hover {
+    background: #f9f9f9;
+  }
+  
+  .chatlist-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    padding: 0 12px;
+  }
+  
+  .chatlist-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #007bff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-right: 16px;
+  }
+  
+  .chatlist-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chatlist-name {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .chatlist-extra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  
+  .chatlist-preview {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+  }
+  
+  .chatlist-time {
+    font-size: 12px;
+    color: #aaa;
+  }
+  
+  .chatlist-loading,
+  .chatlist-empty {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    padding: 20px;
+  }
+  

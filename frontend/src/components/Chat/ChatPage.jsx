@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import "./ChatPage.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 const ChatPage = () => {
   const { chatId } = useParams();
-  const { user } = useContext(AuthContext);  
+  const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [textInput, setTextInput] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -16,25 +17,24 @@ const ChatPage = () => {
   const fileInputRef = useRef();
 
   useEffect(() => {
-    // Establish socket connection
-    socketRef.current = io(API_URL);
-
-    // Join the chat room with the given chatId
+    socketRef.current = io(API_URL, { transports: ["websocket"] });
     socketRef.current.emit("joinChat", { chatId });
+    console.log(`Joining chat room ${chatId}`);
 
-    // Listen for incoming messages
     socketRef.current.on("message", (message) => {
+      console.log("Received message:", message);
       setMessages((prev) => [...prev, message]);
     });
 
-    // Cleanup on component unmount
     return () => socketRef.current.disconnect();
   }, [chatId]);
 
   const sendTextMessage = () => {
     if (textInput.trim() && user && user._id) {
       const senderId = user._id;
-      socketRef.current.emit("sendMessage", { chatId, sender: senderId, text: textInput });
+      const payload = { chatId, sender: senderId, text: textInput };
+      console.log("Sending message:", payload);
+      socketRef.current.emit("sendMessage", payload);
       setTextInput("");
     }
   };
@@ -49,16 +49,17 @@ const ChatPage = () => {
   const sendImageMessage = async () => {
     if (!selectedImage || !user || !user._id) return;
     const formData = new FormData();
-    formData.append("images", selectedImage); // Ensure key matches your multer field name
+    formData.append("images", selectedImage);
 
     try {
-      // Upload image to Cloudinary via your chat image upload endpoint
       const response = await axios.post(`${API_URL}/api/upload/chat`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const imageUrl = response.data.imageUrl;
       const senderId = user._id;
-      socketRef.current.emit("sendMessage", { chatId, sender: senderId, image: imageUrl });
+      const payload = { chatId, sender: senderId, image: imageUrl };
+      console.log("Sending image message:", payload);
+      socketRef.current.emit("sendMessage", payload);
 
       setSelectedImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -68,46 +69,55 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="chat-container">
-      <h2>Chat Conversation</h2>
-      <div className="chat-messages">
+    <div className="chatpage-container">
+      <h2 className="chatpage-title">Chat Conversation</h2>
+      <div className="chatpage-messages">
         {messages.map((msg, index) => (
-          <div key={index} className="chat-message">
-            {msg.text && <span>{msg.text}</span>}
+          <div key={index} className="chatpage-message">
+            {msg.text && <span className="chatpage-text">{msg.text}</span>}
             {msg.image && (
               <img
                 src={msg.image}
                 alt="sent content"
-                style={{ maxWidth: "200px", display: "block", marginTop: "8px" }}
+                className="chatpage-image"
               />
             )}
-            <small>{new Date(msg.createdAt).toLocaleTimeString()}</small>
+            <small className="chatpage-timestamp">
+              {new Date(msg.createdAt).toLocaleTimeString()}
+            </small>
           </div>
         ))}
       </div>
-      <div className="chat-input">
+      <div className="chatpage-input-container">
         <textarea
+          className="chatpage-input"
           placeholder="Type a message..."
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
         />
-        <button onClick={sendTextMessage}>Send Text</button>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          ref={fileInputRef}
-        />
-        <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>
-          Choose Image
-        </button>
-        {selectedImage && (
-          <div>
-            <p>Selected: {selectedImage.name}</p>
-            <button onClick={sendImageMessage}>Send Image</button>
-          </div>
-        )}
+        <div className="chatpage-buttons">
+          <button className="chatpage-btn" onClick={sendTextMessage}>
+            Send Text
+          </button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            ref={fileInputRef}
+          />
+          <button
+            className="chatpage-btn"
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          >
+            Choose Image
+          </button>
+          {selectedImage && (
+            <button className="chatpage-btn" onClick={sendImageMessage}>
+              Send Image
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
