@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
-  // ✅ Fetch user when token is available
+  // Fetch user when token is available
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -22,9 +22,10 @@ export const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        console.log("Fetched user:", data.user); // Verify that _id is present
         setUser(data.user);
         setIsAuthenticated(true);
-        localStorage.setItem("user", JSON.stringify(data.user)); // ✅ Store user in localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
       } catch (error) {
         console.error("Error fetching profile:", error);
         logout();
@@ -32,26 +33,26 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchProfile();
-  }, []); // ✅ Runs once on app load
+  }, []);
 
-  // ✅ Watch for changes in `user` to update authentication state
+  // Update isAuthenticated when user changes
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     setIsAuthenticated(!!storedUser);
-  }, [user]); // ✅ Updates when `user` changes
+  }, [user]);
 
-  // ✅ Login function updates state immediately
+  // Login function updates state immediately
   const login = (userData, token) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData)); // ✅ Store user data
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setIsAuthenticated(true);
   };
 
-  // ✅ Logout function clears state
+  // Logout function clears state
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user"); // ✅ Remove user data
+    localStorage.removeItem("user");
     setUser(null);
     setIsAuthenticated(false);
   };

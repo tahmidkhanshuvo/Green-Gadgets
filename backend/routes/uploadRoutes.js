@@ -37,4 +37,22 @@ router.post("/ad", (req, res) => {
   });
 });
 
+// ✅ Upload Chat Image Route
+router.post("/chat", (req, res) => {
+  uploadChatImages(req, res, (err) => {
+    if (err) {
+      console.error("Image upload error:", err);
+      return res.status(500).json({ message: "Image upload failed", error: err.message });
+    }
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "No image uploaded!" });
+    }
+
+    // Assuming one image per upload
+    const imageUrl = req.files[0].path; // Cloudinary returns the URL in the file path
+    res.json({ message: "Chat image uploaded successfully", imageUrl });
+  });
+});
+
 module.exports = router;

@@ -8,7 +8,6 @@ import PostBlog from "./PostBlog";
 
 const { Meta } = Card;
 const { Title } = Typography;
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 const Blog = () => {
@@ -21,7 +20,7 @@ const Blog = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // ✅ Fetch Blogs from Backend
+  // Fetch Blogs from Backend
   const fetchBlogs = async () => {
     try {
       const { data } = await axios.get(`${API_URL}/api/blog`);
@@ -36,24 +35,7 @@ const Blog = () => {
     fetchBlogs();
   }, []);
 
-  // ✅ Handle Blog Posting
-  const handlePostBlog = async (formData) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${API_URL}/api/blog`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      message.success("Blog posted successfully!");
-      fetchBlogs(); // Refresh blogs after posting
-      setModalVisible(false);
-    } catch (error) {
-      console.error("Error posting blog:", error);
-      message.error("Error posting blog");
-    }
-  };
-
-  // ✅ Filter and Paginate Blogs
+  // Filter and Paginate Blogs
   const filteredBlogs = blogs
     .filter((blog) =>
       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -119,13 +101,23 @@ const Blog = () => {
       <Row gutter={[16, 16]}>
         {currentBlogs.map((blog) => (
           <Col xs={24} sm={12} md={8} lg={6} key={blog._id}>
-            <Card hoverable cover={<img alt={blog.title} src={blog.images[0] || "https://via.placeholder.com/300"} />}>
+            <Card 
+              hoverable 
+              cover={
+                <img 
+                  alt={blog.title} 
+                  src={blog.images[0] || "https://via.placeholder.com/300"} 
+                />
+              }
+            >
               <Meta
                 title={blog.title}
                 description={
                   <>
                     <p>{blog.shortDescription}</p>
-                    <small>Posted by: {blog.createdBy}</small>
+                    <small>
+                      Posted by: {blog.createdBy && blog.createdBy.name ? blog.createdBy.name : "Unknown"}
+                    </small>
                     <br />
                     <small>{new Date(blog.createdAt).toLocaleDateString()}</small>
                   </>
@@ -171,4 +163,3 @@ const Blog = () => {
 };
 
 export default Blog;
-// ✅ Add Blog Post Modal

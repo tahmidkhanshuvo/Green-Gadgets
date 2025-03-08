@@ -17,5 +17,6 @@ const createStorage = (folderName, width, height) => {
 // ✅ Upload handlers for different types of uploads
 const uploadBlogImages = multer({ storage: createStorage("blogs", 800, 600) }).array("images", 5); // Blog images
 const uploadAdImages = multer({ storage: createStorage("ads", 500, 500) }).array("images", 8); // Ad images
+const uploadChatImages = multer({ storage: createStorage("chats", 500, 500) }).array("images", 1); // Chat images
 
-module.exports = { uploadBlogImages, uploadAdImages };
+module.exports = { uploadBlogImages, uploadAdImages, uploadChatImages };

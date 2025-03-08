@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, Typography, Button, Row, Col, Divider, message, Carousel } from "antd";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const { Title, Paragraph } = Typography;
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
@@ -11,6 +12,7 @@ const BlogDetails = () => {
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchBlogDetails = async () => {
@@ -32,6 +34,32 @@ const BlogDetails = () => {
     fetchBlogDetails();
   }, [id]);
 
+  // Function to handle messaging the blog author
+  const handleMessage = async () => {
+    if (!user) {
+      message.info("Please log in to send a message.");
+      navigate("/login");
+      return;
+    }
+    // Check if createdBy is an object with _id; otherwise, use blog.createdBy directly if it's an ID.
+    const authorId = blog.createdBy && blog.createdBy._id ? blog.createdBy._id : blog.createdBy;
+    if (!authorId) {
+      message.error("Unable to message the author.");
+      return;
+    }
+    try {
+      // Create (or retrieve) a chat between the current user and the blog author.
+      const response = await axios.post(`${API_URL}/api/chats`, {
+        participants: [user._id, authorId],
+      });
+      const chatId = response.data._id;
+      navigate(`/chat/${chatId}`);
+    } catch (error) {
+      console.error("Error initiating chat:", error);
+      message.error("Error initiating chat.");
+    }
+  };
+
   if (!blog) {
     return (
       <Title level={2} style={{ textAlign: "center", marginTop: "50px" }}>
@@ -45,10 +73,10 @@ const BlogDetails = () => {
       <div style={{ margin: "20px" }}>
         <Button 
           type="primary" 
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/blog")}
           style={{ fontSize: "16px" }}
         >
-          ← Back to Blogs
+          ← Back to Blog
         </Button>
       </div>
 
@@ -60,7 +88,6 @@ const BlogDetails = () => {
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        {/* Display multiple images with Carousel if available */}
         {blog.images && blog.images.length > 1 ? (
           <Carousel autoplay>
             {blog.images.map((img, index) => (
@@ -95,7 +122,7 @@ const BlogDetails = () => {
           </Title>
           <Paragraph style={{ color: "#888", marginBottom: "20px", fontSize: "16px" }}>
             Published on: {new Date(blog.createdAt).toLocaleDateString()} by{" "}
-            {blog.createdBy?.name || "Unknown"}
+            {blog.createdBy && blog.createdBy.name ? blog.createdBy.name : blog.createdBy || "Unknown"}
           </Paragraph>
           <div
             style={{
@@ -107,6 +134,11 @@ const BlogDetails = () => {
             }}
             dangerouslySetInnerHTML={{ __html: blog.content || blog.description }}
           />
+          <div style={{ marginTop: "30px" }}>
+            <Button type="primary" onClick={handleMessage}>
+              Message Author
+            </Button>
+          </div>
         </div>
       </Card>
 

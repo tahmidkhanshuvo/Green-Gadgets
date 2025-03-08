@@ -36,6 +36,17 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
   };
 
   const handleSubmit = async (values) => {
+    // Manually validate content field
+    if (!content || content.trim() === "") {
+      message.error("Content is required");
+      return;
+    }
+
+    console.log("User in PostBlog:", user);
+    if (!user || !user._id) {
+      message.error("User information not loaded. Please log in again.");
+      return;
+    }
     try {
       const token = localStorage.getItem("token");
       await axios.post(
@@ -44,7 +55,6 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
           ...values,
           content,
           images: imageList,
-          createdBy: user.name || "Unknown", // Added: Use user.name for createdBy
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +67,7 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
       setContent("");
       onCancel();
     } catch (error) {
-      console.error(error);
+      console.error("Error posting blog:", error);
       message.error("Error posting blog!");
     }
   };
@@ -81,11 +91,8 @@ const PostBlog = ({ visible, onCancel, fetchBlogs }) => {
           <Input.TextArea rows={2} />
         </Form.Item>
 
-        <Form.Item
-          name="content"
-          label="Content"
-          rules={[{ required: true, message: "Content is required" }]}
-        >
+        {/* Removed name and rules to handle content separately */}
+        <Form.Item label="Content">
           <ReactQuill value={content} onChange={setContent} theme="snow" />
         </Form.Item>
 

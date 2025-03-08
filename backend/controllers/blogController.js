@@ -9,13 +9,17 @@ exports.createBlog = async (req, res) => {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
+    // Log to verify user information
+    console.log("Creating blog with user:", req.user);
+
+    // Use req.user.userId instead of req.user._id
     const newBlog = new Blog({
       title,
       shortDescription,
       content,
       images,
       category,
-      createdBy: req.user._id, // Associate with logged-in user
+      createdBy: req.user.userId, // Associate with logged-in user's ID from token
     });
 
     await newBlog.save();
@@ -29,7 +33,9 @@ exports.createBlog = async (req, res) => {
 // ✅ Get All Blogs (Public)
 exports.getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().populate("createdBy", "name email").sort({ createdAt: -1 });
+    const blogs = await Blog.find()
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
     res.json(blogs);
   } catch (error) {
     console.error("Error fetching blogs:", error);
