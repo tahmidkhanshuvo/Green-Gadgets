@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Button, Container, Typography, TextField, Stack, Divider } from "@mui/material";
+import { Container, Button, Typography, Divider } from "@mui/material";
+import { Form, Input } from "antd";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
-import "./UserAccount.css";
 import AdsFavorites from "./AdsFavorites";
+import { Layout, Menu } from 'antd';
+import { AppstoreOutlined, HeartOutlined, SettingOutlined } from '@ant-design/icons';
+import "./UserAccount.css";
+
+const { Header, Content, Footer, Sider } = Layout;
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
@@ -36,7 +41,6 @@ const UserAccount = ({ theme }) => {
     fetchProfile();
   }, [isAuthenticated, logout, setUser]);
 
-  // ✅ Update user details
   const handleUpdateDetails = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -51,7 +55,6 @@ const UserAccount = ({ theme }) => {
     }
   };
 
-  // ✅ Update Password
   const handleChangePassword = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -66,60 +69,108 @@ const UserAccount = ({ theme }) => {
     }
   };
 
-  // ✅ Logout and Redirect to Login Page
   const handleLogout = () => {
     logout();
     window.location.href = "/login";
   };
 
+  // Menu items for the Sider
+  const siderItems = [
+    { label: 'My Ads', key: 'myAds', icon: <AppstoreOutlined /> },
+    { label: 'Favorites', key: 'favorites', icon: <HeartOutlined /> },
+    { label: 'Settings', key: 'settings', icon: <SettingOutlined /> },
+  ];
+
+  const handleMenuClick = ({ key }) => {
+    setActiveTab(key);
+  };
+
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" className={`account-title ${theme === "dark" ? "dark" : ""}`}>
-        My Account
-      </Typography>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider style={{ backgroundColor: '#e0f2e9' }}>
+        <Menu
+          theme="light"
+          mode="inline"
+          selectedKeys={[activeTab]}
+          onClick={handleMenuClick}
+          style={{ border: 0 }} // Remove default border
+        >
+          {siderItems.map(item => (
+            <Menu.Item key={item.key} icon={item.icon} className="tab-button">
+              {item.label}
+            </Menu.Item>
+          ))}
+        </Menu>
+      </Sider>
+      
+      <Layout>
+        <Header
+          style={{
+            padding: 0,
+            background: theme === "dark" ? '#333' : '#fff',
+          }}
+        />
+        <Content style={{ margin: '0 16px' }}>
+          <Typography variant="h4" className={`account-title ${theme}`}>
+            My Account
+          </Typography>
 
-      {/* ✅ Tabs for My Ads, Favorites, and Settings */}
-      <Box className="tabs-container">
-        <Button onClick={() => setActiveTab("myAds")} variant={activeTab === "myAds" ? "contained" : "outlined"}>
-          My Ads
-        </Button>
-        <Button onClick={() => setActiveTab("favorites")} variant={activeTab === "favorites" ? "contained" : "outlined"}>
-          Favorites
-        </Button>
-        <Button onClick={() => setActiveTab("settings")} variant={activeTab === "settings" ? "contained" : "outlined"}>
-          Settings
-        </Button>
-      </Box>
+          <div className="tab-content">
+            {activeTab === "settings" ? (
+              <div className="settings-container">
+                <Typography variant="h6" className="settings-title">
+                  Update Profile
+                </Typography>
+                <Form layout="vertical">
+                  <Form.Item label="Email">
+                    <Input value={userData.email || ""} disabled />
+                  </Form.Item>
+                  <Form.Item label="Name">
+                    <Input value={userData.name || ""} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
+                  </Form.Item>
+                  <Form.Item label="Location">
+                    <Input value={userData.location || ""} onChange={(e) => setUserData({ ...userData, location: e.target.value })} />
+                  </Form.Item>
+                  <Button className="update-button" onClick={handleUpdateDetails}>
+                    Update Details
+                  </Button>
+                </Form>
 
-      {/* ✅ Tab Content */}
-      <Box className="tab-content">
-        {activeTab === "settings" ? (
-          <Box className={`settings-container ${theme === "dark" ? "dark" : ""}`}>
-            <Typography variant="h6">Update Profile</Typography>
-            <Stack spacing={2}>
-              <TextField label="Email" value={userData.email || ""} disabled fullWidth />
-              <TextField label="Name" value={userData.name || ""} onChange={(e) => setUserData({ ...userData, name: e.target.value })} fullWidth />
-              <TextField label="Location" value={userData.location || ""} onChange={(e) => setUserData({ ...userData, location: e.target.value })} fullWidth />
-              <Button variant="contained" color="primary" onClick={handleUpdateDetails}>Update Details</Button>
-            </Stack>
+                <Divider className="divider" />
 
-            <Divider className="divider" />
+                <Typography variant="h6" className="settings-title">
+                  Change Password
+                </Typography>
+                <Form layout="vertical">
+                  <Form.Item label="New Password">
+                    <Input.Password value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                  </Form.Item>
+                  <Button className="update-button" onClick={handleChangePassword}>
+                    Change Password
+                  </Button>
+                </Form>
 
-            <Typography variant="h6">Change Password</Typography>
-            <Stack spacing={2}>
-              <TextField type="password" label="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} fullWidth />
-              <Button variant="contained" color="secondary" onClick={handleChangePassword}>Change Password</Button>
-            </Stack>
+                <Divider className="divider" />
 
-            <Divider className="divider" />
-
-            <Button variant="outlined" color="error" onClick={handleLogout} fullWidth>Log Out</Button>
-          </Box>
-        ) : (
-          <AdsFavorites activeTab={activeTab} />
-        )}
-      </Box>
-    </Container>
+                <Button className="logout-button" onClick={handleLogout}>
+                  Log Out
+                </Button>
+              </div>
+            ) : (
+              <AdsFavorites activeTab={activeTab} />
+            )}
+          </div>
+        </Content>
+        
+        <Footer
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        </Footer>
+      </Layout>
+    </Layout>
   );
 };
 

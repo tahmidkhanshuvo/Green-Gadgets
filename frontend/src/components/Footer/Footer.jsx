@@ -15,7 +15,8 @@ const Footer = () => {
             </li>
             <li>Careers</li>
             <li>Press</li>
-            <li>Contact</li>
+            <li>
+              <Link to ="/Contact" className ="footer-link">  Contact </Link></li>
           </ul>
         </div>
 
@@ -23,10 +24,18 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Support</h4>
           <ul>
-            <li>Help Center</li>
-            <li>FAQs</li>
-            <li>Terms & Conditions</li>
-            <li>Privacy Policy</li>
+            <li>
+              <Link to="/help-center" className="footer-link">Help Center</Link> {/* Correct link for Help Center */}
+            </li>
+            <li>
+              <Link to="/faq" className="footer-link">FAQs</Link> {/* Correct link for FAQ */}
+            </li>
+            <li>
+              <Link to="/terms-and-conditions" className="footer-link">Terms & Conditions</Link> {/* Correct link for Terms & Conditions */}
+            </li>
+            <li>
+              <Link to="/privacy-policy" className="footer-link">Privacy Policy</Link> {/* Correct link for Privacy Policy */}
+            </li>
           </ul>
         </div>
 
@@ -35,9 +44,8 @@ const Footer = () => {
           <h4>Explore</h4>
           <ul>
             <li>
-  <Link to="/blog" className="footer-link">Blog</Link>
-</li>
-
+              <Link to="/blog" className="footer-link">Blog</Link>
+            </li>
             <li>Affiliate Program</li>
             <li>Partners</li>
             <li>Community</li>
