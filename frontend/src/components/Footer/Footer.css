@@ -1,0 +1,227 @@
+/* Prevent horizontal scrolling */
+body, html {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Footer styles */
+.footer {
+    background: linear-gradient(#355E3B, #006400); /* Matches navbar background */
+    padding: 35px 5%; /* Further reduced padding for better responsiveness */
+    font-family: 'Arial', sans-serif;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Dark mode footer */
+.dark .footer {
+    background: linear-gradient(#579040, #487C3E); /* Matches dark mode navbar background */
+}
+
+/* Footer container */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1600px; /* Adjusted for 27-inch screens */
+    margin: 0 auto;
+    flex-wrap: wrap;
+    text-align: left;
+    gap: 25px; /* Further reduced gap to prevent breaking */
+}
+
+/* Footer sections */
+.footer-section {
+    flex: 1;
+    min-width: 200px; /* Adjusted from 220px */
+    max-width: 270px; /* Adjusted from 280px */
+    padding: 0 10px; /* Reduced padding from 15px */
+}
+
+.footer-section h4 {
+    font-size: 17px; /* Slightly reduced from 18px */
+    font-weight: bold;
+    margin-bottom: 8px; /* Reduced margin from 10px */
+    color: #f0f0f0;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    flex-direction: column;
+}
+
+.footer-section ul li {
+    font-size: 14px; /* Reduced from 15px */
+    color: #aaa;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-section ul li:hover {
+    color: #fff;
+}
+
+/* Fix for "Our Story" link to match other footer items */
+.footer-link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: normal;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover effect to match other links */
+.footer-link:hover {
+    color: #fff;
+}
+
+/* Social Media Icons */
+.social-icons {
+    display: flex;
+    gap: 10px; /* Reduced from 12px */
+}
+
+.social-icons a {
+    font-size: 17px; /* Reduced from 18px */
+    color: white;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+    color: #ddd;
+}
+
+/* Download App Section */
+.download-section {
+    text-align: left;
+}
+
+.app-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduced from 6px */
+}
+
+.app-badge {
+    width: 135px; /* Reduced from 140px */
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.app-badge:hover {
+    transform: scale(1.1);
+}
+
+/* Footer Bottom Section */
+.footer-line {
+    border: none;
+    height: 1px;
+    background: #555;
+    margin: 18px 0; /* Reduced from 20px */
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 14px; /* Reduced from 15px */
+    color: #aaa;
+}
+
+/* Large Screen Optimization */
+@media (min-width: 1600px) {
+    .footer-container {
+        max-width: 1700px;
+        gap: 35px; /* Adjusted from 40px */
+    }
+
+    .footer-section {
+        max-width: 290px; /* Adjusted from 300px */
+    }
+}
+
+/* Screens below 1356px */
+@media (max-width: 1356px) {
+    .footer-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        gap: 20px; /* Further reduced gap */
+    }
+
+    .footer-section {
+        min-width: 160px; /* Adjusted to fit smaller screens */
+        margin-bottom: 15px; /* Adjusted spacing */
+    }
+
+    .app-links {
+        align-items: center;
+    }
+
+    .app-badge {
+        width: 120px; /* Adjusted to be smaller */
+    }
+}
+
+/* Tablet View */
+@media (max-width: 1024px) {
+    .footer-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        gap: 15px; /* Adjusted for better fit */
+    }
+
+    .footer-section {
+        min-width: 180px; /* Adjusted */
+        margin-bottom: 10px; /* Reduced */
+    }
+
+    .app-links {
+        align-items: center;
+    }
+
+    .app-badge {
+        width: 115px; /* Further reduced */
+    }
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .footer-container {
+
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-section {
+        min-width: auto;
+        margin-bottom: 8px; /* Further reduced */
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 480px) {
+    .footer {
+        padding: 15px 100px; /* Further reduced */
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-section ul li {
+        font-size: 13px; /* Further reduced */
+    }
+
+    .app-badge {
+        width: 100px; /* Further reduced */
+    }
+}

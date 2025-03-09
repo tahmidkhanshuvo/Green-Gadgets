@@ -1,0 +1,302 @@
+/* Main Navbar */
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(#dcf6da, #b6dbb3);
+  transition: 0.5s;
+  height: 55px;
+  padding: 0 2vw;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+/* Logo */
+.logo {
+  width: 60px;
+  cursor: pointer;
+  margin-left: 2vw;
+}
+
+/* Navbar Menu */
+ul {
+  flex: 1;
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+ul li {
+  display: inline-block;
+  margin: 10px 1.5vw;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: margin 0.3s;
+}
+
+/* Navbar Buttons */
+ul li button {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 1rem;
+  background-color: #66bb6a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+ul li button .icon {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.dark ul li button {
+  background-color: #bbbbbb;
+  color: rgb(4, 123, 22);
+}
+
+ul li.chat {
+  margin-left: 5vw;
+}
+
+.dark .navbar {
+  background: linear-gradient(#579040, #487C3E);
+  color: #ffffff;
+}
+
+/* 🔹 Post Free Ads Button Gradient Animation (Only for Large Screens) */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Apply hover only for Post Free Ads Button */
+ul li.post-ads button { /* Target 'Post Free Ads' button */
+  background: linear-gradient(45deg, #a40606, rgb(248 86 57), #ffffff, #f53844, #00237E);
+  background-size: 400% 250%;
+  animation: gradient 8s ease infinite;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: transform 0.3s ease-in-out;
+}
+
+ul li.post-ads button:hover {
+  transform: scale(1.07);
+}
+
+/* Disable Animation for Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  ul li.post-ads button {
+    background: #66bb6a; /* Mobile devices - No animation */
+    background-size: initial;
+    animation: none;
+  }
+}
+
+/* Theme Toggle Icon */
+.toggle-icon {
+  width: 30px;
+  cursor: pointer;
+  position: absolute;
+  right: 90px;
+  top: 12px;
+  z-index: 1050;
+}
+
+.toggle-icon:hover {
+  transform: rotate(18deg);
+}
+
+/* Mobile Toggle Button (☰) */
+.mobile-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  z-index: 1051;
+}
+
+/* ========== MOBILE MENU (Right Sidebar) ========== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 220px;
+  height: 100vmax;
+  background: linear-gradient(#dcf6da, #b6dbb3);
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Show menu when open */
+.mobile-menu.open {
+  right: 0;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Close Button Inside Menu */
+.mobile-menu .close-btn {
+  position: absolute;
+  top: 50px;
+  right: 5px;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Mobile Menu Items */
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu ul li {
+  display: block;
+  width: auto;
+}
+
+/* Mobile Menu Buttons */
+.mobile-menu ul li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-size: 1rem;
+  background: #66bb6a;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Post Free Ads in Mobile Menu */
+.mobile-menu ul li.post-free-ads {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-menu ul li.post-free-ads button {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Keep Icons Aligned Properly */
+.mobile-menu ul li button .icon {
+  margin-right: 8px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Large Screens */
+@media (max-width: 1440px) {
+  .navbar {
+    height: auto;
+    padding: 10px 5vw;
+  }
+  ul {
+    justify-content: center;
+  }
+  ul li {
+    font-size: 0.9rem;
+    margin: 5px 1vw;
+  }
+  ul li.chat {
+    margin-left: 2vw;
+  }
+  .toggle-icon {
+    right: 90px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .navbar {
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    padding: 10px 3vw;
+  }
+  ul {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+  ul li {
+    margin: 5px 1vw;
+    text-align: center;
+  }
+  .logo {
+    margin-bottom: 10px;
+  }
+  .toggle-icon {
+    right: 85px;
+  }
+}
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 55px;
+  }
+
+  ul {
+    display: none;
+  }
+
+  .toggle-icon {
+    right: 80px;
+    top: 12px;
+  }
+
+  .mobile-toggle {
+    display: block;
+    right: 20px;
+    top: 12px;
+  }
+}

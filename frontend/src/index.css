@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  transition: background 0.5s ease;
+}
+.container.dark{
+  background: #263427;
+}
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

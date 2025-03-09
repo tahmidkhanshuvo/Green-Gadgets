@@ -1,0 +1,367 @@
+/* General styles for the home page */
+.home-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  color: #2e7d32;
+  background: #f0f4f8; /* Light background for a modern look */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Slider Background (unchanged) */
+.home-background {
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 1s ease-in-out;
+}
+
+/* Overlay content (unchanged) */
+.home-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 100, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dark .home-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.home-title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.dark .home-title {
+  color: #76c7c0;
+}
+
+.home-search-box {
+  width: 60%;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  background: white;
+  color: #2e7d32;
+}
+
+.dark .home-search-box {
+  background: #333;
+  color: white;
+}
+
+/* Button styling (unchanged) */
+.home-buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #3b9a40;
+  color: white;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  min-width: 220px;
+}
+
+.home-button svg {
+  font-size: 2rem;
+}
+
+.home-button:hover {
+  background-color: #388e3c;
+}
+
+.dark .home-button {
+  background-color: #2d652e;
+}
+
+.dark .home-button:hover {
+  background-color: #388e3c;
+}
+
+/* Modern Features Section */
+.home-features {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 1200px;
+}
+
+.home-features h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1b5e20;
+}
+
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.feature-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  width: 280px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card h3 {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #2e7d32;
+}
+
+.feature-card p {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 15px;
+}
+
+/* Modern Testimonials Section */
+.home-testimonials {
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 1200px;
+  text-align: center;
+}
+
+.home-testimonials h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1b5e20;
+}
+
+.testimonial-slider {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.testimonial-slider.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+.testimonial-slider.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.testimonial-card img {
+  width: 150px;
+  height: 150px;
+  border-radius: 20%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.testimonial-customer {
+  font-size: 1rem;
+  color: #2e7d32;
+}
+
+/* Modern Impact Counters Section */
+.home-statistics {
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 1200px;
+  text-align: center;
+}
+
+.home-statistics h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1b5e20;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-width: 250px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.stat-item p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Modern Latest Blogs Section */
+.home-blogs {
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  margin: 50px auto;
+  max-width: 1200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.home-blogs h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1b5e20;
+}
+
+.blogs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.blog-card {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 320px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.blog-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.blog-content {
+  padding: 25px;
+  text-align: left;
+}
+
+.blog-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #2e7d32;
+}
+
+.blog-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.read-more {
+  font-weight: bold;
+  color: #487C3E;
+  text-decoration: none;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2rem;
+  }
+  .home-search-box {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  .home-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+  .home-features,
+  .home-testimonials,
+  .home-statistics,
+  .home-blogs {
+    padding: 40px 15px;
+  }
+  .stats-grid,
+  .blogs-grid,
+  .features-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,376 @@
+/* ✅ General Styles */
+.product-search {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.product-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* ✅ Sidebar */
+.sidebar {
+  width: 200px;
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.sidebar h2 {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  background: white;
+  color: black;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar button.active {
+  background: #388e3c;
+  color: white;
+  font-weight: bold;
+}
+
+/* ✅ Show More Button */
+.show-more {
+  background: #388e3c !important;
+  color: white !important;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: none;
+  visibility: visible;
+  opacity: 1;
+}
+
+.show-more:hover {
+  background: #2e7d32 !important;
+  transform: scale(1.05);
+}
+
+/* ✅ Product Section */
+.product-section {
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* ✅ Search and Filter Container */
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Keeps search bar centered and filter on right */
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* ✅ Search Bar */
+.search-bar {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center; /* Keeps search centered */
+}
+
+/* Search Input */
+.search-bar input {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+.search-bar input:focus {
+  border-color: #388e3c;
+}
+
+/* ✅ Product Grid */
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* ✅ Fixed card width */
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ✅ Product Card */
+.product-item {
+  background: white;
+  width: 250px; /* ✅ Fixed width */
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ Image Container */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 180px; /* ✅ Fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-item img {
+  width: 100%; /* ✅ Ensures image fits the container */
+  height: 100%;
+  object-fit: cover; /* ✅ Prevents image stretching */
+  border-radius: 8px;
+}
+
+/* ✅ Badge Styling */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #388e3c;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+/* ✅ Product Details */
+.product-details {
+  padding: 10px;
+  width: 100%;
+}
+
+.product-details h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.product-details p {
+  font-size: 14px;
+  font-weight: bold;
+  color: #388e3c;
+}
+
+/* ✅ No results message */
+.no-results {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  margin-top: 20px;
+}
+
+/* ✅ Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: none;
+  background: #f4f4f4;
+  color: black;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.pagination .active {
+  background: red;
+  color: white;
+  font-weight: bold;
+}
+
+.pagination button:hover {
+  background: #ddd;
+}
+
+/* ✅ Responsive Fixes */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column; /* Stack elements vertically */
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .product-section {
+    width: 100%;
+  }
+
+  .search-filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .filter-section {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .product-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .product-item {
+    width: 100%;
+  }
+}
+
+/* ✅ Tablet (768px to 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .product-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .sidebar {
+    width: 250px;
+  }
+
+  .product-item {
+    width: 240px;
+  }
+
+  .search-bar input {
+    width: 70%;
+  }
+}
+
+/* ✅ Laptops (1024px to 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .product-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .sidebar {
+    width: 280px;
+  }
+
+  .product-item {
+    width: 250px;
+  }
+
+  .search-bar input {
+    width: 60%;
+  }
+}
+
+/* ========== DARK MODE STYLES ========== */
+.dark .product-search {
+  background-color: #121212;
+  color: white;
+}
+
+.dark .product-container {
+  color: white;
+}
+
+.dark .sidebar {
+  background: #333;
+}
+
+.dark .sidebar button {
+  background: #555;
+  color: white;
+}
+
+.dark .product-item {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+}
+
+.dark .product-item:hover {
+  background-color: #333;
+}
+
+.dark .badge {
+  background: #388e3c;
+}
+
+.dark .product-details h3 {
+  color: #e0e0e0;
+}
+
+.dark .pagination button {
+  background: #444;
+  color: white;
+}
+
+.dark .pagination button:hover {
+  background: #666;
+}
+
+/* ✅ Search Input */
+.dark .search-bar input {
+  background-color: #333; /* Dark background */
+  color: white; /* Light text */
+  border-color: #555; /* Border color for dark mode */
+}
+
+.dark .search-bar input:focus {
+  border-color: #388e3c; /* Green focus border */
+}
+
+/* ✅ Show More and Sort Dropdown */
+.dark .show-more-options select,
+.dark .filter-section select {
+  background-color: #444;
+  color: white;
+  border: 1px solid #555;
+}
+
+.dark .show-more-options select:focus,
+.dark .filter-section select:focus {
+  border-color: #388e3c; /* Green focus border */
+}
+
+.dark .show-more,
+.dark .pagination button {
+  background-color: #444; /* Dark background */
+  color: white; /* Light text */
+}
+
+.dark .show-more:hover,
+.dark .pagination button:hover {
+  background-color: #666; /* Lighter background on hover */
+}
