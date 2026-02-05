@@ -13,7 +13,7 @@ import BlogDetails from './components/Blog/BlogDetails';
 import PostBlog from './components/Blog/PostBlog';
 import LoginSignup from './components/Account/LoginSignup';
 import TermsAndConditions from './components/Support/TermsAndConditions';
-import FAQ from './components/Support/FAQ';
+import FAQ from './components/Support/faq';
 import HelpCenter from './components/Support/HelpCenter';
 import PrivacyPolicy from './components/Support/PrivacyPolicy';
 import Contact from './components/Contact/Contact';
