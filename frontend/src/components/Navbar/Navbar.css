@@ -285,8 +285,8 @@ ul li.post-ads button:hover {
     height: 55px;
   }
 
-  ul {
-    display: none;
+  .desktop-menu {
+    display: none !important;
   }
 
   .toggle-icon {
