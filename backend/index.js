@@ -2,13 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const helmet = require("helmet");
 const http = require("http");
 const { Server } = require("socket.io");
+const { authLimiter, apiLimiter } = require("./middleware/rateLimit");
 const Chat = require("./models/Chat"); // Your Chat model
 
 const app = express();
 
 // Middleware
+app.use(helmet()); // Add security headers
 app.use(express.json());
 app.use(
   cors({
@@ -16,6 +19,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(apiLimiter); // Apply general rate limiter to all routes
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));

@@ -6,6 +6,7 @@ import AuthContext from "../../context/AuthContext";
 import "./ChatPage.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || API_URL;
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -35,7 +36,7 @@ const ChatPage = () => {
 
   // Setup Socket.io connection
   useEffect(() => {
-    socketRef.current = io(API_URL, { transports: ["websocket"] });
+    socketRef.current = io(SOCKET_URL, { transports: ["websocket"] });
     socketRef.current.emit("joinChat", { chatId });
     console.log(`Joining chat room ${chatId}`);
 
