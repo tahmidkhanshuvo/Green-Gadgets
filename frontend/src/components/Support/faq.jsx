@@ -1,5 +1,5 @@
 import React from 'react';
-import './FAQ.css'; // You can create a custom CSS file for styling if needed
+import './faq.css'; // You can create a custom CSS file for styling if needed
 
 const FAQ = () => {
   return (
