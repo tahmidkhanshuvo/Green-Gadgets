@@ -26,6 +26,10 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('user'));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
+  // DEBUG: Log environment variables
+  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+  console.log('All env vars:', import.meta.env);
+
   useEffect(() => {
     localStorage.setItem('current_theme', theme);
   }, [theme]);
