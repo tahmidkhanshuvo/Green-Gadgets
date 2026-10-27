@@ -37,7 +37,9 @@ const ChatList = () => {
 
   // Listen for new chat message events (real-time notifications)
   useEffect(() => {
-    socketRef.current = io(API_URL, { transports: ["websocket"] });
+    socketRef.current = io(API_URL, {
+      auth: { token: localStorage.getItem("token") },
+    });
     socketRef.current.on("newChatMessage", (data) => {
       console.log("New chat message event received:", data);
       if (!location.pathname.includes(`/chat/${data.chatId}`)) {
@@ -91,7 +93,7 @@ const ChatList = () => {
       <ul className="chatlist-list">
         {chats.map((chat) => {
           const otherUser = chat.participants.find(
-            (participant) => participant._id !== user._id
+            (participant) => participant._id !== user._id,
           );
           const lastMessage =
             chat.messages.length > 0
@@ -126,13 +128,17 @@ const ChatList = () => {
                   {lastMessage && (
                     <div className="chatlist-extra">
                       <p className="chatlist-preview">
-                        {lastMessage.text || (lastMessage.image ? "📷 Image" : "")}
+                        {lastMessage.text ||
+                          (lastMessage.image ? "📷 Image" : "")}
                       </p>
                       <span className="chatlist-time">
-                        {new Date(lastMessage.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {new Date(lastMessage.createdAt).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          },
+                        )}
                       </span>
                     </div>
                   )}

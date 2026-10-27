@@ -16,7 +16,9 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
     if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
     }
 
     // 🔹 Hash password
@@ -25,11 +27,19 @@ const register = async (req, res) => {
     await user.save();
 
     // 🔹 Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.status(201).json({ 
-      token, 
-      user: { id: user._id, name: user.name, email: user.email, location: user.location } 
+    res.status(201).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        favorites: user.favorites,
+      },
     });
   } catch (error) {
     console.error("❌ Signup Error:", error);
@@ -48,14 +58,23 @@ const login = async (req, res) => {
 
     // 🔹 Validate password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid credentials" });
 
     // 🔹 Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.json({ 
-      token, 
-      user: { id: user._id, name: user.name, email: user.email, location: user.location } 
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        favorites: user.favorites,
+      },
     });
   } catch (error) {
     console.error("❌ Login Error:", error);

@@ -1,11 +1,20 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("user"));
+      return stored ? { ...stored, _id: stored._id || stored.id } : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token"),
+  );
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   // Fetch user when token is available
@@ -22,13 +31,12 @@ export const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("Fetched user:", data.user); // Verify that _id is present
-        setUser(data.user);
+        setUser({ ...data.user, _id: data.user._id || data.user.id });
         setIsAuthenticated(true);
         localStorage.setItem("user", JSON.stringify(data.user));
       } catch (error) {
         console.error("Error fetching profile:", error);
-        logout();
+        if (error.response?.status === 401) logout();
       }
     };
 
@@ -42,23 +50,26 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   // Login function updates state immediately
-  const login = (userData, token) => {
+  const login = useCallback((userData, token) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    const normalizedUser = { ...userData, _id: userData._id || userData.id };
+    localStorage.setItem("user", JSON.stringify(normalizedUser));
+    setUser(normalizedUser);
     setIsAuthenticated(true);
-  };
+  }, []);
 
   // Logout function clears state
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     setIsAuthenticated(false);
-  };
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, setUser }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, login, logout, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -10,13 +10,15 @@ const AdSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   mobile: { type: String, required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  status: { type: String, enum: ["active", "sold"], default: "active" },
 
   // ✅ Main Image & Additional Images
   mainImage: { type: String, required: true }, // URL for the primary image
-  images: { type: [String], required: true },  // Array of additional images
+  images: { type: [String], required: true }, // Array of additional images
 
   details: { type: mongoose.Schema.Types.Mixed, default: {} }, // Dynamic fields
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Ad", AdSchema);

@@ -1,227 +1,88 @@
-/* Prevent horizontal scrolling */
-body, html {
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+.gg-footer {
+  background: #142b21;
+  color: #d2dfd2;
+  padding: 60px max(24px, 5vw) 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
-
-/* Footer styles */
-.footer {
-    background: linear-gradient(#355E3B, #006400); /* Matches navbar background */
-    padding: 35px 5%; /* Further reduced padding for better responsiveness */
-    font-family: 'Arial', sans-serif;
-    color: white;
-    width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
+.gg-footer-inner {
+  max-width: 1280px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 36px;
 }
-
-/* Dark mode footer */
-.dark .footer {
-    background: linear-gradient(#579040, #487C3E); /* Matches dark mode navbar background */
+.gg-footer a {
+  color: inherit;
+  text-decoration: none;
 }
-
-/* Footer container */
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1600px; /* Adjusted for 27-inch screens */
-    margin: 0 auto;
-    flex-wrap: wrap;
-    text-align: left;
-    gap: 25px; /* Further reduced gap to prevent breaking */
+.gg-footer a:hover {
+  color: #d5f88e;
 }
-
-/* Footer sections */
-.footer-section {
-    flex: 1;
-    min-width: 200px; /* Adjusted from 220px */
-    max-width: 270px; /* Adjusted from 280px */
-    padding: 0 10px; /* Reduced padding from 15px */
+.gg-footer-brand > a {
+  display: inline-flex;
+  gap: 20px;
+  font-size: 24px;
+  letter-spacing: -1px;
+  color: #f5f7ed;
+  font-weight: 700;
 }
-
-.footer-section h4 {
-    font-size: 17px; /* Slightly reduced from 18px */
-    font-weight: bold;
-    margin-bottom: 8px; /* Reduced margin from 10px */
-    color: #f0f0f0;
+.gg-footer-brand > a span {
+  color: #d5f88e;
 }
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
+.gg-footer-brand p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 20px 0;
+}
+.gg-footer-brand small {
+  color: #8da592;
+  font-size: 11px;
+}
+.gg-footer nav {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 12px;
+}
+.gg-footer nav h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #90a697;
+  margin: 7px 0 10px;
+}
+.gg-footer nav a {
+  font-size: 13px;
+}
+.gg-footer-bottom {
+  max-width: 1280px;
+  margin: 50px auto 0;
+  border-top: 1px solid #ffffff18;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #90a697;
+  font-size: 11px;
+}
+.dark .gg-footer {
+  background: #0b1b13;
+}
+@media (max-width: 760px) {
+  .gg-footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .gg-footer-brand {
+    grid-column: 1/-1;
+  }
+  .gg-footer-bottom {
     flex-direction: column;
+  }
 }
-
-.footer-section ul li {
-    font-size: 14px; /* Reduced from 15px */
-    color: #aaa;
-    margin-bottom: 6px;
-    cursor: pointer;
-    transition: color 0.3s ease-in-out;
-}
-
-.footer-section ul li:hover {
-    color: #fff;
-}
-
-/* Fix for "Our Story" link to match other footer items */
-.footer-link {
-    text-decoration: none;
-    color: inherit;
-    font-weight: normal;
-    transition: color 0.3s ease-in-out;
-}
-
-/* Hover effect to match other links */
-.footer-link:hover {
-    color: #fff;
-}
-
-/* Social Media Icons */
-.social-icons {
-    display: flex;
-    gap: 10px; /* Reduced from 12px */
-}
-
-.social-icons a {
-    font-size: 17px; /* Reduced from 18px */
-    color: white;
-    transition: transform 0.3s ease-in-out;
-}
-
-.social-icons a:hover {
-    transform: scale(1.2);
-    color: #ddd;
-}
-
-/* Download App Section */
-.download-section {
-    text-align: left;
-}
-
-.app-links {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Reduced from 6px */
-}
-
-.app-badge {
-    width: 135px; /* Reduced from 140px */
-    height: auto;
-    transition: transform 0.3s ease-in-out;
-}
-
-.app-badge:hover {
-    transform: scale(1.1);
-}
-
-/* Footer Bottom Section */
-.footer-line {
-    border: none;
-    height: 1px;
-    background: #555;
-    margin: 18px 0; /* Reduced from 20px */
-}
-
-.footer-bottom {
-    text-align: center;
-    font-size: 14px; /* Reduced from 15px */
-    color: #aaa;
-}
-
-/* Large Screen Optimization */
-@media (min-width: 1600px) {
-    .footer-container {
-        max-width: 1700px;
-        gap: 35px; /* Adjusted from 40px */
-    }
-
-    .footer-section {
-        max-width: 290px; /* Adjusted from 300px */
-    }
-}
-
-/* Screens below 1356px */
-@media (max-width: 1356px) {
-    .footer-container {
-        flex-wrap: wrap;
-        justify-content: center;
-        text-align: center;
-        gap: 20px; /* Further reduced gap */
-    }
-
-    .footer-section {
-        min-width: 160px; /* Adjusted to fit smaller screens */
-        margin-bottom: 15px; /* Adjusted spacing */
-    }
-
-    .app-links {
-        align-items: center;
-    }
-
-    .app-badge {
-        width: 120px; /* Adjusted to be smaller */
-    }
-}
-
-/* Tablet View */
-@media (max-width: 1024px) {
-    .footer-container {
-        flex-wrap: wrap;
-        justify-content: center;
-        text-align: center;
-        gap: 15px; /* Adjusted for better fit */
-    }
-
-    .footer-section {
-        min-width: 180px; /* Adjusted */
-        margin-bottom: 10px; /* Reduced */
-    }
-
-    .app-links {
-        align-items: center;
-    }
-
-    .app-badge {
-        width: 115px; /* Further reduced */
-    }
-}
-
-/* Mobile View */
-@media (max-width: 768px) {
-    .footer-container {
-
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-section {
-        min-width: auto;
-        margin-bottom: 8px; /* Further reduced */
-    }
-
-    .social-icons {
-        justify-content: center;
-    }
-}
-
-/* Small Mobile Screens */
-@media (max-width: 480px) {
-    .footer {
-        padding: 15px 100px; /* Further reduced */
-    }
-
-    .footer-section {
-        text-align: center;
-    }
-
-    .footer-section ul li {
-        font-size: 13px; /* Further reduced */
-    }
-
-    .app-badge {
-        width: 100px; /* Further reduced */
-    }
+@media (max-width: 360px) {
+  .gg-footer-inner {
+    grid-template-columns: 1fr;
+  }
 }

@@ -3,8 +3,9 @@ const User = require("../models/User");
 exports.getUserByEmail = async (req, res) => {
   try {
     const { email } = req.params;
-    console.log("Looking for user with email:", email);
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select(
+      "_id name email location",
+    );
     if (!user) {
       console.log("User not found in DB");
       return res.status(404).json({ error: "User not found" });

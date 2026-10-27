@@ -1,249 +1,245 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight, FaSearch, FaLaptop } from "react-icons/fa";
 import axios from "axios";
 import "./Product-Search.css";
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
-
-const ProductSearch = () => {
-  const [ads, setAds] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("All");
-  const [selectedLocation, setSelectedLocation] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("default");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(9);
-  const [darkMode, setDarkMode] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Toggle Dark Mode
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+export default function ProductSearch() {
+  const [params, setParams] = useSearchParams(),
+    [ads, setAds] = useState([]),
+    [state, setState] = useState("loading"),
+    [attempt, setAttempt] = useState(0);
+  const query = params.get("q") || "",
+    category = params.get("category") || "All",
+    sub = params.get("sub") || "All",
+    location = params.get("location") || "All",
+    sort = params.get("sort") || "newest";
+  const update = (key, value) => {
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.set(key, value);
+        if (key !== "page") next.delete("page");
+        if (key === "category") next.delete("sub");
+        return next;
+      },
+      { replace: key === "q" },
+    );
   };
-
-  // Fetch Ads from API
   useEffect(() => {
+    let active = true;
+    setState("loading");
     axios
       .get(`${API_URL}/api/ad`)
-      .then((response) => setAds(response.data))
-      .catch((error) => console.error("Error fetching ads:", error));
-  }, []);
-
-  // Set initial search term and category from location state if available
-  useEffect(() => {
-    if (location.state) {
-      if (location.state.searchTerm) {
-        setSearchTerm(location.state.searchTerm);
-      }
-      if (location.state.category) {
-        setSelectedCategory(location.state.category);
-      }
-    }
-  }, [location.state]);
-
-  // Optimized Filtering & Sorting
-  const filteredAds = useMemo(() => {
-    let updatedAds = ads.filter(
+      .then(({ data }) => {
+        if (active) {
+          setAds(Array.isArray(data) ? data : []);
+          setState("ready");
+        }
+      })
+      .catch(() => {
+        if (active) setState("error");
+      });
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
+  const filtered = useMemo(() => {
+    const results = ads.filter(
       (ad) =>
-        (selectedCategory === "All" || ad.category === selectedCategory) &&
-        (selectedSubCategory === "All" || ad.subCategory === selectedSubCategory) &&
-        (selectedLocation === "All" || ad.location === selectedLocation) &&
-        ad.title.toLowerCase().includes(searchTerm.toLowerCase())
+        (category === "All" || ad.category === category) &&
+        (sub === "All" || ad.subCategory === sub) &&
+        (location === "All" || ad.location === location) &&
+        [ad.title, ad.description].some((value) =>
+          String(value || "")
+            .toLowerCase()
+            .includes(query.toLowerCase()),
+        ),
     );
-
-    if (sortOption === "lowToHigh") {
-      updatedAds.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "highToLow") {
-      updatedAds.sort((a, b) => b.price - a.price);
-    }
-
-    return updatedAds;
-  }, [ads, selectedCategory, selectedSubCategory, selectedLocation, searchTerm, sortOption]);
-
-  // Pagination Logic
-  const totalPages = Math.ceil(filteredAds.length / productsPerPage);
-  const currentProducts = filteredAds.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage
-  );
-
-  // Handle Page Change
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  // Get count of subcategories based on selected category
-  const getSubCategoryCount = (subCategory) => {
-    return ads.filter(
-      (ad) =>
-        ad.subCategory === subCategory &&
-        (selectedCategory === "All" || ad.category === selectedCategory)
-    ).length;
-  };
-
-  // Apply dark mode class to body
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  }, [darkMode]);
-
+    if (sort === "price-low") results.sort((a, b) => a.price - b.price);
+    if (sort === "price-high") results.sort((a, b) => b.price - a.price);
+    return results;
+  }, [ads, query, category, sub, location, sort]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / 9)),
+    page = Math.min(
+      totalPages,
+      Math.max(1, parseInt(params.get("page"), 10) || 1),
+    ),
+    products = filtered.slice((page - 1) * 9, page * 9);
+  const subcategories = [
+      ...new Set(
+        ads
+          .filter((ad) => category === "All" || ad.category === category)
+          .map((ad) => ad.subCategory)
+          .filter(Boolean),
+      ),
+    ].sort(),
+    locations = [
+      ...new Set(ads.map((ad) => ad.location).filter(Boolean)),
+    ].sort();
   return (
-    <div className="product-search">
-      <div className="product-container">
-        {/* Sidebar Filters */}
-        <div className="sidebar">
-          <h2>Categories</h2>
-          {["All", "Recycle", "Refurbished", "Reuse"].map((category) => (
-            <button
-              key={category}
-              className={selectedCategory === category ? "active" : ""}
-              onClick={() => {
-                setSelectedCategory(category);
-                setSelectedSubCategory("All");
-              }}
-            >
-              {category}
-            </button>
-          ))}
-
-          <h2>Subcategories</h2>
-          {selectedCategory === "All"
-            ? ["Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
-                <button
-                  key={subCategory}
-                  className={selectedSubCategory === subCategory ? "active" : ""}
-                  onClick={() => setSelectedSubCategory(subCategory)}
-                >
-                  {subCategory} ({getSubCategoryCount(subCategory)})
-                </button>
-              ))
-            : ["All", "Mobile", "Laptop", "Monitor", "TV", "Speaker", "Camera"].map((subCategory) => (
-                <button
-                  key={subCategory}
-                  className={selectedSubCategory === subCategory ? "active" : ""}
-                  onClick={() => setSelectedSubCategory(subCategory)}
-                >
-                  {subCategory} ({getSubCategoryCount(subCategory)})
-                </button>
-              ))}
-
-          <h2>Location</h2>
-          {["All", "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Barishal"].map(
-            (locationName) => (
-              <button
-                key={locationName}
-                className={selectedLocation === locationName ? "active" : ""}
-                onClick={() => setSelectedLocation(locationName)}
-              >
-                {locationName}
-              </button>
-            )
-          )}
+    <main className="gg-market">
+      <div className="gg-market-title">
+        <div>
+          <p>THE CIRCULAR MARKETPLACE</p>
+          <h1>Find your next good thing.</h1>
+          <span>Pre-loved, refurbished, and ready for another chapter.</span>
         </div>
-
-        {/* Product Section */}
-        <div className="product-section">
-          <div className="search-filter-container">
-            {/* Search Bar */}
-            <div className="search-bar">
-              <input
-                type="text"
-                placeholder="Search for products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-
-            {/* Show More Options */}
-            <div className="show-more-options">
-              <label>Show: </label>
-              <select
-                onChange={(e) => setProductsPerPage(Number(e.target.value))}
-                value={productsPerPage}
-              >
-                <option value={20}>20</option>
-                <option value={40}>40</option>
-                <option value={60}>60</option>
-                <option value={75}>75</option>
-                <option value={100}>100</option>
-              </select>
-            </div>
-
-            {/* Sorting Options */}
-            <div className="filter-section">
-              <label>Sort: </label>
-              <select onChange={(e) => setSortOption(e.target.value)} value={sortOption}>
-                <option value="default">Default</option>
-                <option value="lowToHigh">Price: Low to High</option>
-                <option value="highToLow">Price: High to Low</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Product Grid */}
-          <div className="product-list">
-            {currentProducts.length > 0 ? (
-              currentProducts.map((ad) => (
-                <div
-                  key={ad._id}
-                  className="product-item"
-                  onClick={() => navigate(`/productdetails/${ad._id}`)}
-                >
-                  <div className="image-container">
-                    <span className="badge">{ad.category}</span>
-                    <img
-                      src={
-                        ad.images.length > 0
-                          ? ad.images[0]
-                          : "https://via.placeholder.com/200"
-                      }
-                      alt={ad.title}
-                      className="product-image"
-                    />
-                  </div>
-                  <div className="product-details">
-                    <h3>{ad.title}</h3>
-                    <p>৳ {ad.price}</p>
-                    <p className="location">{ad.location}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="no-results">No products found.</p>
-            )}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="pagination">
-              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                Next
-              </button>
-            </div>
-          )}
-        </div>
+        <Link to="/postAd">Give a gadget a new home ↗</Link>
       </div>
-    </div>
+      <div className="gg-market-search">
+        <FaSearch />
+        <label className="gg-search-label" htmlFor="market-query">
+          Search listings
+        </label>
+        <input
+          id="market-query"
+          value={query}
+          onChange={(event) => update("q", event.target.value)}
+          placeholder="Search phones, laptops, components…"
+        />
+        <span>
+          {state === "ready"
+            ? `${filtered.length} listings`
+            : "Finding listings…"}
+        </span>
+      </div>
+      <div className="gg-market-layout">
+        <aside aria-label="Listing filters">
+          <div className="gg-filter-heading">
+            <h2>Make it yours.</h2>
+            <button onClick={() => setParams({})}>Reset</button>
+          </div>
+          <label>
+            Listing type
+            <select
+              value={category}
+              onChange={(event) => update("category", event.target.value)}
+            >
+              {["All", "Reuse", "Refurbished", "Recycle"].map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Device category
+            <select
+              value={sub}
+              onChange={(event) => update("sub", event.target.value)}
+            >
+              <option>All</option>
+              {subcategories.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Location
+            <select
+              value={location}
+              onChange={(event) => update("location", event.target.value)}
+            >
+              <option>All</option>
+              {locations.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <p>
+            Ask the seller about condition and availability before making
+            arrangements.
+          </p>
+        </aside>
+        <section aria-label="Search results">
+          <div className="gg-results-top">
+            <p>
+              {query
+                ? `Results for “${query}”`
+                : "Good finds, waiting for you."}
+            </p>
+            <label>
+              Sort by
+              <select
+                value={sort}
+                onChange={(event) => update("sort", event.target.value)}
+              >
+                <option value="newest">Newest first</option>
+                <option value="price-low">Price: low to high</option>
+                <option value="price-high">Price: high to low</option>
+              </select>
+            </label>
+          </div>
+          {state === "loading" ? (
+            <div className="gg-market-empty" role="status">
+              Finding your next gadget… The server may take a moment to wake up.
+            </div>
+          ) : state === "error" ? (
+            <div className="gg-market-empty" role="alert">
+              <h2>We couldn't load the marketplace.</h2>
+              <button onClick={() => setAttempt((value) => value + 1)}>
+                Try again
+              </button>
+            </div>
+          ) : products.length ? (
+            <>
+              <div className="gg-market-cards">
+                {products.map((ad) => (
+                  <Link key={ad._id} to={`/productdetails/${ad._id}`}>
+                    <div className="gg-market-image">
+                      {ad.mainImage || ad.images?.[0] ? (
+                        <img
+                          loading="lazy"
+                          src={ad.mainImage || ad.images[0]}
+                          alt={ad.title}
+                        />
+                      ) : (
+                        <FaLaptop />
+                      )}
+                      <span>{ad.category}</span>
+                    </div>
+                    <div className="gg-market-card-copy">
+                      <small>{ad.location}</small>
+                      <h2>{ad.title}</h2>
+                      <strong>
+                        ৳ {Number(ad.price || 0).toLocaleString("en-BD")}
+                      </strong>
+                      <span>View listing ↗</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <nav className="gg-market-pagination" aria-label="Results pages">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => update("page", String(page - 1))}
+                >
+                  <FaArrowLeft />
+                  Previous
+                </button>
+                <span>
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => update("page", String(page + 1))}
+                >
+                  Next
+                  <FaArrowRight />
+                </button>
+              </nav>
+            </>
+          ) : (
+            <div className="gg-market-empty">
+              <FaSearch size={25} />
+              <h2>No matches just yet.</h2>
+              <p>Try a different search or broaden your filters.</p>
+              <button onClick={() => setParams({})}>
+                Explore all listings
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
   );
-};
-
-export default ProductSearch;
+}

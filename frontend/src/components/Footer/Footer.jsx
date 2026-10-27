@@ -1,106 +1,62 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; // ✅ Import Link from React Router
-import './Footer.css';
-
-const Footer = () => {
+import { Link } from "react-router-dom";
+import "./Footer.css";
+export default function Footer() {
+  const sections = [
+    [
+      "Explore",
+      [
+        ["All listings", "/search"],
+        ["Sell a gadget", "/postAd"],
+        ["Journal", "/blog"],
+        ["Our story", "/about"],
+      ],
+    ],
+    [
+      "Need a hand?",
+      [
+        ["Help center", "/help-center"],
+        ["Questions & answers", "/faq"],
+        ["Contact", "/Contact"],
+      ],
+    ],
+    [
+      "The details",
+      [
+        ["Privacy", "/privacy-policy"],
+        ["Terms of use", "/terms-and-conditions"],
+        ["Your account", "/account"],
+      ],
+    ],
+  ];
   return (
-    <footer className="footer">
-      <div className="footer-container">
-        {/* About Section */}
-        <div className="footer-section">
-          <h4>About Us</h4>
-          <ul>
-            <li>
-              <Link to="/about" className="footer-link">Our Story</Link> {/* ✅ Redirects to About Us */}
-            </li>
-            <li>Careers</li>
-            <li>Press</li>
-            <li>
-              <Link to ="/Contact" className ="footer-link">  Contact </Link></li>
-          </ul>
+    <footer className="gg-footer">
+      <div className="gg-footer-inner">
+        <div className="gg-footer-brand">
+          <Link to="/">
+            Green Gadgets<span>↗</span>
+          </Link>
+          <p>
+            Good technology deserves
+            <br />
+            another chapter.
+          </p>
+          <small>Made for a more circular Bangladesh.</small>
         </div>
-
-        {/* Support Section */}
-        <div className="footer-section">
-          <h4>Support</h4>
-          <ul>
-            <li>
-              <Link to="/help-center" className="footer-link">Help Center</Link> {/* Correct link for Help Center */}
-            </li>
-            <li>
-              <Link to="/faq" className="footer-link">FAQs</Link> {/* Correct link for FAQ */}
-            </li>
-            <li>
-              <Link to="/terms-and-conditions" className="footer-link">Terms & Conditions</Link> {/* Correct link for Terms & Conditions */}
-            </li>
-            <li>
-              <Link to="/privacy-policy" className="footer-link">Privacy Policy</Link> {/* Correct link for Privacy Policy */}
-            </li>
-          </ul>
-        </div>
-
-        {/* Explore Section */}
-        <div className="footer-section">
-          <h4>Explore</h4>
-          <ul>
-            <li>
-              <Link to="/blog" className="footer-link">Blog</Link>
-            </li>
-            <li>Affiliate Program</li>
-            <li>Partners</li>
-            <li>Community</li>
-          </ul>
-        </div>
-
-        {/* Social Media Section */}
-        <div className="footer-section">
-          <h4>Follow Us</h4>
-          <div className="social-icons">
-            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div>
-        </div>
-
-        {/* Download Section */}
-        <div className="footer-section download-section">
-          <h4>Get Our App</h4>
-          <div className="app-links">
-            <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                alt="Google Play"
-                className="app-badge"
-              />
-            </a>
-            <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer">
-              <img
-                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                alt="App Store"
-                className="app-badge"
-              />
-            </a>
-          </div>
-        </div>
+        {sections.map(([title, links]) => (
+          <nav key={title} aria-label={title}>
+            <h3>{title}</h3>
+            {links.map(([label, to]) => (
+              <Link key={to} to={to}>
+                {label}
+              </Link>
+            ))}
+          </nav>
+        ))}
       </div>
-
-      <hr className="footer-line" />
-
-      {/* Footer Bottom */}
-      <div className="footer-bottom">
-        <p>© 2025. All rights reserved. Green Gadgets BD Limited.</p>
+      <div className="gg-footer-bottom">
+        <span>© {new Date().getFullYear()} Green Gadgets</span>
+        <span>Rethink. Reuse. Repeat.</span>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

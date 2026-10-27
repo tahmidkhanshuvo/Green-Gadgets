@@ -1,141 +1,104 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthContext from "../../context/AuthContext"; // ✅ Import AuthContext
-import './Navbar.css';
-
-import logo_light from '../../assets/logo-black.png';
-import logo_dark from '../../assets/logo.png';
-import toggle_light from '../../assets/night.png';
-import toggle_dark from '../../assets/day.png';
-import { FaBars, FaTimes, FaSearch, FaComment, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
-
-const Navbar = ({ theme, setTheme }) => {
-  const navigate = useNavigate();
-  const { isAuthenticated, logout } = useContext(AuthContext); // ✅ Use AuthContext
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggle_mode = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+import { useContext, useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  FaLeaf,
+  FaSun,
+  FaMoon,
+  FaBars,
+  FaTimes,
+  FaPlus,
+  FaRegCommentDots,
+  FaRegUserCircle,
+} from "react-icons/fa";
+import AuthContext from "../../context/AuthContext";
+import "./Navbar.css";
+export default function Navbar({ theme, setTheme }) {
+  const { isAuthenticated, logout } = useContext(AuthContext),
+    [open, setOpen] = useState(false),
+    { pathname } = useLocation(),
+    navigate = useNavigate();
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    const close = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
+  const leave = () => {
+    logout();
+    setOpen(false);
+    navigate("/");
   };
-
-  const handleButtonClick = (page) => {
-    navigate(page);
-    setMobileMenuOpen(false); // Close menu on navigation
-  };
-
-  return (
+  const links = (
     <>
-      <div className='navbar'>
-        {/* Logo - Click to go home */}
-        <img 
-          src={theme === 'light' ? logo_light : logo_dark} 
-          alt='logo' 
-          className='logo' 
-          onClick={() => handleButtonClick('/')} // Redirect to Home
-          style={{ cursor: 'pointer' }} // Ensure it's clickable
-        />
-
-        <ul className='desktop-menu'>
-          <li className='ads'>
-            <button onClick={() => handleButtonClick('/search')}>
-              <span className="icon-text">All Ads</span>
-            </button>
-          </li>
-          <li className='chat'>
-            <button onClick={() => handleButtonClick('/chatlist')}>
-              <FaComment className="icon" />
-              <span className="icon-text">Chat</span>
-            </button>
-          </li>
-
-          {isAuthenticated ? (
-            <>
-              <li>
-                <button onClick={() => handleButtonClick('/account')}>
-                  <FaUserCircle className="icon" />
-                  <span className="icon-text">Account</span>
-                </button>
-              </li>
-              <li>
-                <button onClick={logout}>
-                  <FaSignOutAlt className="icon" />
-                  <span className="icon-text">Logout</span>
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button onClick={() => handleButtonClick('/login')}>
-                <FaUserCircle className="icon" />
-                <span className="icon-text">Login / Sign Up</span>
-              </button>
-            </li>
-          )}
-
-          <li className='post-ads'>
-            <button onClick={() => handleButtonClick('/postAd')} className="post-ads-button">
-              <span className="icon-text">Post Free Ads</span>
-            </button>
-          </li>
-        </ul>
-
-        <img
-          onClick={toggle_mode}
-          src={theme === 'light' ? toggle_light : toggle_dark}
-          alt='toggle icon'
-          className='toggle-icon'
-        />
-
-        {/* Mobile Menu Toggle Button (☰) */}
-        <button className="mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          <FaBars />
+      <NavLink to="/search">Marketplace</NavLink>
+      <NavLink to="/blog">Journal</NavLink>
+      <NavLink to="/chatlist">
+        <FaRegCommentDots />
+        Messages
+      </NavLink>
+      <NavLink to={isAuthenticated ? "/account" : "/login"}>
+        <FaRegUserCircle />
+        {isAuthenticated ? "Your account" : "Sign in"}
+      </NavLink>
+      {isAuthenticated && (
+        <button className="gg-signout" onClick={leave}>
+          Sign out
         </button>
-      </div>
-
-      <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        {/* Mobile Menu Items */}
-        <ul>
-          <li>
-            <button onClick={() => handleButtonClick('/search')}>
-              All Ads
-            </button>
-          </li>
-          <li>
-            <button onClick={() => handleButtonClick('/chat')}>
-              <FaComment className="icon" /> Chat
-            </button>
-          </li>
-
-          {isAuthenticated ? (
-            <>
-              <li>
-                <button onClick={() => handleButtonClick('/account')}>
-                  <FaUserCircle className="icon" /> Account
-                </button>
-              </li>
-              <li>
-                <button onClick={logout}>
-                  <FaSignOutAlt className="icon" /> Logout
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button onClick={() => handleButtonClick('/login')}>
-                <FaUserCircle className="icon" /> Login / Sign Up
-              </button>
-            </li>
-          )}
-
-          <li>
-            <button onClick={() => handleButtonClick('/postAd')} className="post-ads-button">
-              📢 Post Free Ads
-            </button>
-          </li>
-        </ul>
-      </div>
+      )}
+      <Link className="gg-list-cta" to="/postAd">
+        <FaPlus />
+        Post Free Ads
+      </Link>
     </>
   );
-};
-
-export default Navbar;
+  return (
+    <header className="gg-header">
+      <div className="gg-header-inner">
+        <Link className="gg-brand" to="/" aria-label="Green Gadgets home">
+          <span>
+            <FaLeaf />
+          </span>
+          Green Gadgets
+        </Link>
+        <nav className="gg-desktop-nav" aria-label="Main navigation">
+          {links}
+        </nav>
+        <div className="gg-header-tools">
+          <button
+            className="gg-icon-button"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            aria-label={
+              theme === "light"
+                ? "Switch to dark theme"
+                : "Switch to light theme"
+            }
+          >
+            {theme === "light" ? <FaMoon /> : <FaSun />}
+          </button>
+          <button
+            className="gg-icon-button gg-menu-toggle"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="gg-mobile-nav"
+          >
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+      </div>
+      {open && (
+        <nav
+          id="gg-mobile-nav"
+          className="gg-mobile-nav"
+          aria-label="Mobile navigation"
+        >
+          {links}
+        </nav>
+      )}
+    </header>
+  );
+}

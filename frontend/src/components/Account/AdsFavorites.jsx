@@ -1,64 +1,135 @@
-import React from "react";
-import { Box, Grid2, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import "./AdsFavorites.css"; // Ensure this file also exists
-
-// ✅ Hardcoded My Ads
-const myAds = [
-  {
-    id: 1,
-    title: "iPhone 12",
-    price: "৳62,999",
-    image: "https://via.placeholder.com/300x200",
-    description: "Excellent condition, 1 year old",
-  },
-  {
-    id: 2,
-    title: "Samsung Galaxy S21",
-    price: "৳52,999",
-    image: "https://via.placeholder.com/300x200",
-    description: "Like new, complete box",
-  },
-];
-
-// ✅ Hardcoded Favorite Ads
-const favoriteAds = [
-  {
-    id: 1,
-    title: "Gaming Laptop",
-    price: "৳85,000",
-    image: "https://via.placeholder.com/300x200",
-    description: "High-performance gaming laptop with NVIDIA graphics and 16GB RAM",
-  },
-  {
-    id: 2,
-    title: "27-inch Monitor",
-    price: "৳12,000",
-    image: "https://via.placeholder.com/300x200",
-    description: "Crystal clear display with 144Hz refresh rate",
-  },
-];
-
-const AdsFavorites = ({ activeTab }) => {
-  const adsToShow = activeTab === "myAds" ? myAds : favoriteAds;
-
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import AuthContext from "../../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+export default function AdsFavorites({ activeTab }) {
+  const { user, setUser } = useContext(AuthContext),
+    [ads, setAds] = useState([]),
+    [loading, setLoading] = useState(true),
+    [error, setError] = useState(""),
+    [attempt, setAttempt] = useState(0),
+    [busy, setBusy] = useState("");
+  const owned = activeTab === "myAds";
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setError("");
+    axios
+      .get(`${API_URL}${owned ? "/api/ad/mine" : "/api/account/favorites"}`)
+      .then(({ data }) => {
+        if (active) setAds(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (active)
+          setError("We could not load these listings. Please try again.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [owned, attempt, user?._id]);
+  const update = async (ad) => {
+    setBusy(ad._id);
+    setError("");
+    try {
+      if (owned) {
+        const { data } = await axios.patch(
+          `${API_URL}/api/ad/${ad._id}/status`,
+          { status: ad.status === "sold" ? "active" : "sold" },
+        );
+        setAds((current) =>
+          current.map((item) => (item._id === ad._id ? data : item)),
+        );
+      } else {
+        const { data } = await axios.delete(
+          `${API_URL}/api/account/favorites/${ad._id}`,
+        );
+        const next = { ...user, favorites: data.favorites };
+        setUser(next);
+        localStorage.setItem("user", JSON.stringify(next));
+        setAds((current) => current.filter((item) => item._id !== ad._id));
+      }
+    } catch {
+      setError("Unable to update this listing. Please try again.");
+    } finally {
+      setBusy("");
+    }
+  };
   return (
-    <Box>
-      <Grid2 container spacing={3}>
-        {adsToShow.map((ad) => (
-          <Grid2 item xs={12} sm={6} md={4} key={ad.id}>
-            <Card className="ad-card">
-              <CardMedia component="img" height="200" image={ad.image} alt={ad.title} />
-              <CardContent>
-                <Typography gutterBottom variant="h5">{ad.title}</Typography>
-                <Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>{ad.price}</Typography>
-                <Typography variant="body2" color="text.secondary">{ad.description}</Typography>
-              </CardContent>
-            </Card>
-          </Grid2>
-        ))}
-      </Grid2>
-    </Box>
+    <section>
+      <div className="gg-account-section-top">
+        <div>
+          <h2>{owned ? "Your listings" : "Saved finds"}</h2>
+          <p>
+            {owned
+              ? "Give good tech its next chapter. Mark a listing as sold when it finds a home."
+              : "A little collection of possibilities. Saved listings follow your account."}
+          </p>
+        </div>
+        {owned && <Link to="/postAd">Post a listing ↗</Link>}
+      </div>
+      {error && (
+        <p role="alert" className="gg-account-error">
+          {error}
+          <button
+            className="gg-inline"
+            onClick={() => setAttempt((value) => value + 1)}
+          >
+            Retry
+          </button>
+        </p>
+      )}
+      {loading ? (
+        <p role="status">Loading your listings…</p>
+      ) : ads.length ? (
+        <div className="gg-account-cards">
+          {ads.map((ad) => (
+            <article key={ad._id}>
+              <Link to={`/productdetails/${ad._id}`}>
+                <img
+                  loading="lazy"
+                  src={ad.mainImage || ad.images?.[0]}
+                  alt={ad.title}
+                />
+                <div>
+                  <small>{ad.status === "sold" ? "SOLD" : ad.category}</small>
+                  <h3>{ad.title}</h3>
+                  <strong>৳ {Number(ad.price).toLocaleString("en-BD")}</strong>
+                  <p>{ad.location}</p>
+                </div>
+              </Link>
+              <button disabled={busy === ad._id} onClick={() => update(ad)}>
+                {busy === ad._id
+                  ? "Updating…"
+                  : owned
+                    ? ad.status === "sold"
+                      ? "Make available again"
+                      : "Mark as sold"
+                    : "Remove from saved"}
+              </button>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="gg-account-empty">
+          <h3>
+            {owned
+              ? "Your next listing starts here."
+              : "Make space for a good find."}
+          </h3>
+          <p>
+            {owned
+              ? "Take a few photos and tell buyers what makes your gadget worth keeping."
+              : "Open any listing and choose Save listing to keep it here."}
+          </p>
+          <Link to={owned ? "/postAd" : "/search"}>
+            {owned ? "Post your first listing" : "Explore the marketplace"} ↗
+          </Link>
+        </div>
+      )}
+    </section>
   );
-};
-
-export default AdsFavorites;
+}

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const chatController = require("../controllers/chatController");
+router.use(require("../middleware/authMiddleware"));
 
 // Create (or retrieve existing) chat between participants
 router.post("/", chatController.createChat);

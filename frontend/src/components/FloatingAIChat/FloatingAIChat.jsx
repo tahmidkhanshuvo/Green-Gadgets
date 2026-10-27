@@ -1,121 +1,96 @@
-import React, { useState } from 'react';
-import { FaComments, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
-import './FloatingAIChat.css';
+import React, { useState } from "react";
+import { FaComments, FaTimes } from "react-icons/fa";
+import axios from "axios";
+import { API_URL } from "../../api";
+import "./FloatingAIChat.css";
 
-const FloatingAIChat = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export default function FloatingAIChat() {
+  const [isOpen, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: 'ai', text: 'Hi! I am Green AI. How can I help you today?' },
+    {
+      sender: "ai",
+      text: "Hi! I can help you buy, sell, or recycle electronics. What would you like to know?",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const toggleChat = () => setIsOpen(!isOpen);
-
-  const formatText = (text) => {
-    const lines = text.split('\n').map((line) => line.trim()).filter((line) => line);
-    return lines.join('\n');
-  };
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
-    setInput('');
+  async function send(event) {
+    event.preventDefault();
+    const message = input.trim();
+    if (!message || loading) return;
+    setMessages((previous) => [...previous, { sender: "user", text: message }]);
+    setInput("");
     setLoading(true);
-
     try {
-      const apiKey = import.meta.env.VITE_GOOGLE_GENAI_KEY;
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}`;
-      const payload = {
-        contents: [
-          {
-            parts: [{ text: input }],
-          },
-        ],
-      };
-
-      console.log('API Request Payload:', payload);
-      const response = await axios.post(url, payload, {
-        headers: { 'Content-Type': 'application/json' },
-        responseType: 'json',
+      const { data } = await axios.post(`${API_URL}/api/assistant`, {
+        message,
       });
-      console.log('Raw API Response Data:', response.data);
-
-      let aggregatedText = '';
-
-      if (Array.isArray(response.data)) {
-        response.data.forEach((obj) => {
-          if (obj.candidates && obj.candidates.length > 0) {
-            const candidate = obj.candidates[0];
-            if (candidate.content && candidate.content.parts) {
-              candidate.content.parts.forEach((part) => {
-                if (part.text) {
-                  aggregatedText += part.text;
-                }
-              });
-            }
-          }
-        });
-      }
-
-      const formattedText = formatText(aggregatedText);
-      console.log('Formatted Response:', formattedText);
-
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages, { sender: 'ai', text: formattedText }];
-        console.log('Updated Messages:', updatedMessages);
-        return updatedMessages;
-      });
-    } catch (error) {
-      console.error('Error fetching AI response:', error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'ai', text: 'Sorry, there was an error getting a response.' },
+      setMessages((previous) => [
+        ...previous,
+        { sender: "ai", text: data.reply },
+      ]);
+    } catch {
+      setMessages((previous) => [
+        ...previous,
+        {
+          sender: "ai",
+          text: "Help is unavailable for a moment. Please try again, or visit the Help Center.",
+        },
       ]);
     } finally {
       setLoading(false);
     }
-  };
-
+  }
   return (
     <div className="floating-chat">
       {isOpen && (
-        <div className="chat-window">
+        <section
+          className="chat-window"
+          role="dialog"
+          aria-label="Green Gadgets help"
+        >
           <div className="chat-header">
-            <h4>Green AI</h4>
-            <button className="close-button" onClick={toggleChat}>
+            <h4>Green Gadgets help</h4>
+            <button
+              className="close-button"
+              onClick={() => setOpen(false)}
+              aria-label="Close help"
+            >
               <FaTimes />
             </button>
           </div>
-          <div className="chat-messages">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`chat-message ${msg.sender}`}>
-                <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{msg.text}</pre>
+          <div className="chat-messages" role="log" aria-live="polite">
+            {messages.map((message, index) => (
+              <div key={index} className={`chat-message ${message.sender}`}>
+                <p style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                  {message.text}
+                </p>
               </div>
             ))}
-            {loading && <div className="chat-message ai">Typing...</div>}
+            {loading && <p role="status">Thinking…</p>}
           </div>
-          <form className="chat-input-area" onSubmit={handleSend}>
+          <form className="chat-input-area" onSubmit={send}>
             <input
-              type="text"
+              aria-label="Your question"
+              maxLength={2000}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask me anything..."
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ask about buying or selling…"
             />
-            <button type="submit" disabled={loading}>
+            <button type="submit" disabled={loading || !input.trim()}>
               Send
             </button>
           </form>
-        </div>
+        </section>
       )}
-      <button className="chat-toggle-button" onClick={toggleChat}>
+      <button
+        className="chat-toggle-button"
+        aria-label={isOpen ? "Close help" : "Open help"}
+        aria-expanded={isOpen}
+        onClick={() => setOpen(!isOpen)}
+      >
         <FaComments size={24} />
       </button>
     </div>
   );
-};
-
-export default FloatingAIChat;
+}

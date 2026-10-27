@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Slider from "react-slick";
@@ -13,6 +14,10 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [isContactRevealed, setIsContactRevealed] = useState(false);
+  const { user, setUser } = useContext(AuthContext);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [chatError, setChatError] = useState("");
 
   useEffect(() => {
     axios
@@ -20,10 +25,24 @@ const ProductDetails = () => {
       .then((response) => {
         setProduct(response.data);
       })
-      .catch((error) => console.error("Error fetching product:", error));
+      .catch(() =>
+        setError("This listing could not be loaded. It may have been removed."),
+      );
   }, [id]);
 
-  if (!product) return <p className="loading-text">Loading product details...</p>;
+  if (error)
+    return (
+      <div role="alert" style={{ padding: 48 }}>
+        <p>{error}</p>
+        <button onClick={() => navigate("/search")}>Browse listings</button>
+      </div>
+    );
+  if (!product)
+    return (
+      <p role="status" className="loading-text">
+        Loading product details...
+      </p>
+    );
 
   // Slick Slider Settings
   const settings = {
@@ -40,7 +59,7 @@ const ProductDetails = () => {
   // Handler for sending a message directly to the seller using email lookup
   const handleSendMessage = async () => {
     // Check if a user is logged in (from localStorage)
-    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    const loggedInUser = user;
     if (!loggedInUser) {
       navigate("/login");
       return;
@@ -55,16 +74,24 @@ const ProductDetails = () => {
 
     try {
       // Lookup the seller by email
-      const sellerResponse = await axios.get(`${API_URL}/api/users/email/${sellerEmail}`);
+      const sellerResponse = await axios.get(
+        `${API_URL}/api/users/email/${encodeURIComponent(sellerEmail)}`,
+      );
       const sellerData = sellerResponse.data;
       if (!sellerData || !sellerData._id) {
         console.error("Seller not found");
         return;
       }
 
+      if (
+        String(loggedInUser._id || loggedInUser.id) === String(sellerData._id)
+      ) {
+        setChatError("This is your listing. Buyers can message you here.");
+        return;
+      }
       // Create (or retrieve) a chat between logged-in user and seller using their IDs
       const chatResponse = await axios.post(`${API_URL}/api/chats`, {
-        participants: [loggedInUser._id, sellerData._id],
+        participants: [loggedInUser._id || loggedInUser.id, sellerData._id],
       });
       const chatId = chatResponse.data._id;
 
@@ -79,10 +106,36 @@ const ProductDetails = () => {
       // Navigate to the chat page
       navigate(`/chat/${chatId}`);
     } catch (error) {
-      console.error("Error initiating chat:", error);
+      setChatError(
+        error.response?.data?.error ||
+          "Unable to start a conversation. Please try again.",
+      );
     }
   };
 
+  const isSaved =
+    user?.favorites?.some((value) => String(value?._id || value) === id) ||
+    false;
+  const toggleSaved = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    setSaving(true);
+    try {
+      const result = isSaved
+        ? await axios.delete(`${API_URL}/api/account/favorites/${id}`)
+        : await axios.post(`${API_URL}/api/account/favorites/${id}`);
+      const next = { ...user, favorites: result.data.favorites };
+      setUser(next);
+      localStorage.setItem("user", JSON.stringify(next));
+      setChatError("");
+    } catch {
+      setChatError("Unable to update saved listings. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
   return (
     <div className="product-details-container">
       {/* Breadcrumbs */}
@@ -98,7 +151,11 @@ const ProductDetails = () => {
             <Slider {...settings}>
               {product.images.map((image, index) => (
                 <div key={index} className="slide">
-                  <img src={image} alt={`Product ${index + 1}`} className="slider-image" />
+                  <img
+                    src={image}
+                    alt={`Product ${index + 1}`}
+                    className="slider-image"
+                  />
                 </div>
               ))}
             </Slider>
@@ -161,8 +218,27 @@ const ProductDetails = () => {
 
           {/* Message Section: Single "Message Author" Button */}
           <div className="message-section">
-            <button className="send-message-button" onClick={handleSendMessage}>
-              Message Author
+            {chatError && <p role="alert">{chatError}</p>}
+            <button
+              className="send-message-button"
+              onClick={handleSendMessage}
+              disabled={product.status === "sold"}
+            >
+              {product.status === "sold"
+                ? "This listing is sold"
+                : "Message Author"}
+            </button>
+            <button
+              className="send-message-button"
+              aria-pressed={isSaved}
+              onClick={toggleSaved}
+              disabled={saving}
+            >
+              {saving
+                ? "Saving…"
+                : isSaved
+                  ? "♥ Saved listing"
+                  : "♡ Save listing"}
             </button>
           </div>
         </div>

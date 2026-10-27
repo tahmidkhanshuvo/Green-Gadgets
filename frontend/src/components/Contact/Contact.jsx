@@ -1,38 +1,47 @@
-import React from 'react';
-import './Contact.css';
-
-const Contact = () => {
+import { Link } from "react-router-dom";
+import "./Contact.css";
+export default function Contact() {
   return (
-    <div className="contact-container">
-      <h2 className="contact-title">Contact Us</h2>
-
+    <main className="contact-container">
+      <p>WE'RE HERE TO HELP</p>
+      <h1 className="contact-title">Let's keep good tech going.</h1>
       <div className="contact-info">
-        <div className="contact-item">
-          <h4>Email</h4>
-          <p>support@greengadgets.com</p>
-        </div>
-
-        <div className="contact-item">
-          <h4>Phone</h4>
-          <p>+1 (123) 456-7890</p>
-        </div>
-
-        <div className="contact-item">
-          <h4>Address</h4>
-          <p>123 Green Road Street,Dhanmondi,Dhaka, Bangladesh</p>
-        </div>
-
-        <div className="contact-item">
-          <h4>Business Hours</h4>
-          <p>Sunday - Saturday: 9:00 AM - 6:00 PM</p>
-        </div>
+        <section className="contact-item">
+          <h2>Marketplace help</h2>
+          <p>
+            Need help posting a listing, finding a device, or starting a
+            conversation?
+          </p>
+          <Link to="/help-center">Visit the help center ↗</Link>
+        </section>
+        <section className="contact-item">
+          <h2>Questions for a seller</h2>
+          <p>
+            Open a listing and choose Chat to ask about condition, collection,
+            and availability before making arrangements.
+          </p>
+          <Link to="/search">Browse listings ↗</Link>
+        </section>
+        <section className="contact-item">
+          <h2>Report a problem</h2>
+          <p>
+            This project is maintained by Tahmid Khan. Include the page URL and
+            what happened; leave passwords and private account details out of
+            your report.
+          </p>
+          <a href="mailto:hi@tahmidkhan.com.bd?subject=Green%20Gadgets%20support">
+            Email the maintainer ↗
+          </a>
+          <br />
+          <a
+            href="https://github.com/tahmidkhanshuvo/Green-Gadgets/issues"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open a GitHub issue ↗
+          </a>
+        </section>
       </div>
-
-      <div className="footer-note">
-        <p>We’re here to help! Feel free to reach out to us with any inquiries.</p>
-      </div>
-    </div>
+    </main>
   );
-};
-
-export default Contact;
+}

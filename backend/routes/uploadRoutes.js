@@ -1,19 +1,26 @@
 const express = require("express");
-const { uploadBlogImages, uploadAdImages, uploadChatImages } = require("../middleware/upload");
+const {
+  uploadBlogImages,
+  uploadAdImages,
+  uploadChatImages,
+} = require("../middleware/upload");
 
 const router = express.Router();
+router.use(require("../middleware/authMiddleware"));
 
 // ✅ Upload Blog Images Route
 router.post("/blog", (req, res) => {
   uploadBlogImages(req, res, (err) => {
     if (err) {
       console.error("Image upload error:", err);
-      return res.status(500).json({ message: "Image upload failed", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Image upload failed", error: err.message });
     }
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded!" });
     }
-    const imageUrls = req.files.map(file => file.path);
+    const imageUrls = req.files.map((file) => file.path);
     res.json({ message: "Blog images uploaded successfully", imageUrls });
   });
 });
@@ -23,12 +30,14 @@ router.post("/ad", (req, res) => {
   uploadAdImages(req, res, (err) => {
     if (err) {
       console.error("Image upload error:", err);
-      return res.status(500).json({ message: "Image upload failed", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Image upload failed", error: err.message });
     }
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No images uploaded!" });
     }
-    const imageUrls = req.files.map(file => file.path);
+    const imageUrls = req.files.map((file) => file.path);
     res.json({ message: "Ad images uploaded successfully", imageUrls });
   });
 });
@@ -38,7 +47,9 @@ router.post("/chat", (req, res) => {
   uploadChatImages(req, res, (err) => {
     if (err) {
       console.error("Image upload error:", err);
-      return res.status(500).json({ message: "Image upload failed", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Image upload failed", error: err.message });
     }
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No image uploaded!" });

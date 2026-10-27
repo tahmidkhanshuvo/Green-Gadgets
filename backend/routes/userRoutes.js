@@ -3,6 +3,10 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 
 // GET /api/users/email/:email
-router.get("/email/:email", userController.getUserByEmail);
+router.get(
+  "/email/:email",
+  require("../middleware/authMiddleware"),
+  userController.getUserByEmail,
+);
 
 module.exports = router;

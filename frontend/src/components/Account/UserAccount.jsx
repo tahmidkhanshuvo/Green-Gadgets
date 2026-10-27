@@ -1,177 +1,203 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Typography, Divider } from "@mui/material";
-import { Form, Input } from "antd";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import {
+  FaRegUserCircle,
+  FaRegHeart,
+  FaThLarge,
+  FaSlidersH,
+} from "react-icons/fa";
 import AuthContext from "../../context/AuthContext";
 import AdsFavorites from "./AdsFavorites";
-import { Layout, Menu } from 'antd';
-import { AppstoreOutlined, HeartOutlined, SettingOutlined } from '@ant-design/icons';
 import "./UserAccount.css";
-
-const { Header, Content, Footer, Sider } = Layout;
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
-
-const UserAccount = ({ theme }) => {
-  const { user, logout, setUser, isAuthenticated } = useContext(AuthContext);
-  const [userData, setUserData] = useState(user || {});
-  const [newPassword, setNewPassword] = useState("");
-  const [activeTab, setActiveTab] = useState("myAds");
-
+export default function UserAccount() {
+  const { user, setUser, logout } = useContext(AuthContext),
+    [tab, setTab] = useState("myAds"),
+    [profile, setProfile] = useState(user || {}),
+    [passwords, setPasswords] = useState({
+      currentPassword: "",
+      newPassword: "",
+    }),
+    [busy, setBusy] = useState(""),
+    [error, setError] = useState(""),
+    [notice, setNotice] = useState("");
   useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const { data } = await axios.get(`${API_URL}/api/account/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUser(data.user);
-        setUserData(data.user);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        logout();
-      }
+    let active = true;
+    axios
+      .get(`${API_URL}/api/account/profile`)
+      .then(({ data }) => {
+        if (active) {
+          setProfile(data.user);
+          setUser(data.user);
+        }
+      })
+      .catch((cause) => {
+        if (active) {
+          if (cause.response?.status === 401) logout();
+          else setError("Unable to refresh your profile. Please try again.");
+        }
+      });
+    return () => {
+      active = false;
     };
-
-    fetchProfile();
-  }, [isAuthenticated, logout, setUser]);
-
-  const handleUpdateDetails = async () => {
+  }, [user?._id, logout, setUser]);
+  const save = async (event, type) => {
+    event.preventDefault();
+    setBusy(type);
+    setError("");
+    setNotice("");
     try {
-      const token = localStorage.getItem("token");
-      const { data } = await axios.put(`${API_URL}/api/account/update`, userData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setUser(data.user);
-      alert("Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
+      if (type === "profile") {
+        const { data } = await axios.put(`${API_URL}/api/account/update`, {
+          name: profile.name.trim(),
+          location: profile.location.trim(),
+        });
+        setProfile(data.user);
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setNotice("Your profile has been updated.");
+      } else {
+        await axios.put(`${API_URL}/api/account/change-password`, passwords);
+        setPasswords({ currentPassword: "", newPassword: "" });
+        setNotice("Your password has been changed.");
+      }
+    } catch (cause) {
+      setError(
+        cause.response?.data?.message ||
+          "We could not save your changes. Please try again.",
+      );
+    } finally {
+      setBusy("");
     }
   };
-
-  const handleChangePassword = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(`${API_URL}/api/account/change-password`, { newPassword }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      alert("Password changed successfully!");
-      setNewPassword("");
-    } catch (error) {
-      console.error("Error changing password:", error);
-    }
-  };
-
-  const handleLogout = () => {
-    logout();
-    window.location.href = "/login";
-  };
-
-  // Menu items for the Sider
-  const siderItems = [
-    { label: 'My Ads', key: 'myAds', icon: <AppstoreOutlined /> },
-    { label: 'Favorites', key: 'favorites', icon: <HeartOutlined /> },
-    { label: 'Settings', key: 'settings', icon: <SettingOutlined /> },
-  ];
-
-  const handleMenuClick = ({ key }) => {
-    setActiveTab(key);
-  };
-
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider style={{ backgroundColor: '#e0f2e9' }}>
-        <Menu
-          theme="light"
-          mode="inline"
-          selectedKeys={[activeTab]}
-          onClick={handleMenuClick}
-          style={{ border: 0 }} // Remove default border
-        >
-          {siderItems.map(item => (
-            <Menu.Item key={item.key} icon={item.icon} className="tab-button">
-              {item.label}
-            </Menu.Item>
+    <main className="gg-account">
+      <div className="gg-account-heading">
+        <p>YOUR CIRCULAR CORNER</p>
+        <h1>Welcome back, {user?.name?.split(" ")[0] || "there"}.</h1>
+        <span>
+          Keep track of your listings, save good finds, and make yourself at
+          home.
+        </span>
+      </div>
+      <div className="gg-account-layout">
+        <nav className="gg-account-tabs" aria-label="Account sections">
+          {[
+            ["myAds", "Your listings", FaThLarge],
+            ["favorites", "Saved finds", FaRegHeart],
+            ["settings", "Account settings", FaSlidersH],
+          ].map(([key, label, Icon]) => (
+            <button
+              key={key}
+              aria-current={tab === key ? "page" : undefined}
+              onClick={() => {
+                setTab(key);
+                setError("");
+                setNotice("");
+              }}
+            >
+              <Icon />
+              {label}
+            </button>
           ))}
-        </Menu>
-      </Sider>
-      
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: theme === "dark" ? '#333' : '#fff',
-          }}
-        />
-        <Content style={{ margin: '0 16px' }}>
-          <Typography variant="h4" className={`account-title ${theme}`}>
-            My Account
-          </Typography>
-
-          <div className="tab-content">
-            {activeTab === "settings" ? (
-              <div className="settings-container">
-                <Typography variant="h6" className="settings-title">
-                  Update Profile
-                </Typography>
-                <Form layout="vertical">
-                  <Form.Item label="Email">
-                    <Input value={userData.email || ""} disabled />
-                  </Form.Item>
-                  <Form.Item label="Name">
-                    <Input value={userData.name || ""} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
-                  </Form.Item>
-                  <Form.Item label="Location">
-                    <Input value={userData.location || ""} onChange={(e) => setUserData({ ...userData, location: e.target.value })} />
-                  </Form.Item>
-                  <Button className="update-button" onClick={handleUpdateDetails}>
-                    Update Details
-                  </Button>
-                </Form>
-
-                <Divider className="divider" />
-
-                <Typography variant="h6" className="settings-title">
-                  Change Password
-                </Typography>
-                <Form layout="vertical">
-                  <Form.Item label="New Password">
-                    <Input.Password value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                  </Form.Item>
-                  <Button className="update-button" onClick={handleChangePassword}>
-                    Change Password
-                  </Button>
-                </Form>
-
-                <Divider className="divider" />
-
-                <Button className="logout-button" onClick={handleLogout}>
-                  Log Out
-                </Button>
-              </div>
-            ) : (
-              <AdsFavorites activeTab={activeTab} />
-            )}
-          </div>
-        </Content>
-        
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
-      </Layout>
-    </Layout>
+          <button onClick={logout}>
+            <FaRegUserCircle />
+            Sign out
+          </button>
+        </nav>
+        <div className="gg-account-content">
+          {error && (
+            <p className="gg-account-error" role="alert">
+              {error}
+            </p>
+          )}
+          {notice && (
+            <p className="gg-account-notice" role="status">
+              {notice}
+            </p>
+          )}
+          {tab === "settings" ? (
+            <div className="gg-settings-grid">
+              <form onSubmit={(event) => save(event, "profile")}>
+                <h2>A little about you</h2>
+                <p>Your email identifies your account and listings.</p>
+                <label>
+                  Email
+                  <input value={profile.email || ""} type="email" disabled />
+                </label>
+                <label>
+                  Name
+                  <input
+                    autoComplete="name"
+                    required
+                    maxLength={100}
+                    value={profile.name || ""}
+                    onChange={(event) =>
+                      setProfile({ ...profile, name: event.target.value })
+                    }
+                  />
+                </label>
+                <label>
+                  Location
+                  <input
+                    required
+                    maxLength={150}
+                    value={profile.location || ""}
+                    onChange={(event) =>
+                      setProfile({ ...profile, location: event.target.value })
+                    }
+                  />
+                </label>
+                <button disabled={!!busy}>
+                  {busy === "profile" ? "Saving…" : "Save details"}
+                </button>
+              </form>
+              <form onSubmit={(event) => save(event, "password")}>
+                <h2>Keep your account yours.</h2>
+                <p>Confirm your current password before choosing a new one.</p>
+                <label>
+                  Current password
+                  <input
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={passwords.currentPassword}
+                    onChange={(event) =>
+                      setPasswords({
+                        ...passwords,
+                        currentPassword: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  New password
+                  <input
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    minLength={6}
+                    maxLength={72}
+                    value={passwords.newPassword}
+                    onChange={(event) =>
+                      setPasswords({
+                        ...passwords,
+                        newPassword: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <small>Use 6–72 characters.</small>
+                <button disabled={!!busy}>
+                  {busy === "password" ? "Updating…" : "Change password"}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <AdsFavorites activeTab={tab} />
+          )}
+        </div>
+      </div>
+    </main>
   );
-};
-
-export default UserAccount;
+}

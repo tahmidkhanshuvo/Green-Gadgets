@@ -1,119 +1,85 @@
 const Chat = require("../models/Chat");
+const {
+  validId,
+  accessibleChat,
+  appendMessage,
+} = require("../services/chatService");
 
-/**
- * Create a new chat between participants.
- * If a chat between the same participants already exists (for a two-user conversation),
- * returns the existing chat.
- *
- * Expected req.body: { participants: [userId1, userId2] }
- */
-exports.createChat = async (req, res) => {
+exports.createChat = async (req, res, next) => {
   try {
-    const { participants } = req.body;
-    if (!participants || !Array.isArray(participants) || participants.length < 2) {
-      return res.status(400).json({ error: "At least two participants are required." });
+    const participants = [...new Set(req.body.participants || [])];
+    if (
+      participants.length !== 2 ||
+      participants.some((id) => !validId(id)) ||
+      !participants.includes(String(req.user.userId))
+    ) {
+      return res
+        .status(400)
+        .json({
+          error: "A conversation must include you and one other person.",
+        });
     }
-
-    // Check if a chat with these participants already exists
     let chat = await Chat.findOne({
-      participants: { $all: participants, $size: participants.length }
+      participants: { $all: participants, $size: 2 },
     });
-
-    if (!chat) {
-      chat = new Chat({ participants, messages: [] });
-      await chat.save();
-    }
-
+    if (!chat) chat = await Chat.create({ participants, messages: [] });
     res.json(chat);
   } catch (error) {
-    console.error("Error creating chat:", error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
-
-/**
- * Retrieve a specific chat by its ID.
- * Populates participant details (e.g., name, email, avatar).
- *
- * Expected req.params: { chatId: "chatId" }
- */
-exports.getChat = async (req, res) => {
+exports.getChat = async (req, res, next) => {
   try {
-    const { chatId } = req.params;
-    const chat = await Chat.findById(chatId).populate("participants", "name email avatar");
-    if (!chat) {
-      return res.status(404).json({ error: "Chat not found" });
-    }
+    const chat = await accessibleChat(req.params.chatId, req.user.userId);
+    if (!chat) return res.status(404).json({ error: "Chat not found." });
+    await chat.populate("participants", "name email avatar");
     res.json(chat);
   } catch (error) {
-    console.error("Error fetching chat:", error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
-
-/**
- * Add a message to an existing chat.
- *
- * Expected req.body: { chatId, sender, text, image }
- */
-exports.addMessage = async (req, res) => {
+exports.addMessage = async (req, res, next) => {
   try {
-    const { chatId, sender, text, image } = req.body;
-    if (!chatId || !sender) {
-      return res.status(400).json({ error: "chatId and sender are required." });
-    }
-
-    let chat = await Chat.findById(chatId);
-    if (!chat) {
-      return res.status(404).json({ error: "Chat not found" });
-    }
-
-    if (!chat.participants.includes(sender)) {
-      chat.participants.push(sender);
-    }
-
-    chat.messages.push({ sender, text, image });
-    await chat.save();
-
-    res.json(chat);
+    const result = await appendMessage(
+      req.body.chatId,
+      req.user.userId,
+      req.body,
+    );
+    if (!result) return res.status(404).json({ error: "Chat not found." });
+    res.json(result.chat);
   } catch (error) {
-    console.error("Error adding message:", error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
-
-/**
- * Get all chats for a specific user.
- *
- * Expected req.params: { userId: "userId" }
- */
-exports.getChatsForUser = async (req, res) => {
+exports.getChatsForUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    const chats = await Chat.find({ participants: { $in: [userId] } })
-      .populate("participants", "name email avatar");
-    res.json(chats);
+    if (req.params.userId !== String(req.user.userId))
+      return res
+        .status(403)
+        .json({ error: "You can only access your own conversations." });
+    res.json(
+      await Chat.find({ participants: req.user.userId })
+        .populate("participants", "name email avatar")
+        .sort({ updatedAt: -1 }),
+    );
   } catch (error) {
-    console.error("Error fetching chats for user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
-
-/**
- * Delete a chat by its ID.
- *
- * Expected req.params: { chatId: "chatId" }
- */
-exports.deleteChat = async (req, res) => {
+exports.deleteChat = async (req, res, next) => {
   try {
-    const { chatId } = req.params;
-    const deletedChat = await Chat.findByIdAndDelete(chatId);
-    if (!deletedChat) {
-      return res.status(404).json({ error: "Chat not found" });
-    }
-    res.json({ message: "Chat deleted successfully", chatId });
+    if (!validId(req.params.chatId))
+      return res.status(404).json({ error: "Chat not found." });
+    const chat = await Chat.findOneAndDelete({
+      _id: req.params.chatId,
+      participants: req.user.userId,
+    });
+    if (!chat) return res.status(404).json({ error: "Chat not found." });
+    res.json({
+      message: "Chat deleted successfully",
+      chatId: req.params.chatId,
+    });
   } catch (error) {
-    console.error("Error deleting chat:", error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };

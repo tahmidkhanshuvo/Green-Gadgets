@@ -17,6 +17,8 @@ const ChatPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
   const socketRef = useRef();
   const fileInputRef = useRef();
 
@@ -28,7 +30,10 @@ const ChatPage = () => {
         setChat(response.data);
         setMessages(response.data.messages);
       } catch (error) {
-        console.error("Error fetching chat details:", error);
+        setError(
+          error.response?.data?.error ||
+            "Unable to load this conversation. Please try again.",
+        );
       }
     };
     fetchChatDetails();
@@ -36,12 +41,24 @@ const ChatPage = () => {
 
   // Setup Socket.io connection
   useEffect(() => {
-    socketRef.current = io(SOCKET_URL, { transports: ["websocket"] });
-    socketRef.current.emit("joinChat", { chatId });
-    console.log(`Joining chat room ${chatId}`);
+    socketRef.current = io(SOCKET_URL, {
+      auth: { token: localStorage.getItem("token") },
+    });
+    socketRef.current.on("connect", () =>
+      socketRef.current.emit("joinChat", { chatId }),
+    );
+    socketRef.current.on("messageError", (message) => setError(message));
+    socketRef.current.on("connect_error", () =>
+      setError(
+        "Chat connection unavailable. Please check your connection or sign in again.",
+      ),
+    );
+    socketRef.current.on("disconnect", () =>
+      setError("Reconnecting to chat… Your draft is kept here."),
+    );
+    socketRef.current.on("connect", () => setError(""));
 
     socketRef.current.on("message", (message) => {
-      console.log("Received message:", message);
       setMessages((prev) => [...prev, { ...message }]);
     });
 
@@ -49,11 +66,27 @@ const ChatPage = () => {
   }, [chatId]);
 
   const sendTextMessage = () => {
-    if (textInput.trim() && user && user._id) {
+    if (textInput.trim() && user && user._id && !sending) {
+      if (!socketRef.current?.connected) {
+        setError("Chat is reconnecting. Please try again in a moment.");
+        return;
+      }
       const payload = { chatId, sender: user._id, text: textInput };
-      console.log("Sending text message:", payload);
-      socketRef.current.emit("sendMessage", payload);
-      setTextInput("");
+      setSending(true);
+      socketRef.current
+        .timeout(15000)
+        .emit("sendMessage", payload, (timeout, result) => {
+          setSending(false);
+          if (timeout || !result?.ok) {
+            setError(
+              result?.message ||
+                "The message was not confirmed. Your draft is kept here.",
+            );
+            return;
+          }
+          setTextInput("");
+          setError("");
+        });
     }
   };
 
@@ -72,25 +105,35 @@ const ChatPage = () => {
   };
 
   const sendImageMessage = async () => {
-    if (!selectedImage || !user || !user._id) return;
+    if (!selectedImage || !user || !user._id || isImageUploading) return;
+    if (!socketRef.current?.connected) {
+      setError("Chat is reconnecting. Please try again in a moment.");
+      return;
+    }
     setIsImageUploading(true); // Mark as uploading (red outline)
     const formData = new FormData();
     formData.append("images", selectedImage);
 
     try {
-      const response = await axios.post(`${API_URL}/api/upload/chat`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${API_URL}/api/upload/chat`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
       const imageUrl = response.data.imageUrl;
       const payload = { chatId, sender: user._id, image: imageUrl };
-      console.log("Sending image message:", payload);
-      socketRef.current.emit("sendMessage", payload);
+      const result = await socketRef.current
+        .timeout(15000)
+        .emitWithAck("sendMessage", payload);
+      if (!result?.ok) throw new Error("Message not confirmed.");
       setSelectedImage(null);
       setImagePreview(null);
       setIsImageUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.error("Error uploading image:", error);
+      setError("Unable to upload this image. Please try again.");
       setIsImageUploading(false);
     }
   };
@@ -105,6 +148,7 @@ const ChatPage = () => {
     <div className="chatpage-wrapper">
       <header className="chatpage-header">
         <h2>{otherUserName}</h2>
+        {error && <p role="alert">{error}</p>}
       </header>
       <div className="chatpage-container">
         <div className="chatpage-messages">
@@ -114,7 +158,7 @@ const ChatPage = () => {
             messages.map((msg, index) => (
               <div
                 key={index}
-                className={`chatpage-message ${msg.sender === user._id ? "sent" : "received"}`}
+                className={`chatpage-message ${String(msg.sender?._id || msg.sender) === String(user?._id || user?.id) ? "sent" : "received"}`}
               >
                 {msg.text && <div className="message-content">{msg.text}</div>}
                 {msg.image && (
@@ -148,7 +192,12 @@ const ChatPage = () => {
               >
                 📷
               </button>
-              <button className="chatpage-send-btn" onClick={sendTextMessage}>
+              <button
+                className="chatpage-send-btn"
+                aria-label="Send message"
+                disabled={sending || !textInput.trim()}
+                onClick={sendTextMessage}
+              >
                 ➤
               </button>
             </div>
@@ -166,7 +215,11 @@ const ChatPage = () => {
             >
               <p>Preview:</p>
               <img src={imagePreview} alt="Preview" />
-              <button className="chatpage-send-btn" onClick={sendImageMessage}>
+              <button
+                className="chatpage-send-btn"
+                disabled={isImageUploading}
+                onClick={sendImageMessage}
+              >
                 Send Image
               </button>
             </div>
