@@ -6,7 +6,7 @@
 
 An electronics marketplace built around reuse, refurbishment and responsible recycling.
 
-[Live demo](https://green-gadgets.onrender.com) · [Report a problem](https://github.com/tahmidkhanshuvo/Green-Gadgets/issues)
+[Live demo](https://greengadgets.tahmidkhan.com.bd) · [Report a problem](https://github.com/tahmidkhanshuvo/Green-Gadgets/issues)
 
 ![React](https://img.shields.io/badge/React-18-61dafb?logo=react) ![Express](https://img.shields.io/badge/Express-4-ffffff?logo=express) ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47a248?logo=mongodb) ![Socket.IO](https://img.shields.io/badge/Chat-Socket.IO-010101?logo=socketdotio)
 
